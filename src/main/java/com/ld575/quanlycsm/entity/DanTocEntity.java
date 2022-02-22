@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -23,6 +24,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @Builder
+@Table(name = "dan_toc_entity")
 public class DanTocEntity {
 
 

@@ -9,10 +9,21 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
+@Setter
+@Getter
+@NoArgsConstructor
+@Builder
+@Table(name = "chien_si_entity")
 public class ChienSiEntity {
 
 	@Id
@@ -85,7 +96,6 @@ public class ChienSiEntity {
 	
 	private String sucKhoe;
 	
-	@Column(columnDefinition="c: chưa đăng ký kết hôn, r: đã đăng ký kết hôn")
 	private char coVo;
 	
 	private String qqPhuongXa;
