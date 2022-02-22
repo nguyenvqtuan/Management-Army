@@ -1,0 +1,13 @@
+version: "3.9"
+    
+services:
+  db:
+    image: mysql
+    volumes:
+      - D:\Project-Managent-CSM\Database:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: abc123#A
+      MYSQL_DATABASE: QUANLY_CSM
+      MYSQL_USER: test
+      MYSQL_PASSWORD: abc123#A
