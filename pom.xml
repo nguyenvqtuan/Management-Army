@@ -12,9 +12,9 @@
 	<artifactId>QuanLyCSM</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>QuanLyCSM</name>
-	<description>Project for Chien Sĩ Mỡi</description>
+	<description>Project Chien Sĩ Mỡi</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>1.8</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
