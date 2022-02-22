@@ -9,5 +9,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: abc123#A
       MYSQL_DATABASE: QUANLY_CSM
-      MYSQL_USER: test
+      MYSQL_USER: root
       MYSQL_PASSWORD: abc123#A
+    ports:
+      - "3306:3306"
