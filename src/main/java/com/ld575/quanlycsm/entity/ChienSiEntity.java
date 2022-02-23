@@ -77,11 +77,8 @@ public class ChienSiEntity {
 	private String khongCoBo;
 	
 	private boolean giaDinhAnhHuongCovid;
-	
 	private boolean giaDinhKhoKhan;
-	
 	private String nguoiQuenTrongQuanDoi;
-	
 	private String boMeLaLietSiHoacQuanNhan;
 	
 	private String ngheNghiepBanThan;
@@ -96,6 +93,7 @@ public class ChienSiEntity {
 	
 	private String sucKhoe;
 	
+	@Column(columnDefinition = "char(1) COMMENT \"c: chua dang ky ket hon, r: da dang ky ket hon\"")
 	private char coVo;
 	
 	private String qqPhuongXa;
@@ -116,6 +114,4 @@ public class ChienSiEntity {
 	private String soTruong;
 	
 	private String ghiChu;
-	
-	
 }
