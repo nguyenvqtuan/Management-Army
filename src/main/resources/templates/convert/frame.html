@@ -23,14 +23,15 @@
 
 <body>
   <div class="container-scroller">
-    <!-- Nvarbar -->
+     <!-- Nvarbar -->
+    <div th:replace="convert/nvarbar.html :: nvarbar"></div>
     <!-- Body -->
     <div class="container-fluid page-body-wrapper">
-    	<!-- Nvarbar -->
+    	<!-- Sidebar -->
     	<div th:replace="convert/sidebar.html :: sidebar"></div>
     	<!-- Body -->
     	<div class="main-panel">
-    		<div class="content-wrapper" th:insert="convert/table.html :: table">
+    		<div class="content-wrapper">
     		</div>
     	</div>
     </div>
