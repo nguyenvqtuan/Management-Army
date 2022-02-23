@@ -37,12 +37,12 @@ public class ChienSiEntity {
 	private String hoTen;
 	
 	@Temporal(TemporalType.DATE)
-	private Date NgaySinh;
+	private Date ngaySinh;
 	
-	private String CapBac;
+	private String capBac;
 	
 	@Temporal(TemporalType.DATE)
-	private Date ThoiGianNhanCapBac;
+	private Date thoiGianNhanCapBac;
 	
 	private String chucVu;
 	

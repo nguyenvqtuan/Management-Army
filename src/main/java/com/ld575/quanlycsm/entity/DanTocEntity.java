@@ -32,14 +32,14 @@ public class DanTocEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private String Ten;
+	private String ten;
 	
-	private String MoTa;
+	private String moTa;
 	
 	@OneToMany(mappedBy="danToc")
 	private List<ChienSiEntity> danhSachChienSi;
 	
 	@CreatedDate
 	@Temporal(TemporalType.TIME)
-	private Date NgayTao;
+	private Date ngayTao;
 }

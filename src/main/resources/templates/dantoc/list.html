@@ -36,59 +36,35 @@
     				<div class="col-lg-12 grid-margin stretch-card">
 					  <div class="card">
 					    <div class="card-body">
-					      <h4 class="card-title">Danh sacsh  Table</h4>
+					      <h4 class="card-title">Danh sách dân tộc</h4>
 					      <div class="table-responsive">
 					        <table class="table table-striped">
 					          <thead>
 					            <tr>
 					              <th>
-					                User
+					                Tên
 					              </th>
 					              <th>
-					                First name
+					                Mô tả
 					              </th>
 					              <th>
-					                Progress
+					               	Tác vụ
 					              </th>
 					            </tr>
 					          </thead>
 					          <tbody>
-					            <tr>
-					              <td class="py-1">
-					                <img th:src="@{/images/faces/face1.jpg}" alt="image"/>
+					            <tr th:each="dantoc : ${listDanToc}">
+					              <td th:text="${dantoc.ten}">
+					              </td>
+					              <td th:text="${dantoc.moTa}">
 					              </td>
 					              <td>
-					                Herman Beck
-					              </td>
-					              <td>
-					                <div class="progress">
-					                  <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-					                </div>
-					              </td>
-					              <td>
-					                $ 77.99
-					              </td>
-					              <td>
-					                May 15, 2015
-					              </td>
-					            </tr>
-					            <tr>
-					              <td class="py-1">
-					                <img th:src="@{/images/faces/face2.jpg}" alt="image"/>
-					              </td>
-					              <td>
-					                Messsy Adam
-					              </td>
-					              <td>
-					                <div class="progress">
-					                  <div class="progress-bar bg-danger" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-					                </div>
-					              </td>
-					              <td>
-					                $245.30
-					              </td>
-					              <td>
-					                July 1, 2015
+					              	<a th:href="#">
+					              		<i class="mdi mdi-delete"></i>
+					              	</a>
+					              	<a th:href="#">
+					              		<i class="mdi mdi-delete"></i>
+					              	</a>
 					              </td>
 					            </tr>
 					          </tbody>

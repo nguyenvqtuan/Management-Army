@@ -33,13 +33,13 @@ public class DoanhTraiEntity {
 	private Long id;
 	
 	@Column(nullable = false)
-	private String Ten;
+	private String ten;
 	
-	private String TenDayDu;
+	private String tenDayDu;
 	
-	private String MoTa;
+	private String moTa;
 	
-	private Long TrucThuoc;
+	private Long trucThuoc;
 	
 	@OneToMany(mappedBy="doanhTrai")
 	private List<ChienSiEntity> danhSachChienSi;
