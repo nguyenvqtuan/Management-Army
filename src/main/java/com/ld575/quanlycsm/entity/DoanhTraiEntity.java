@@ -15,17 +15,15 @@ import javax.persistence.TemporalType;
 
 import org.springframework.data.annotation.CreatedDate;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Setter
-@Getter
-@NoArgsConstructor
-@Builder
 @Table(name = "doanh_trai_entity")
+@NoArgsConstructor
+@Getter
+@Setter
 public class DoanhTraiEntity {
 
 	@Id
@@ -35,10 +33,13 @@ public class DoanhTraiEntity {
 	@Column(nullable = false)
 	private String ten;
 	
+	@Column
 	private String tenDayDu;
 	
+	@Column
 	private String moTa;
 	
+	@Column
 	private Long trucThuoc;
 	
 	@OneToMany(mappedBy="doanhTrai")

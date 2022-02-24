@@ -3,6 +3,7 @@ package com.ld575.quanlycsm.entity;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,17 +15,15 @@ import javax.persistence.TemporalType;
 
 import org.springframework.data.annotation.CreatedDate;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Setter
-@Getter
-@NoArgsConstructor
-@Builder
 @Table(name = "dan_toc_entity")
+@NoArgsConstructor
+@Getter
+@Setter
 public class DanTocEntity {
 
 
@@ -32,8 +31,10 @@ public class DanTocEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column
 	private String ten;
 	
+	@Column
 	private String moTa;
 	
 	@OneToMany(mappedBy="danToc")
