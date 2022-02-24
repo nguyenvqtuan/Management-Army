@@ -35,15 +35,18 @@
 	    		<div class="col-12 grid-margin stretch-card">
 				  <div class="card">
 				    <div class="card-body">
-				      <h4 class="card-title">Thêm Dân Tộc</h4>
-				      <form class="forms-sample">
+				      <h4 class="card-title" th:text="${title}"></h4>
+				      <form class="forms-sample" method="POST" th:object="${dantoc}" th:action="@{/dan-toc/form}">
 				        <div class="form-group">
-				          <label for="exampleInputName1">Tên dân tộc</label>
-				          <input type="text" class="form-control" id="name" placeholder="Tên dân tộc">
+				          <label for="ten">Tên dân tộc</label>
+				          <input type="text" th:field="*{ten}" class="form-control" placeholder="Tên dân tộc">
 				        </div>
 				        <div class="form-group">
-				          <label for="exampleInputEmail3">Mô tả</label>
-				          <input type="email" class="form-control" id="description" placeholder="Mô tả">
+				          <label for="moTa">Mô tả</label>
+				          <input type="text" th:field="*{moTa}" name="moTa" value="${moTa}" class="form-control" id="moTa" placeholder="Mô tả">
+				        </div>
+				        <div>
+				        	<input type="hidden" th:field="*{id}">
 				        </div>
 				        <button type="submit" class="btn btn-primary me-2">Submit</button>
 				      </form>

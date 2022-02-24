@@ -59,10 +59,10 @@
 					              <td th:text="${dantoc.moTa}">
 					              </td>
 					              <td>
-					              	<a th:href="#">
-					              		<i class="mdi mdi-delete"></i>
+					              	<a th:href="@{/dan-toc/form/{id}(id=${dantoc.id})}">
+					              		<i class="mdi mdi-table-edit"></i>
 					              	</a>
-					              	<a th:href="#">
+					              	<a th:href="@{/dan-toc/delete/{id}(id=${dantoc.id})}" onclick="return confirm('Bạn có chắc muốn xóa không?')">
 					              		<i class="mdi mdi-delete"></i>
 					              	</a>
 					              </td>
@@ -81,18 +81,21 @@
     <div th:replace="convert/footer.html :: footer"></div>
   </div>
   <!-- container-scroller -->
+  
   <!-- plugins:js -->
   <script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
   <!-- endinject -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+  
   <!-- Plugin js for this page -->
   <script th:src="@{/vendors/typeahead.js/typeahead.bundle.min.js}"></script>
   <script th:src="@{/vendors/select2/select2.min.js}"></script>
   <script th:src="@{/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js}"></script>
   <!-- End plugin js for this page -->
+  
   <!-- inject:js -->
   <script th:src="@{/js/off-canvas.js}"></script>
   <script th:src="@{/js/hoverable-collapse.js}"></script>
-  <script th:src="@{/js/template.js}"></script>
   <script th:src="@{/js/settings.js}"></script>
   <script th:src="@{/js/todolist.js}"></script>
   <!-- endinject -->
