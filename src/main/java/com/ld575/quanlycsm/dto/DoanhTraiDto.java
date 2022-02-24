@@ -19,5 +19,7 @@ public class DoanhTraiDto {
 	
 	private String tenDayDu;
 	
+	private Integer doSau; // deep -> 0: bigest
+	
 	private Long trucThuoc;
 }

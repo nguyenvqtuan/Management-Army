@@ -1,5 +1,8 @@
 package com.ld575.quanlycsm.controller;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,5 +61,15 @@ public class DoanhTraiController {
 		}
 		doanhTraiService.deleteById(id);
 		return "redirect:/doanh-trai/list";
+	}
+	
+	private List<DoanhTraiDto> getListDoanhTraiDto() {
+		List<DoanhTraiDto> listDoanhTraiDto = new ArrayList<>();
+		Iterable<DoanhTraiEntity> listDoanhTrai = doanhTraiService.findAll();
+		Iterator<DoanhTraiEntity> iterator = listDoanhTrai.iterator();
+		while (iterator.hasNext()) {
+			DoanhTraiEntity doanhTraiEntity = iterator.next();
+		}
+		return listDoanhTraiDto;
 	}
 }
