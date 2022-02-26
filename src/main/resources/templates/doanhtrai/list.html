@@ -69,7 +69,7 @@
 					              <td th:text="${doanhtrai.strTrucThuoc}">
 					              </td>
 					              <td>
-					              	<a th:href="@{/doanh-trai/form/{id}(id=${doanhtrai.id})}">
+					              	<a th:href="@{/doanh-trai/form/{id}(id=${doanhtrai.id}, strTrucThuoc=${doanhtrai.strTrucThuoc})}">
 					              		<i class="mdi mdi-table-edit"></i>	
 					              	</a>
 					              	<a th:href="@{/doanh-trai/delete/{id}(id=${doanhtrai.id})}" onclick="return confirm('Bạn có chắc muốn xóa không?')">

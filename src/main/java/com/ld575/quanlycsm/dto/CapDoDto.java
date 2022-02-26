@@ -14,5 +14,5 @@ import lombok.Setter;
 public class CapDoDto {
 
 	private int id;
-	private String capDo;
+	private String strCapDo;
 }

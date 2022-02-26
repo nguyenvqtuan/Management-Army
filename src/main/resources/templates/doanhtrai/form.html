@@ -37,7 +37,7 @@
 				  <div class="card">
 				    <div class="card-body">
 				      <h4 class="card-title" th:text="${title}"></h4>
-				      <form class="forms-sample" method="POST" th:object="${doanhtrai}" th:action="@{/doanh-trai/form}">
+				      <form class="forms-sample" method="POST" th:object="${doanhTrai}" th:action="@{/doanh-trai/form}">
 				        <div class="form-group">
 				          <label for="ten">Tên</label>
 				          <input type="text" th:field="*{ten}" class="form-control" placeholder="Tên đơn vị">
@@ -51,13 +51,17 @@
 				          <input type="text" th:field="*{moTa}" name="moTa" value="${moTa}" class="form-control" id="moTa" placeholder="Mô tả">
 				        </div>
 				        <div class="form-group">
-				          <label for="capDo">Cấp độ</label>
-				          <select class="form-control" id="capDo" th:field="*{capDo}">
-				          	<option th:each="i : ${listCapDo}" th:value="${i.id}" th:text="${i.capDo}"></option>
+				          <label for="capDo" >Cấp độ Trực thuộc </label>
+				          <select class="form-control" id="capDo" name="capDo">
+				          	<option th:each="i : ${listCapDo}" th:value="${i.id}" th:text="${i.strCapDo}" th:selected="${i.id} == ${doanhTrai.capDo}"></option>
                           </select>
 				        </div>
 				        <div class="form-group">
 				          <label for="moTa">Trực thuộc</label>
+				          <div th:if="${id != null}" id="contain-trucThuoc">
+				          	<input type="hidden" name="trucThuoc" th:value="${id}"/>
+				          	<input type="text" th:value="${strTrucThuoc}" disabled>
+				          </div>
 				          <select class="form-control" id="trucThuoc" th:field="*{trucThuoc}">
                           </select>
 				        </div>
@@ -100,6 +104,7 @@
   $( "#capDo" ).on( "change", function() {
 	  let capDo = $('#capDo').val();
 	  let link = /*[[@{/doanh-trai/getTrucThuoc/}]]*/'';
+      $('#contain-trucThuoc').remove();
 	  $.ajax({
 			url: link + capDo,
 			success: function(result) {
