@@ -37,23 +37,29 @@
 				  <div class="card">
 				    <div class="card-body">
 				      <h4 class="card-title" th:text="${title}"></h4>
-				      <form class="forms-sample" method="POST" th:object="${doanhtrai}" th:action="@{/dan-toc/form}">
+				      <form class="forms-sample" method="POST" th:object="${doanhtrai}" th:action="@{/doanh-trai/form}">
 				        <div class="form-group">
 				          <label for="ten">Tên</label>
-				          <input type="text" th:field="*{ten}" class="form-control" placeholder="Tên dân tộc">
+				          <input type="text" th:field="*{ten}" class="form-control" placeholder="Tên đơn vị">
 				        </div>
 				        <div class="form-group">
-				          <label for="moTa">Tên đầy đủ</label>
-				          <input type="text" th:field="*{tenDayDu}" name="moTa" value="${moTa}" class="form-control" id="moTa" placeholder="Mô tả">
+				          <label for="tenDayDu">Tên đầy đủ</label>
+				          <input type="text" th:field="*{tenDayDu}" name="tenDayDu" value="${tenDayDu}" class="form-control" id="tenDayDu" placeholder="Tên đầy đủ">
+				        </div>
+				        <div class="form-group">
+				          <label for="moTa">Mô tả</label>
+				          <input type="text" th:field="*{moTa}" name="moTa" value="${moTa}" class="form-control" id="moTa" placeholder="Mô tả">
+				        </div>
+				        <div class="form-group">
+				          <label for="capDo">Cấp độ</label>
+				          <select class="form-control" id="capDo" th:field="*{capDo}">
+				          	<option th:each="i : ${listCapDo}" th:value="${i.id}" th:text="${i.capDo}"></option>
+                          </select>
 				        </div>
 				        <div class="form-group">
 				          <label for="moTa">Trực thuộc</label>
-				          <select class="form-control">
-                              <option>America</option>
-                              <option>Italy</option>
-                              <option>Russia</option>
-                              <option>Britain</option>
-                            </select>
+				          <select class="form-control" id="trucThuoc" th:field="*{trucThuoc}">
+                          </select>
 				        </div>
 				        <div>
 				        	<input type="hidden" th:field="*{id}">
@@ -88,6 +94,24 @@
   <script th:src="@{/js/typeahead.js}"></script>
   <script th:src="@{/js/select2.js}"></script>
   <!-- End custom js for this page-->
+  
+  <script type="text/javascript" th:inline="javascript">
+  /*<![CDATA[*/
+  $( "#capDo" ).on( "change", function() {
+	  let capDo = $('#capDo').val();
+	  let link = /*[[@{/doanh-trai/getTrucThuoc/}]]*/'';
+	  $.ajax({
+			url: link + capDo,
+			success: function(result) {
+				$('#trucThuoc').empty();
+				result.forEach(function(item) {
+					$('#trucThuoc').append('<option value=' + item.id +'>' + item.strTrucThuoc + '</option>');
+				});
+			}
+		});
+	});
+  /*]]>*/
+  </script>
  </body>
  </html>
   

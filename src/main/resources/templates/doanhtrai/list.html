@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- plugins:css -->
+  <link rel="stylesheet" th:href="@{/vendors/feather/feather.css}">
+  <link rel="stylesheet" th:href="@{/vendors/mdi/css/materialdesignicons.min.css}">
+  <link rel="stylesheet" th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+  <link rel="stylesheet" th:href="@{/vendors/typicons/typicons.css}">
+  <link rel="stylesheet" th:href="@{/vendors/simple-line-icons/css/simple-line-icons.css}">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" th:href="@{/css/vertical-layout-light/style.css}">
+  <!-- endinject -->
+  <link rel="shortcut icon" th:href="@{/images/favicon.png}" />
+  <title>Danh sách Doanh Trại</title>
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- Nvarbar -->
+    <div th:replace="convert/nvarbar.html :: nvarbar"></div>
+    <!-- Body -->
+    <div class="container-fluid page-body-wrapper">
+    	<!-- Sidebar -->
+    	<div th:replace="convert/sidebar.html :: sidebar"></div>
+    	<!-- Body -->
+    	<div class="main-panel">
+    		<div class="content-wrapper">
+    			<div class="table-responsive">
+    				<div class="col-lg-12 grid-margin stretch-card">
+					  <div class="card">
+					    <div class="card-body">
+					      <h4 class="card-title">Danh sách dân tộc</h4>
+					      <div class="table-responsive">
+					        <table class="table table-striped">
+					          <thead>
+					            <tr>
+					              <th>
+					                Tên
+					              </th>
+					              <th>
+					                Tên đầy đủ
+					              </th>
+					              <th>
+					                Mô tả
+					              </th>
+					              <th>
+					                Trực thuộc
+					              </th>
+					              <th>
+					               	Tác vụ
+					              </th>
+					            </tr>
+					          </thead>
+					          <tbody>
+					            <tr th:each="doanhtrai : ${listDoanhTrai}">
+					              <td th:text="${doanhtrai.ten}">
+					              </td>
+					              <td th:text="${doanhtrai.tenDayDu}">
+					              </td>
+					              <td th:text="${doanhtrai.moTa}">
+					              </td>
+					              <td th:text="${doanhtrai.strTrucThuoc}">
+					              </td>
+					              <td>
+					              	<a th:href="@{/doanh-trai/form/{id}(id=${doanhtrai.id})}">
+					              		<i class="mdi mdi-table-edit"></i>	
+					              	</a>
+					              	<a th:href="@{/doanh-trai/delete/{id}(id=${doanhtrai.id})}" onclick="return confirm('Bạn có chắc muốn xóa không?')">
+					              		<i class="mdi mdi-delete"></i>
+					              	</a>
+					              </td>
+					            </tr>
+					          </tbody>
+					        </table>
+					      </div>
+					    </div>
+					  </div>
+					</div>
+    			</div>
+    		</div>
+    	</div>
+    </div>
+    <!-- Footer -->
+    <div th:replace="convert/footer.html :: footer"></div>
+  </div>
+  <!-- container-scroller -->
+  
+  <!-- plugins:js -->
+  <script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
+  <!-- endinject -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+  
+  <!-- Plugin js for this page -->
+  <script th:src="@{/vendors/typeahead.js/typeahead.bundle.min.js}"></script>
+  <script th:src="@{/vendors/select2/select2.min.js}"></script>
+  <script th:src="@{/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js}"></script>
+  <!-- End plugin js for this page -->
+  
+  <!-- inject:js -->
+  <script th:src="@{/js/off-canvas.js}"></script>
+  <script th:src="@{/js/hoverable-collapse.js}"></script>
+  <script th:src="@{/js/settings.js}"></script>
+  <script th:src="@{/js/todolist.js}"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script th:src="@{/js/file-upload.js}"></script>
+  <script th:src="@{/js/typeahead.js}"></script>
+  <script th:src="@{/js/select2.js}"></script>
+  <!-- End custom js for this page-->
+ </body>
+ </html>
+  

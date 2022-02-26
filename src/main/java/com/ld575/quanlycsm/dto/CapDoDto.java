@@ -11,19 +11,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class DoanhTraiDto {
+public class CapDoDto {
 
-	private Long id;
-	
-	private String ten;
-	
-	private String tenDayDu;
-	
-	private String moTa;
-	
-	private Long trucThuoc;
-	
-	private String strTrucThuoc;
-	
-	private Integer capDo;
+	private int id;
+	private String capDo;
 }

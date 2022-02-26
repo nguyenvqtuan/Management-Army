@@ -1,5 +1,6 @@
 package com.ld575.quanlycsm.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +38,9 @@ public class DoanhTraiService {
 	
 	public void deleteById(Long id) {
 		doanhTraiRepository.deleteById(id);
+	}
+	
+	public List<DoanhTraiEntity> findByLevel(Integer level) {
+		return doanhTraiRepository.findByCapDo(level);
 	}
 }
