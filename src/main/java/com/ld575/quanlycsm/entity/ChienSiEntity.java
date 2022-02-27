@@ -1,6 +1,6 @@
 package com.ld575.quanlycsm.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,28 +40,31 @@ public class ChienSiEntity {
 	private String hoTen;
 	
 	@Temporal(TemporalType.DATE)
-	private Date ngaySinh;
+	private LocalDate ngaySinh;
 	
 	@Column
 	private String capBac;
 	
 	@Temporal(TemporalType.DATE)
-	private Date thoiGianNhanCapBac;
+	private LocalDate thoiGianNhanCapBac;
 	
 	@Column
 	private String chucVu;
 	
 	@Temporal(TemporalType.DATE)
-	private Date ngayVaoDang;
+	private LocalDate ngayNhapNgu;
 	
 	@Temporal(TemporalType.DATE)
-	private Date ngayVaoDangChinhThuc;
+	private LocalDate ngayVaoDang;
+	
+	@Temporal(TemporalType.DATE)
+	private LocalDate ngayVaoDangChinhThuc;
 	
 	@Column
 	private String soTheDang;
 	
 	@Temporal(TemporalType.DATE)
-	private Date ngayVaoDoan;
+	private LocalDate ngayVaoDoan;
 	
 	@Column
 	private String ngheNghiepGiaDinh;
@@ -82,25 +85,25 @@ public class ChienSiEntity {
 	private String ngheNghiepCha;
 	
 	@Column
-	private String hoTenme;
+	private String hoTenMe;
 	
 	@Column
-	private int nameSinhme;
+	private int namSinhMe;
 	
 	@Column
 	private String ngheNghiepMe;
 	
 	@Column
-	private String boMat;
+	private boolean boMat;
 	
 	@Column
-	private String meMat;
+	private boolean meMat;
 	
 	@Column
-	private String boMeLiDi;
+	private boolean boMeLiDi;
 	
 	@Column
-	private String khongCoBo;
+	private boolean khongCoBo;
 	
 	@Column
 	private boolean giaDinhAnhHuongCovid;
@@ -135,6 +138,9 @@ public class ChienSiEntity {
 	
 	@Column(columnDefinition = "char(1) COMMENT \"c: chua dang ky ket hon, r: da dang ky ket hon\"")
 	private char coVo;
+	
+	@Column
+	private String ghiChuCoVo;
 	
 	@Column
 	private String qqPhuongXa;
