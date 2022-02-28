@@ -2,9 +2,9 @@ package com.ld575.quanlycsm.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -13,12 +13,16 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ld575.quanlycsm.entity.ChienSiEntity;
 import com.ld575.quanlycsm.entity.DanTocEntity;
 import com.ld575.quanlycsm.entity.DoanhTraiEntity;
+import com.ld575.quanlycsm.service.ChienSiService;
+import com.ld575.quanlycsm.service.DanTocService;
+import com.ld575.quanlycsm.service.DoanhTraiService;
 
 @Controller
 @RequestMapping("/chien-si")
@@ -27,6 +31,19 @@ public class ChienSiController {
 	@Autowired
 	private ChienSiService chienSiService;
 	
+	@Autowired
+	private DoanhTraiService doanhTraiService;
+	
+	@Autowired
+	private DanTocService danTocService;
+	
+	@GetMapping(value = {"/", "/list"})
+	public String list(Model model) {
+		Iterable<ChienSiEntity> listChienSi = chienSiService.findAll();
+		model.addAttribute("listChienSi", listChienSi);
+		return "/dantoc/list.html";
+	}
+
 	@GetMapping("/read-excel")
 	public void readExcel() {
 		try (FileInputStream file = new FileInputStream(new File("D:\\Project-Managent-CSM\\Nhập liệu cho phần mềm Quản lý - CSM.xlsx"));
@@ -35,8 +52,10 @@ public class ChienSiController {
 			Sheet sheet = workbook.getSheetAt(0);
 			int i = 0;
 			for (Row row : sheet) {
-				ChienSiEntity chienSiEntity = getChienSiEntityInsert(row);
-				
+				if (i != 0) {
+					ChienSiEntity chienSiEntity = getChienSiEntityInsert(row);
+					chienSiService.save(chienSiEntity);
+				}
 			    i++;
 			}
 		} catch (Exception e) {
@@ -54,8 +73,13 @@ public class ChienSiController {
 	    	case 1: // Trực thuộc
 	    		switch (cell.getCellType()) {
 	    		case STRING:
-	    			String val = cell.getStringCellValue();
-	    			res.setDoanhTrai(new DoanhTraiEntity());
+	    			String[] arr = cell.getStringCellValue().split("-");
+	    			if (isValidDoanhTrai(arr)) {
+	    				res.setDoanhTrai(doanhTraiService.findByTen(arr[arr.length - 1]).get());
+	    			} else {
+	    				throw new RuntimeException("Bộ phận trực thuộc không hợp lệ");
+	    			}
+	    			
 	    			break;
 	    		default:
 	    			break;
@@ -186,6 +210,7 @@ public class ChienSiController {
 	    		switch (cell.getCellType()) {
 	    		case STRING:
 	    			String val = cell.getStringCellValue();
+	    			System.out.println(val);
 	    			res.setCoMayAnhChiEm(Integer.parseInt(val));
 	    			break;
 	    		default:
@@ -370,7 +395,7 @@ public class ChienSiController {
 	    		switch (cell.getCellType()) {
 	    		case STRING:
 	    			String val = cell.getStringCellValue();
-	    			res.setDanToc(new DanTocEntity()); // TODO
+	    			res.setDanToc(danTocService.findByTen(formatDanToc(val)).get());
 	    			break;
 	    		default:
 	    			break;
@@ -544,18 +569,54 @@ public class ChienSiController {
 		return res;
 	}
 
-	private LocalDate convertStrToDate(String strDate) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		return LocalDate.parse(strDate, formatter);
+	private Date convertStrToDate(String strDate) {
+		Date res = new Date();
+		try {
+			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+			res = formatter.parse(strDate);
+		} catch (ParseException e) {
+		}
+		
+		return res;
 	}
 
 	private boolean isValidDate(String strDate) {
 		try {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			LocalDate.parse(strDate, formatter);
-		} catch (DateTimeParseException e) {
+			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+			formatter.parse(strDate);
+		} catch (ParseException e) {
 			return false;
 		}
 		return false;
+	}
+	
+	private boolean isValidDoanhTrai(String[] arr) {
+		// previous.id == current.TrucThuoc
+		long prevId = 0;
+		for (int i = 0; i < arr.length; ++i) {
+			DoanhTraiEntity doanhTraiEntity = doanhTraiService.findByTen(arr[i].toLowerCase()).get();
+			if (i != 0) {
+				if (prevId != doanhTraiEntity.getTrucThuoc()) {
+					return false;
+				}
+			}
+			prevId = doanhTraiEntity.getId();
+		}
+		return true;
+	}
+	
+	private String formatDanToc(String input) {
+		StringBuilder res = new StringBuilder();
+		String[] arr = input.split("\\s");
+		for (String str : arr) {
+			if (res.length() != 0) {
+				res.append(" ");
+			}
+			String first = str.substring(0, 1).toUpperCase();
+			String last = str.substring(1);
+			res.append(first);
+			res.append(last);
+		}
+		return res.toString();
 	}
 }
