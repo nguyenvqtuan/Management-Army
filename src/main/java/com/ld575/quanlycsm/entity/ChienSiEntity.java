@@ -1,7 +1,8 @@
 package com.ld575.quanlycsm.entity;
 
-import java.time.LocalDate;
+import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,7 +33,7 @@ public class ChienSiEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="doanh_trai_id", nullable = false)
 	private DoanhTraiEntity doanhTrai;
 	
@@ -40,31 +41,31 @@ public class ChienSiEntity {
 	private String hoTen;
 	
 	@Temporal(TemporalType.DATE)
-	private LocalDate ngaySinh;
+	private Date ngaySinh;
 	
 	@Column
 	private String capBac;
 	
 	@Temporal(TemporalType.DATE)
-	private LocalDate thoiGianNhanCapBac;
+	private Date thoiGianNhanCapBac;
 	
 	@Column
 	private String chucVu;
 	
 	@Temporal(TemporalType.DATE)
-	private LocalDate ngayNhapNgu;
+	private Date ngayNhapNgu;
 	
 	@Temporal(TemporalType.DATE)
-	private LocalDate ngayVaoDang;
+	private Date ngayVaoDang;
 	
 	@Temporal(TemporalType.DATE)
-	private LocalDate ngayVaoDangChinhThuc;
+	private Date ngayVaoDangChinhThuc;
 	
 	@Column
 	private String soTheDang;
 	
 	@Temporal(TemporalType.DATE)
-	private LocalDate ngayVaoDoan;
+	private Date ngayVaoDoan;
 	
 	@Column
 	private String ngheNghiepGiaDinh;
@@ -106,10 +107,10 @@ public class ChienSiEntity {
 	private boolean khongCoBo;
 	
 	@Column
-	private boolean giaDinhAnhHuongCovid;
+	private String giaDinhAnhHuongCovid;
 	
 	@Column
-	private boolean giaDinhKhoKhan;
+	private String giaDinhKhoKhan;
 	
 	@Column
 	private String nguoiQuenTrongQuanDoi;
@@ -126,7 +127,7 @@ public class ChienSiEntity {
 	@Column
 	private String daQuaTruong;
 	
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="dan_toc_id", nullable = false)
 	private DanTocEntity danToc;
 
