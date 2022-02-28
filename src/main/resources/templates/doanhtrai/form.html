@@ -57,7 +57,7 @@
                           </select>
 				        </div>
 				        <div class="form-group">
-				          <label for="moTa">Trực thuộc</label>
+				          <label for="trucThuoc">Trực thuộc</label>
 				          <div th:if="${id != null}" id="contain-trucThuoc">
 				          	<input type="hidden" name="trucThuoc" th:value="${id}"/>
 				          	<input type="text" th:value="${strTrucThuoc}" disabled>
@@ -66,7 +66,8 @@
                           </select>
 				        </div>
 				        <div>
-				        	<input type="hidden" th:field="*{id}">
+				        	<input type = "hidden" th:field="*{strTrucThuoc}" />
+				        	<input type="hidden" th:field="*{id}" />
 				        </div>
 				        <button type="submit" class="btn btn-primary me-2">Submit</button>
 				      </form>
@@ -102,19 +103,32 @@
   <script type="text/javascript" th:inline="javascript">
   /*<![CDATA[*/
   $( "#capDo" ).on( "change", function() {
-	  let capDo = $('#capDo').val();
+	  let capDo = $(this).val();
 	  let link = /*[[@{/doanh-trai/getTrucThuoc/}]]*/'';
-      $('#contain-trucThuoc').remove();
+	  
+	  $('#contain-trucThuoc').remove();
 	  $.ajax({
 			url: link + capDo,
 			success: function(result) {
 				$('#trucThuoc').empty();
+				let i = 0;
 				result.forEach(function(item) {
+					if (i == 0) {
+						$("#strTrucThuoc").empty();
+						 $("#strTrucThuoc").val(item.strTrucThuoc);
+					}
+					console.log(item.strTrucThuoc);
 					$('#trucThuoc').append('<option value=' + item.id +'>' + item.strTrucThuoc + '</option>');
+					i++;
 				});
 			}
 		});
 	});
+   $("#trucThuoc").on("change", function() {
+	   let strTrucThuoc = $("#trucThuoc option:selected").text();
+	   console.log(strTrucThuoc);
+	   $("#strTrucThuoc").empty().val(strTrucThuoc);
+   })
   /*]]>*/
   </script>
  </body>
