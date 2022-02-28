@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.ld575.quanlycsm.dto.CapDoDto;
 import com.ld575.quanlycsm.dto.DoanhTraiDto;
 import com.ld575.quanlycsm.entity.DoanhTraiEntity;
+import com.ld575.quanlycsm.service.CommonService;
 import com.ld575.quanlycsm.service.DoanhTraiService;
 
 @Controller
@@ -29,6 +30,9 @@ public class DoanhTraiController {
 	
 	@Autowired
 	public DoanhTraiService doanhTraiService;
+	
+	@Autowired
+	public CommonService commonService;
 	
 	@GetMapping(value = {"/", "/list"})
 	public String list(Model model) {
@@ -83,7 +87,11 @@ public class DoanhTraiController {
 					break;
 				}
 			}
-			res.add(DoanhTraiDto.builder().id(doanhTrai.getId()).strTrucThuoc(doanhTrai.getTenDayDu() + " - " + strTrucThuoc).build());
+			String fullStrTrucThuoc = doanhTrai.getTenDayDu();
+			if (!strTrucThuoc.isEmpty()) {
+				fullStrTrucThuoc += " - " + strTrucThuoc;
+			}
+			res.add(DoanhTraiDto.builder().id(doanhTrai.getId()).strTrucThuoc(fullStrTrucThuoc).build());
 		}
 		return ResponseEntity.ok(res);
 	}
@@ -108,13 +116,14 @@ public class DoanhTraiController {
 			StringBuilder strTrucThuoc = new StringBuilder();
 			Long current = doanhTraiEntity.getId();
 			while (true) {
-				if (mapTrucThuoc.get(current) == null || mapTrucThuoc.get(current) == 0) {
+				if (current == 0 || current == null || mapTrucThuoc.get(current) == null 
+						|| mapTrucThuoc.get(current) == 0) {
 					break;
 				}
-				current = mapTrucThuoc.get(current);
 				if (strTrucThuoc.length() != 0) {
 					strTrucThuoc.append(" - ");
 				}
+				current = mapTrucThuoc.get(current);
 				strTrucThuoc.append(mapTrucThuocStr.get(current));
 			}
 			
@@ -123,7 +132,7 @@ public class DoanhTraiController {
 					.ten(doanhTraiEntity.getTen())
 					.tenDayDu(doanhTraiEntity.getTenDayDu())
 					.trucThuoc(doanhTraiEntity.getTrucThuoc())
-					.strTrucThuoc(strTrucThuoc.toString())
+					.strTrucThuoc(commonService.removefirstLastCharInString('-', strTrucThuoc.toString()))
 					.build();
 			listDoanhTraiDto.add(doanhTraiDto);
 		}
