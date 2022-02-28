@@ -37,6 +37,10 @@ public class DoanhTraiService {
 		return doanhTraiRepository.findById(id);
 	}
 	
+	public Optional<DoanhTraiEntity> findByTen(String ten) {
+		return doanhTraiRepository.findByTen(ten);
+	}
+	
 	public void deleteById(Long id) {
 		doanhTraiRepository.deleteById(id);
 	}
