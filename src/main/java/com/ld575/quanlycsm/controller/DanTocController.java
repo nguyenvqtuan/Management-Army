@@ -24,14 +24,19 @@ public class DanTocController {
 	
 	@GetMapping(value = {"/", "/list"})
 	public String list(Model model) {
+		Iterable<DanTocEntity> listDanToc = danTocService.findAll();
+		model.addAttribute("listDanToc", listDanToc);
+		return "/dantoc/list.html";
+	}
+	
+	@GetMapping(value = "/insert-dan-toc")
+	public String insertDanToc() {
 		String str = "Việt,Tày,Thái,Mường,Khmer,Hoa,Nùng,H'Mông,Dao,Gia Rai,Ê Đê,Ba Na,Sán Chay,Chăm,Cơ Ho,Xơ Đăng,Sán Dìu,Hrê,Ra Glai,Mnông,Thổ,Xtiêng,Khơ mú,Bru - Vân Kiều,Cơ Tu,Giáy,Tà Ôi,Mạ,Giẻ-Triêng,Co,Chơ Ro,Xinh Mun,Hà Nhì,Chu Ru,Lào,La Chí,Kháng,Phù Lá,La Hủ,La Ha,Pà Thẻn,Lự,Ngái,Chứt,Lô Lô,Mảng,Cơ Lao,Bố Y,Cống,Si La,Pu Péo,Rơ Măm,Brâu,Ơ Đu";
 		String[] arr = str.split(",");
 		for (String s : arr) {
 			DanTocDto danTocDto = DanTocDto.builder().ten(s).build();
 			danTocService.save(danTocDto);
 		}
-		Iterable<DanTocEntity> listDanToc = danTocService.findAll();
-		model.addAttribute("listDanToc", listDanToc);
 		return "/dantoc/list.html";
 	}
 	
