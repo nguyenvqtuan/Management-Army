@@ -1,4 +1,4 @@
-package com.ld575.quanlycsm.controller;
+	package com.ld575.quanlycsm.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,13 +54,6 @@ public class DoanhTraiController {
 	public String showUpdate(Model model, @PathVariable("id") Long id, @RequestParam("strTrucThuoc") String strTrucThuoc) {
 		model.addAttribute("title", "Cập nhật doanh trại");
 		Optional<DoanhTraiEntity> doanhTraiEntity = doanhTraiService.findById(id);
-//		List<DoanhTraiDto> listDoanhTraiEntity = getListDoanhTraiDto();
-//		for (DoanhTraiDto doanhTrai : listDoanhTraiEntity) {
-//			if (doanhTrai.getId().equals(doanhTraiEntity.get().getId())) {
-//				
-//				break;
-//			}
-//		}
 		model.addAttribute("doanhTrai", doanhTraiEntity.get());
 		model.addAttribute("listCapDo", getCapDo());
 		model.addAttribute("strTrucThuoc", strTrucThuoc);
@@ -79,7 +72,7 @@ public class DoanhTraiController {
 	
 	@GetMapping("getTrucThuoc/{level}")
 	public ResponseEntity<?> getTrucThuoc(@PathVariable("level") Integer level) {
-		List<DoanhTraiEntity> listDoanhTraiByLevel = doanhTraiService.findByLevel(level);
+		List<DoanhTraiEntity> listDoanhTraiByLevel = doanhTraiService.findByLevel(level + 1);
 		List<DoanhTraiDto> listDoanhTraiEntity = getListDoanhTraiDto();
 		List<DoanhTraiDto> res = new ArrayList<>();
 		for (DoanhTraiEntity doanhTrai : listDoanhTraiByLevel) {
@@ -115,7 +108,7 @@ public class DoanhTraiController {
 			StringBuilder strTrucThuoc = new StringBuilder();
 			Long current = doanhTraiEntity.getId();
 			while (true) {
-				if (mapTrucThuoc.get(current) == 0) {
+				if (mapTrucThuoc.get(current) == null || mapTrucThuoc.get(current) == 0) {
 					break;
 				}
 				current = mapTrucThuoc.get(current);
