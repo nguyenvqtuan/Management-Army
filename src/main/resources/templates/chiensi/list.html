@@ -169,6 +169,8 @@
 					          <tbody>
 					            <tr th:each="chiensi : ${listChienSi}">
 					              <td>
+					              	<span th:text="${chiensi.doanhTrai.tenDayDu}"></span> - 
+					              	<span th:text="${chiensi.doanhTrai.strTrucThuoc}"></span>
 					              </td>
 					              <td th:text="${chiensi.hoTen}">
 					              </td>
