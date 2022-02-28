@@ -3,6 +3,7 @@ package com.ld575.quanlycsm.entity;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -41,7 +42,7 @@ public class DanTocEntity {
 	@Column
 	private String moTa;
 	
-	@OneToMany(mappedBy="danToc")
+	@OneToMany(mappedBy="danToc", cascade=CascadeType.ALL)
 	private List<ChienSiEntity> danhSachChienSi;
 	
 	@CreatedDate
