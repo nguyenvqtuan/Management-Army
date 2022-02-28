@@ -48,13 +48,13 @@ public class ChienSiController {
 	}
 	
 	@PostMapping("/upload")
-	public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
+	public String uploadFile(@RequestParam("file") MultipartFile file) {
 		try {
 			chienSiService.readExcel(file);
-			return ResponseEntity.status(HttpStatus.OK).body("Upload OK");
+			return "redirect:/chien-si/list";
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Upload FAILED");
+			return "redirect:/chien-si/list";
 		}
 	}
 }

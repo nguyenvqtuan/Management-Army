@@ -36,11 +36,24 @@
     				<div class="col-lg-12 grid-margin stretch-card">
 					  <div class="card">
 					    <div class="card-body">
-					      <h4 class="card-title">Danh sách chiến sĩ</h4>
+					    	<div class="row">
+					    		<div class="col-3">
+					    		  <h4 class="card-title">Danh sách chiến sĩ</h4>
+					    		</div>
+					    		<div class="col-9 float-right text-right">
+					    		 Tổng số: <span class="text-bold" th:text="${listChienSi.size()}"></span>
+					    		 <a th:href="@{/chien-si/upload}">
+				              		<i class="mdi mdi-file-import"></i>
+				              	</a>
+					    		</div>
+					    	</div>
 					      <div class="table-responsive">
 					        <table class="table table-striped">
 					          <thead>
 					            <tr>
+					              <th>
+					                Stt
+					              </th>
 					              <th>
 					                Trực thuộc
 					              </th>
@@ -167,7 +180,9 @@
 					            </tr>
 					          </thead>
 					          <tbody>
-					            <tr th:each="chiensi : ${listChienSi}">
+					            <tr th:each="chiensi, iter : ${listChienSi}">
+					            	<td th:text="${iter.index + 1}">
+					            	</td>
 					              <td>
 					              	<span th:text="${chiensi.doanhTrai.tenDayDu}"></span> - 
 					              	<span th:text="${chiensi.doanhTrai.strTrucThuoc}"></span>
