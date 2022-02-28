@@ -41,7 +41,7 @@ public class ChienSiController {
 	public String list(Model model) {
 		Iterable<ChienSiEntity> listChienSi = chienSiService.findAll();
 		model.addAttribute("listChienSi", listChienSi);
-		return "/dantoc/list.html";
+		return "/chiensi/list.html";
 	}
 
 	@GetMapping("/read-excel")

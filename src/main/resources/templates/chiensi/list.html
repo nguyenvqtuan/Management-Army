@@ -42,9 +42,6 @@
 					          <thead>
 					            <tr>
 					              <th>
-					                Tên
-					              </th>
-					              <th>
 					                Trực thuộc
 					              </th>
 					              <th>
@@ -171,129 +168,98 @@
 					          </thead>
 					          <tbody>
 					            <tr th:each="chiensi : ${listChienSi}">
-					              <th>
-					                Tên
-					              </th>
-					              <th>
-					                Trực thuộc
-					              </th>
-					              <th>
-					               	Họ tên
-					              </th>
-					              <th>
-					                Ngày tháng năm sinh
-					              </th>
-					              <th>
-					                Cấp bậc
-					              </th>
-					              <th>
-					               	Thời gian nhận cấp bậc
-					              </th>
-					              <th>
-					                Chức vụ
-					              </th>
-					              <th>
-					                Ngày nhập ngũ
-					              </th>
-					              <th>
-					               	Ngày vào Đảng
-					              </th>
-					              <th>
-					                Ngày vào Đảng chính thức
-					              </th>
-					              <th>
-					                Số thẻ Đảng
-					              </th>
-					              <th>
-					               	Ngày vào Đoàn
-					              </th>
-					              <th>
-					                Nghề nghiệp gia đình
-					              </th>
-					              <th>
-					                Có mấy anh chị em
-					              </th>
-					              <th>
-					               	Con thứ mấy trong nhà
-					              </th>
-					              <th>
-					                Họ tên cha
-					              </th>
-					              <th>
-					                Năm sinh cha
-					              </th>
-					              <th>
-					               	Nghề nghiệp cha
-					              </th>
-					              <th>
-					                Họ tên mẹ
-					              </th>
-					              <th>
-					                Năm sinh mẹ
-					              </th>
-					              <th>
-					               	Nghề nghiệp mẹ
-					              </th>
-					              <th>
-					                Bố mất - Mẹ mất - Bố mẹ li dị - Không có bố
-					              </th>
-					              <th>
-					                Gia đình ảnh hưởng covid
-					              </th>
-					              <th>
-					               	Gia đình khó khăn
-					              </th>
-					              <th>
-					                Người quen trong quân đội
-					              </th>
-					              <th>
-					                Bố mẹ đang là liệt sĩ - quân nhân
-					              </th>
-					              <th>
-					               	Nghề nghiệp bản thân
-					              </th>
-					              <th>
-					                Trình độ văn hóa
-					              </th>
-					              <th>
-					                Đã qua trường
-					              </th>
-					              <th>
-					               	Dân tộc
-					              </th>
-					              <th>
-					                Tôn giáo
-					              </th>
-					              <th>
-					                Sức khỏe
-					              </th>
-					              <th>
-					               	Có vợ [c: chưa dkkh, r: đã dkkh] - ghi chú
-					              </th>
-					              <th>
-					                Quê Quán Phường/Xã - Quận/Huyện - Tỉnh/Thành Phố
-					              </th>
-					              <th>
-					                Nơi ở hiện nay Phường/Xã - Quận/Huyện - Tỉnh/Thành Phố
-					              </th>
-					              <th>
-					                Hình xăm
-					              </th>
-					              <th>
-					                Giữ bùa
-					              </th>
-					              <th>
-					                Người yêu
-					              </th>
-					              <th>
-					               	Hút thuốc
-					              </th>
-					              <th>
-					                Sở trường
-					              </th>
-					              <th>
-					                Ghi chú
-					              </th>
+					              <td>
+					              </td>
+					              <td th:text="${chiensi.hoTen}">
+					              </td>
+					              <td th:text="${chiensi.ngaySinh}">
+					              </td>
+					              <td th:text="${chiensi.capBac}">
+					              </td>
+					              <td th:text="${chiensi.thoiGianNhanCapBac}">
+					              </td>
+					              <td th:text="${chiensi.chucVu}">
+					              </td>
+					              <td th:text="${chiensi.ngayNhapNgu}">
+					              </td>
+					              <td th:text="${chiensi.ngayVaoDang}">
+					              </td>
+					              <td th:text="${chiensi.ngayVaoDangChinhThuc}">
+					              </td>
+					              <td th:text="${chiensi.soTheDang}">
+					              </td>
+					              <td th:text="${chiensi.ngayVaoDoan}">
+					              </td>
+					              <td th:text="${chiensi.ngheNghiepGiaDinh}">
+					              </td>
+					              <td th:text="${chiensi.coMayAnhChiEm}">
+					              </td>
+					              <td th:text="${chiensi.conThuMayTrongNha}">
+					              </td>
+					              <td th:text="${chiensi.hoTenCha}">
+					              </td>
+					              <td th:text="${chiensi.namSinhCha}">
+					              </td>
+					              <td th:text="${chiensi.ngheNghiepCha}">
+					              </td>
+					              <td th:text="${chiensi.hoTenMe}">
+					              </td>
+					              <td th:text="${chiensi.namSinhMe}">
+					              </td>
+					              <td th:text="${chiensi.ngheNghiepMe}">
+					              </td>
+					              <td>
+					                <span th:text="${chiensi.boMat}"></span> - 
+					                <span th:text="${chiensi.meMat}"></span> - 
+					                <span th:text="${chiensi.boMeLiDi}"></span> -
+					                <span th:text="${chiensi.khongCoBo}"></span>
+					              </td>
+					              <td th:text="${chiensi.giaDinhAnhHuongCovid}">
+					              </td>
+					              <td th:text="${chiensi.giaDinhKhoKhan}">
+					              </td>
+					              <td th:text="${chiensi.nguoiQuenTrongQuanDoi}">
+					              </td>
+					              <td th:text="${chiensi.boMeLaLietSiHoacQuanNhan}">
+					              </td>
+					              <td th:text="${chiensi.ngheNghiepBanThan}">
+					              </td>
+					              <td th:text="${chiensi.trinhDo}">
+					              </td>
+					              <td th:text="${chiensi.daQuaTruong}">
+					              </td>
+					              <td th:text="${chiensi.danToc.ten}">
+					              </td>
+					              <td th:text="${chiensi.tonGiao}">
+					              </td>
+					              <td th:text="${chiensi.sucKhoe}">
+					              </td>
+					              <td>
+					               	<span th:text="${chiensi.coVo}"></span> - 
+					               	<span th:text="${chiensi.ghiChuCoVo}"></span>
+					              </td>
+					              <td>
+					              	<span th:text="${chiensi.qqPhuongXa}"></span> - 
+					              	<span th:text="${chiensi.qqQuanHuyen}"></span> -
+					              	<span th:text="${chiensi.qqTinhThanh}"></span>
+					              </td>
+					              <td>
+					              	<span th:text="${chiensi.nohnPhuongXa}"></span> -
+					              	<span th:text="${chiensi.nohnQuanHuyen}"></span> -
+					              	<span th:text="${chiensi.nohnTinhThanh}"></span>
+					              </td>
+					              <td th:text="${chiensi.hinhXam}">
+					              </td>
+					              <td th:text="${chiensi.giuBua}">
+					              </td>
+					              <td th:text="${chiensi.nguoiYeu}">
+					              </td>
+					              <td th:text="${chiensi.hutThuoc}">
+					              </td>
+					              <td th:text="${chiensi.soTruong}">
+					              </td>
+					              <td th:text="${chiensi.ghiChu}">
+					              </td>
 					              <td>
 					              	<a th:href="@{/chien-si/form/{id}(id=${chiensi.id})}">
 					              		<i class="mdi mdi-table-edit"></i>
