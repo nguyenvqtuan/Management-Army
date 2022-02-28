@@ -9,5 +9,6 @@ import com.ld575.quanlycsm.entity.DanTocEntity;
 
 @Repository
 public interface DanTocRepository extends CrudRepository<DanTocEntity, Long>{
-	Optional<DanTocEntity> findByTen(String ten);
+	
+	Optional<DanTocEntity> findByTenLike(String ten);
 }

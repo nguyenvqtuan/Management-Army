@@ -38,7 +38,7 @@ public class DanTocService {
 		danTocRepository.deleteById(id);
 	}
 	
-	public Optional<DanTocEntity> findByTen(String ten) {
-		return danTocRepository.findByTen(ten);
+	public Optional<DanTocEntity> findByTenLike(String ten) {
+		return danTocRepository.findByTenLike(ten);
 	}
 }
