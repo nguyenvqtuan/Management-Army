@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -42,6 +43,14 @@ public class ChienSiService {
 		return chienSiRepository.findAll();
 	}
 
+	public Optional<ChienSiEntity> findById(Long id) {
+		return chienSiRepository.findById(id);
+	}
+	
+	public void deleteById(Long id) {
+		chienSiRepository.deleteById(id);
+	}
+	
 	public void readExcel(MultipartFile file) {
 		try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
 			Sheet sheet = workbook.getSheetAt(0);
@@ -392,6 +401,7 @@ public class ChienSiService {
 	    		switch (cell.getCellType()) {
 	    		case STRING:
 	    			String val = cell.getStringCellValue();
+	    			System.out.println(val);
 	    			res.setDanToc(danTocService.findByTenLike(val).get());
 	    			break;
 	    		default:

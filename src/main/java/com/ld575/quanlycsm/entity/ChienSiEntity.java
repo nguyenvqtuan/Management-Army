@@ -33,7 +33,7 @@ public class ChienSiEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne()
 	@JoinColumn(name="doanh_trai_id", nullable = false)
 	private DoanhTraiEntity doanhTrai;
 	
@@ -127,7 +127,7 @@ public class ChienSiEntity {
 	@Column
 	private String daQuaTruong;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne()
 	@JoinColumn(name="dan_toc_id", nullable = false)
 	private DanTocEntity danToc;
 
