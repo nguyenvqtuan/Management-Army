@@ -14,7 +14,6 @@ import lombok.Setter;
 public class ChienSiDto {
 	
 	private String hoTen;
-	public String hoten;
 	
 	private String ngaySinh;
 	private String thangSinh;
@@ -36,10 +35,10 @@ public class ChienSiDto {
 	
 	private boolean dangVien;
 
-	private String danToc;
 	private String sucKhoe;
 	private String trinhDo;
 	
-	private DanTocDto danTocDto;
-	private DoanhTraiDto doanhTraiDto;
+	private String danToc;
+//	private DanTocDto danToc;
+//	private DoanhTraiDto doanhTrai;
 }

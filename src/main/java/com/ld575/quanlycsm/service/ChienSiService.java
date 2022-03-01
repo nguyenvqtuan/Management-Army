@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ld575.quanlycsm.dto.ChienSiDto;
 import com.ld575.quanlycsm.entity.ChienSiEntity;
 import com.ld575.quanlycsm.entity.DoanhTraiEntity;
 import com.ld575.quanlycsm.repository.ChienSiRepository;
@@ -23,6 +25,7 @@ import com.ld575.quanlycsm.repository.ChienSiRepository;
 public class ChienSiService {
 
 	private static long DEFAULT_DAN_TOC = 1L;
+	
 	@Autowired
 	private ChienSiRepository chienSiRepository;
 	
@@ -49,6 +52,10 @@ public class ChienSiService {
 	
 	public void deleteById(Long id) {
 		chienSiRepository.deleteById(id);
+	}
+	
+	public List<ChienSiEntity> findByCondition(ChienSiDto chienSiDto) {
+		return chienSiRepository.findByCondition(chienSiDto);
 	}
 	
 	public void readExcel(MultipartFile file) {

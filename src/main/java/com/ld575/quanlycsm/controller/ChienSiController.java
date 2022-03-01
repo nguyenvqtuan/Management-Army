@@ -1,5 +1,6 @@
 package com.ld575.quanlycsm.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +25,12 @@ public class ChienSiController {
 	@Autowired
 	private ChienSiService chienSiService;
 	
+	
 	@GetMapping(value = {"/", "/list"})
 	public String list(Model model, @ModelAttribute("chiensi") ChienSiDto chienSiDto) {
-		Iterable<ChienSiEntity> listChienSi = chienSiService.findAll();
+		List<ChienSiEntity> listChienSi = chienSiService.findByCondition(chienSiDto);
 		model.addAttribute("listChienSi", listChienSi);
-		model.addAttribute("chiensi", new ChienSiDto());
+		model.addAttribute("chiensi", chienSiDto == null ? new ChienSiDto() : chienSiDto);
 		return "/chiensi/list.html";
 	}
 	

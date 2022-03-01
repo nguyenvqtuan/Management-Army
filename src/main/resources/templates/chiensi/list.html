@@ -66,13 +66,13 @@
 										</div>
 									</div>
 									<form action="POST" th:object="${chiensi}"
-										th:action="@{/chien-si/list}">
+										th:action="@{/chien-si/}">
 										<div class="row">
 											<div class="col-4">
 
 												<div class="form-group float-left">
 													<input type="text" class="form-control"
-														placeholder="Họ tên" aria-label="" th:field=*{hoTen}>
+														placeholder="Họ tên" aria-label="" name="hoTen" th:value="${chiensi.hoTen}">
 												</div>
 											</div>
 											<div class="col-8 form-group">
