@@ -19,6 +19,14 @@
   <link rel="stylesheet" th:href="@{/css/vertical-layout-light/style.css}">
   <!-- endinject -->
   <link rel="shortcut icon" th:href="@{/images/favicon.png}" />
+  <style>
+  	.float-left {
+  		float: left;
+  	}
+  	.mr-1 {
+  		margin-right: 5px;
+  	}
+  </style>
 </head>
 
 <body>
@@ -46,6 +54,90 @@
 				              		<i class="mdi mdi-file-import"></i>
 				              	</a>
 					    		</div>
+					    	</div>
+					    	<form action="POST" th:object="${chiensi}" th:action="@{/chien-si/list}"></form>
+					    	<div class="row">
+					    		<div class="col-4">
+								   <div class="input-group">
+				                      <input type="text" class="form-control" placeholder="Họ tên" aria-label="" th:field=*{hoTen}>
+				                    </div>
+					    		</div>
+					    		<div class="col-8">
+					    			<input type="text" class="form-control w-25 float-left mr-1" placeholder="Ngày sinh" aria-label="" th:field="*{ngaySinh}">
+					    			<input type="text" class="form-control w-25 float-left mr-1" placeholder="Tháng sinh" aria-label="" th:field="*{thangSinh}">
+			                        <input type="text" class="form-control w-25 float-left mr-1" placeholder="Năm sinh" aria-label="" th:field="*{namSinh}">
+			                        <input type="text" class="form-control w-25 float-left mr-1" placeholder="Tuổi" aria-label="" th:field="*{tuoi}">
+					    		</div>
+					    	</div>
+					    	<div class="row">
+					    		<div class="col-12">
+						    		<div class="form-group float-left">
+						    			<label style="float:left">Nguyên quán</label>
+						    			<input type="text" class="form-control float-left mr-1 w-25" placeholder="Phường/Xã" aria-label="" th:field="*{nqPhuongXa}">
+						    			<input type="text" class="form-control float-left mr-1 mr-1 w-25" placeholder="Quận/Huyện" aria-label="" th:field="*{nqQuanHuyen}">
+				                        <input type="text" class="form-control float-left mr-1 w-25" placeholder="Tỉnh/Thành" aria-label="" th:field="*{nqTinhThanh}">
+						    		</div>
+					    		</div>
+					    	</div>
+					    	<div class="row">
+					    		<div class="col-12">
+						    		<div class="form-group float-left">
+						    			<label style="float:left">Nơi ở hiện nay</label>
+						    			<input type="text" class="form-control float-left mr-1 w-25" placeholder="Phường/Xã" aria-label="" th:field="*{nohnPhuongXa}">
+						    			<input type="text" class="form-control float-left mr-1 mr-1 w-25" placeholder="Quận/Huyện" aria-label="" th:field="*{nohnQuanHuyen}">
+				                        <input type="text" class="form-control float-left mr-1 w-25" placeholder="Tỉnh/Thành" aria-label="" th:field="*{nohnTinhThanh}">
+						    		</div>
+					    		</div>
+					    		<div class="input-group-append">
+			                          <button class="btn btn-sm btn-primary" type="button">Search</button>
+			                        </div>
+					    	</div>
+					    	<div class="row">
+					    		<div class="col-12">
+					    			<input type="text" class="form-control float-left mr-1 w-25" placeholder="Trình độ" aria-label="" th:field="*{trinhDo}">
+						    		<input type="text" class="form-control float-left mr-1 w-25" placeholder="Trình độ" aria-label="" th:field="*{danToc}">
+					    		</div>
+					    	</div>
+					    	<div class="row">
+					    		<div class="col-12">
+						    		<div class="form-group float-left">
+						    			<label style="float:left">Đoàn viên</label>
+						    			<input type="text" class="form-control float-left mr-1 w-25" placeholder="Ngày vào đoàn" aria-label="" th:field="*{ngayVaoDoan}">
+						    			<input type="text" class="form-control float-left mr-1 mr-1 w-25" placeholder="Tháng vào đoàn" aria-label="" th:field="*{thangVaoDoan}">
+				                        <input type="text" class="form-control float-left mr-1 w-25" placeholder="Năm vào đoàn" aria-label="" th:field="*{namVaoDoan}">
+						    		</div>
+					    		</div>
+					    	</div>
+					    	<div class="row">
+					    		<div class="col-12">
+						    		<div class="form-group float-left">
+						    			<label style="float:left">Đảng viên</label>
+						    			<input type="checkbox" class="form-check-input" checked="" th:field="*{dangVien}"> Là Đảng Viên
+						    		</div>
+					    		</div>
+					    	</div>
+					    	<div class="row">
+					    		<div class="col-12">
+						    		<div class="form-group float-left">
+						    			<input type="text" class="form-control float-left mr-1 w-25" placeholder="Loại sức khỏe" aria-label="" th:field="*{sucKhoe}">
+						    		</div>
+						    		<div class="form-group float-left">
+						    			<input type="text" class="form-control float-left mr-1 w-25" placeholder="Trình độ" aria-label="" th:field="*{trinhDo}">
+						    		</div>
+					    		</div>
+					    	</div>
+					    	<div class="row">
+					    		<div class="col-12">
+						    		<div class="form-group float-left">
+						    			<label style="float:left">Trực thuộc</label>
+						    			<input type="text" class="form-control float-left mr-1 w-25" placeholder="Ngày vào đoàn" aria-label="" th:field="*{ngayVaoDoan}">
+						    			<input type="text" class="form-control float-left mr-1 mr-1 w-25" placeholder="Tháng vào đoàn" aria-label="" th:field="*{thangVaoDoan}">
+				                        <input type="text" class="form-control float-left mr-1 w-25" placeholder="Năm vào đoàn" aria-label="" th:field="*{namVaoDoan}">
+						    		</div>
+					    		</div>
+					    		<div class="input-group-append">
+			                          <button class="btn btn-sm btn-primary" type="button">Search</button>
+			                        </div>
 					    	</div>
 					      <div class="table-responsive">
 					        <table class="table table-striped">
@@ -226,10 +318,18 @@
 					              <td th:text="${chiensi.ngheNghiepMe}">
 					              </td>
 					              <td>
-					                <span th:text="${chiensi.boMat}"></span> - 
-					                <span th:text="${chiensi.meMat}"></span> - 
-					                <span th:text="${chiensi.boMeLiDi}"></span> -
-					                <span th:text="${chiensi.khongCoBo}"></span>
+					              	<label class="form-check-label" th:if=${chiensi.boMat}>
+					              		<input style="margin-top:0px" type="checkbox" class="form-check-input" checked=""> <span>Bố mất</span> -
+					              	</label>
+					              	<label class="form-check-label" th:if=${chiensi.meMat}>
+					              		<input style="margin-top:0px" type="checkbox" class="form-check-input" checked=""> <span>Mẹ mất</span> -
+					              	</label>
+					              	<label class="form-check-label" th:if=${chiensi.boMeLiDi}>
+					              		<input style="margin-top:0px" type="checkbox" class="form-check-input" checked=""> <span>Bố mẹ li dị</span> -
+					              	</label>
+					              	<label class="form-check-label" th:if=${chiensi.khongCoBo}>
+					              		<input style="margin-top:0px" type="checkbox" class="form-check-input" checked=""> <span>Không có bố</span> -
+					              	</label>
 					              </td>
 					              <td th:text="${chiensi.giaDinhAnhHuongCovid}">
 					              </td>
