@@ -1,5 +1,6 @@
 package com.ld575.quanlycsm.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,8 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ld575.quanlycsm.dto.ChienSiDto;
+import com.ld575.quanlycsm.dto.TrinhDoDto;
 import com.ld575.quanlycsm.entity.ChienSiEntity;
+import com.ld575.quanlycsm.entity.DanTocEntity;
+import com.ld575.quanlycsm.entity.DoanhTraiEntity;
 import com.ld575.quanlycsm.service.ChienSiService;
+import com.ld575.quanlycsm.service.DanTocService;
+import com.ld575.quanlycsm.service.DoanhTraiService;
 
 @Controller
 @RequestMapping("/chien-si")
@@ -25,12 +31,22 @@ public class ChienSiController {
 	@Autowired
 	private ChienSiService chienSiService;
 	
+	@Autowired
+	private DanTocService danTocService;
+	
+	@Autowired
+	private DoanhTraiService doanhTraiService;
 	
 	@GetMapping(value = {"/", "/list"})
 	public String list(Model model, @ModelAttribute("chiensi") ChienSiDto chienSiDto) {
 		List<ChienSiEntity> listChienSi = chienSiService.findByCondition(chienSiDto);
+//		Iterable<ChienSiEntity> listChienSi = chienSiService.findAll();
 		model.addAttribute("listChienSi", listChienSi);
+		model.addAttribute("listTrinhDo", getListTrinhDo());
+		model.addAttribute("listDanToc", getListDanToc());
+		model.addAttribute("listDaiDoi", getListDoanhTraiDaiDoi());
 		model.addAttribute("chiensi", chienSiDto == null ? new ChienSiDto() : chienSiDto);
+		
 		return "/chiensi/list.html";
 	}
 	
@@ -58,5 +74,42 @@ public class ChienSiController {
 		}
 		chienSiService.deleteById(id);
 		return "redirect:/chien-si/list";
+	}
+	
+	private List<TrinhDoDto> getListTrinhDo() {
+		List<TrinhDoDto> listTrinhDo = new ArrayList<>();
+		listTrinhDo.add(new TrinhDoDto("", "Trình độ"));
+		listTrinhDo.add(new TrinhDoDto("ĐH", "ĐH"));
+		listTrinhDo.add(new TrinhDoDto("CĐ", "CĐ"));
+		listTrinhDo.add(new TrinhDoDto("TC", "TC"));
+		listTrinhDo.add(new TrinhDoDto("12", "12"));
+		listTrinhDo.add(new TrinhDoDto("11", "11"));
+		listTrinhDo.add(new TrinhDoDto("10", "10"));
+		listTrinhDo.add(new TrinhDoDto("9", "9"));
+		listTrinhDo.add(new TrinhDoDto("8", "8"));
+		listTrinhDo.add(new TrinhDoDto("7", "7"));
+		listTrinhDo.add(new TrinhDoDto("6", "6"));
+		listTrinhDo.add(new TrinhDoDto("5", "5"));
+		listTrinhDo.add(new TrinhDoDto("4", "4"));
+		listTrinhDo.add(new TrinhDoDto("3", "3"));
+		listTrinhDo.add(new TrinhDoDto("2", "2"));
+		listTrinhDo.add(new TrinhDoDto("1", "1"));
+		return listTrinhDo;
+	}
+	
+	private List<DanTocEntity> getListDanToc() {
+		Iterable<DanTocEntity> listDanToc = danTocService.findAll();
+		List<DanTocEntity> res = new ArrayList<>();
+		res.add(DanTocEntity.builder().id(0L).ten("Dân tộc").build());
+		for (DanTocEntity danTocEntity : listDanToc) {
+			res.add(danTocEntity);
+		}
+		return res;
+	}
+	
+	private List<DoanhTraiEntity> getListDoanhTraiDaiDoi() {
+		List<DoanhTraiEntity> listDoanhTraiEntity = doanhTraiService.findByLevel(3);
+		listDoanhTraiEntity.add(0, DoanhTraiEntity.builder().id(0L).tenDayDu("Đại đội").build());
+		return listDoanhTraiEntity;
 	}
 }

@@ -1,6 +1,7 @@
 package com.ld575.quanlycsm.service;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,6 +21,7 @@ import com.ld575.quanlycsm.dto.ChienSiDto;
 import com.ld575.quanlycsm.entity.ChienSiEntity;
 import com.ld575.quanlycsm.entity.DoanhTraiEntity;
 import com.ld575.quanlycsm.repository.ChienSiRepository;
+import com.ld575.quanlycsm.repository.CustomChienSiRepository;
 
 @Service
 public class ChienSiService {
@@ -37,6 +39,9 @@ public class ChienSiService {
 	
 	@Autowired
 	private CommonService commonService;
+	
+	@Autowired
+	private CustomChienSiRepository customChienSiRepository;
 
 	public ChienSiEntity save(ChienSiEntity chienSiEntity) {
 		return chienSiRepository.save(chienSiEntity);
@@ -55,7 +60,7 @@ public class ChienSiService {
 	}
 	
 	public List<ChienSiEntity> findByCondition(ChienSiDto chienSiDto) {
-		return chienSiRepository.findByCondition(chienSiDto);
+		return customChienSiRepository.findByCondition(chienSiDto);
 	}
 	
 	public void readExcel(MultipartFile file) {
@@ -107,12 +112,9 @@ public class ChienSiService {
 	    		break;
 	    	case 3: // Ngay tháng năm sinh
 	    		switch (cell.getCellType()) {
-	    		case STRING:
-	    			String val = cell.getStringCellValue();
-	    			if (isValidDate(val)) {
-	    				res.setNgaySinh(convertStrToDate(val)); 
-	    			}
-	    			break;
+	    		case NUMERIC:
+	    			Date date = cell.getDateCellValue();
+	    			res.setNgaySinh(date);
 	    		default:
 	    			break;
 	    		}
@@ -129,12 +131,9 @@ public class ChienSiService {
 	    		break;
 	    	case 5: // Thời gian nhận cấp bậc
 	    		switch (cell.getCellType()) {
-	    		case STRING:
-	    			String val = cell.getStringCellValue();
-	    			if (isValidDate(val)) {
-	    				res.setThoiGianNhanCapBac(convertStrToDate(val));
-	    			}
-	    			break;
+	    		case NUMERIC:
+	    			Date date = cell.getDateCellValue();
+	    			res.setThoiGianNhanCapBac(date);
 	    		default:
 	    			break;
 	    		}
@@ -151,11 +150,9 @@ public class ChienSiService {
 	    		break;
 	    	case 7: // Ngày nhập ngũ 
 	    		switch (cell.getCellType()) {
-	    		case STRING:
-	    			String val = cell.getStringCellValue();
-	    			if (isValidDate(val)) {
-	    				res.setNgayNhapNgu(convertStrToDate(val));
-	    			}
+	    		case NUMERIC:
+	    			Date date = cell.getDateCellValue();
+	    			res.setNgayNhapNgu(date);
 	    			break;
 	    		default:
 	    			break;
@@ -169,17 +166,19 @@ public class ChienSiService {
 	    				res.setNgayVaoDang(convertStrToDate(val));
 	    			}
 	    			break;
+	    		case NUMERIC:
+	    			Date date = cell.getDateCellValue();
+	    			res.setNgayVaoDang(date);
+	    			break;
 	    		default:
 	    			break;
 	    		}
 	    		break;
 	    	case 9: // Ngày vào Đảng chính thức
 	    		switch (cell.getCellType()) {
-	    		case STRING:
-	    			String val = cell.getStringCellValue();
-	    			if (isValidDate(val)) {
-	    				res.setNgayVaoDang(convertStrToDate(val));
-	    			}
+	    		case NUMERIC:
+	    			Date date = cell.getDateCellValue();
+	    			res.setNgayVaoDangChinhThuc(date);
 	    			break;
 	    		default:
 	    			break;
@@ -191,18 +190,19 @@ public class ChienSiService {
 	    			String val = cell.getStringCellValue();
 	    			res.setSoTheDang(val);
 	    			break;
+	    		case NUMERIC:
+	    			String val2 = String.valueOf(cell.getNumericCellValue());
+	    			res.setSoTheDang(val2);
+	    			break;
 	    		default:
 	    			break;
 	    		}
 	    		break;
 	    	case 11: // Ngày vào Đoàn
 	    		switch (cell.getCellType()) {
-	    		case STRING:
-	    			String val = cell.getStringCellValue();
-	    			if (isValidDate(val)) {
-	    				res.setNgayVaoDoan(convertStrToDate(val));
-	    			}
-	    			break;
+	    		case NUMERIC:
+	    			Date date = cell.getDateCellValue();
+	    			res.setNgayVaoDoan(date);
 	    		default:
 	    			break;
 	    		}
@@ -221,8 +221,11 @@ public class ChienSiService {
 	    		switch (cell.getCellType()) {
 	    		case STRING:
 	    			String val = cell.getStringCellValue();
-	    			System.out.println(val);
 	    			res.setCoMayAnhChiEm(Integer.parseInt(val));
+	    			break;
+	    		case NUMERIC:
+	    			int val2 = (int) cell.getNumericCellValue();
+	    			res.setCoMayAnhChiEm(val2);
 	    			break;
 	    		default:
 	    			break;
@@ -233,6 +236,10 @@ public class ChienSiService {
 	    		case STRING:
 	    			String val = cell.getStringCellValue();
 	    			res.setConThuMayTrongNha(Integer.parseInt(val));
+	    			break;
+	    		case NUMERIC:
+	    			int val2 = (int) cell.getNumericCellValue();
+	    			res.setConThuMayTrongNha(val2);
 	    			break;
 	    		default:
 	    			break;
@@ -253,6 +260,10 @@ public class ChienSiService {
 	    		case STRING:
 	    			String val = cell.getStringCellValue();
 	    			res.setNamSinhCha(Integer.parseInt(val));
+	    			break;
+	    		case NUMERIC:
+	    			int val2 = (int) cell.getNumericCellValue();
+	    			res.setNamSinhCha(val2);
 	    			break;
 	    		default:
 	    			break;
@@ -283,6 +294,10 @@ public class ChienSiService {
 	    		case STRING:
 	    			String val = cell.getStringCellValue();
 	    			res.setNamSinhMe(Integer.parseInt(val));
+	    			break;
+	    		case NUMERIC:
+	    			int val2 = (int) cell.getNumericCellValue();
+	    			res.setNamSinhMe(val2);
 	    			break;
 	    		default:
 	    			break;
@@ -389,6 +404,10 @@ public class ChienSiService {
 	    		case STRING:
 	    			String val = cell.getStringCellValue();
 	    			res.setTrinhDo(val.toUpperCase());
+	    			break;
+	    		case NUMERIC:
+	    			String val2 = String.valueOf(cell.getNumericCellValue());
+	    			res.setTrinhDo(val2);
 	    			break;
 	    		default:
 	    			break;
@@ -588,7 +607,7 @@ public class ChienSiService {
 	private Date convertStrToDate(String strDate) {
 		Date res = new Date();
 		try {
-			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 			res = formatter.parse(strDate);
 		} catch (ParseException e) {
 		}
@@ -598,12 +617,12 @@ public class ChienSiService {
 
 	private boolean isValidDate(String strDate) {
 		try {
-			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 			formatter.parse(strDate);
 		} catch (ParseException e) {
 			return false;
 		}
-		return false;
+		return true;
 	}
 	
 	private boolean isValidDoanhTrai(String[] arr) {

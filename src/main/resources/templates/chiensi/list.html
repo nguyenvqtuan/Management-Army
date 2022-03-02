@@ -72,7 +72,8 @@
 
 												<div class="form-group float-left">
 													<input type="text" class="form-control"
-														placeholder="Họ tên" aria-label="" name="hoTen" th:value="${chiensi.hoTen}">
+														placeholder="Họ tên" aria-label="" name="hoTen"
+														th:value="${chiensi.hoTen}">
 												</div>
 											</div>
 											<div class="col-8 form-group">
@@ -139,9 +140,22 @@
 										<div class="row">
 											<div class="col-12">
 												<div class="form-group float-left">
-													<label style="float: left">Đảng viên</label> <input
-														type="checkbox" class="form-check-input" checked=""
-														th:field="*{dangVien}"> Là Đảng Viên
+													<input type="checkbox"
+														class="float-left form-check-input mr-1"
+														th:checked="${chiensi.dangVien}" name="dangVien"
+														id="dangVien"> <label style="float: left">Đảng
+														viên</label> <input style="display: none;" type="text"
+														class="dang-vien form-control float-left mr-1 w-25"
+														placeholder="Ngày vào đảng" aria-label=""
+														th:field="*{ngayVaoDang}"> <input
+														style="display: none;" type="text"
+														class="dang-vien form-control float-left mr-1 mr-1 w-25"
+														placeholder="Tháng vào đảng" aria-label=""
+														th:field="*{thangVaoDang}"> <input
+														style="display: none;" type="text"
+														class="dang-vien form-control float-left mr-1 w-25"
+														placeholder="Năm vào đảng" aria-label=""
+														th:field="*{namVaoDang}">
 												</div>
 											</div>
 										</div>
@@ -150,22 +164,121 @@
 												<div class="form-group float-left">
 													<input type="text"
 														class="form-control float-left mr-1 w-25"
-														placeholder="Loại sức khỏe" aria-label=""
-														th:field="*{sucKhoe}"> 
-													<input type="text"
+														placeholder="Sức khỏe" aria-label=""
+														th:field="*{sucKhoe}"> <select
+														class="form-control w-20 float-left" id="trinhDo"
+														name="trinhDo">
+														<option th:each="i : ${listTrinhDo}" th:value="${i.id}"
+															th:text="${i.ten}"
+															th:selected="${i.id} == ${chiensi.trinhDo}"></option>
+													</select> <input type="text"
 														class="form-control float-left mr-1 w-25"
-														placeholder="Trình độ" aria-label=""
-														th:field="*{trinhDo}"> 
-													<input type="text"
+														placeholder="Đã qua trường" aria-label=""
+														th:field="*{daQuaTruong}"> <select
+														class="form-control w-20 float-left" id="danToc"
+														name="danToc">
+														<option th:each="i : ${listDanToc}" th:value="${i.id}"
+															th:text="${i.ten}"
+															th:selected="${i.id == chiensi.danToc}"></option>
+													</select> <input type="text"
 														class="form-control float-left mr-1 w-25"
-														placeholder="Dân tộc" aria-label="" th:field="*{danToc}">
+														placeholder="Nghề nghiệp bản thân" aria-label=""
+														th:field="*{ngheNghiepBanThan}"> <input
+														type="text" class="form-control float-left mr-1 w-25"
+														placeholder="Tôn giáo" aria-label=""
+														th:field="*{tonGiao}"> <input type="text"
+														class="form-control float-left mr-1 w-25"
+														placeholder="Sở trường" aria-label=""
+														th:field="*{soTruong}">
+												</div>
+												<div class="row">
+													<div class="col-12">
+														<div class="form-group">
+															<input type="checkbox"
+																class="float-left form-check-input mr-1"
+																th:checked="${chiensi.hinhXam}" name="hinhXam"
+																id="hinhXam" placeholder="Hình xăm"> <label
+																style="text-align: left" class="float-left">Hình
+																xăm</label> <input type="checkbox"
+																class="float-left form-check-input mr-1"
+																th:checked="${chiensi.giuBua}" name="giuBua" id="giuBua"
+																placeholder="Giữ bùa"> <label
+																style="text-align: left" class="float-left">Giữ
+																bùa</label> <input type="checkbox"
+																class="float-left form-check-input mr-1"
+																th:checked="${chiensi.nguoiYeu}" name="nguoiYeu"
+																id="nguoiYeu" placeholder="Người Yêu"> <label
+																style="text-align: left" class="float-left">Người
+																Yêu</label> <input type="checkbox"
+																class="float-left form-check-input mr-1"
+																th:checked="${chiensi.hutThuoc}" name="hutThuoc"
+																id="hutThuoc" placeholder="Hút Thuốc"> <label
+																style="text-align: left" class="float-left">Hút
+																thuốc</label> <input type="radio"
+																class="float-left form-check-input mr-1"
+																th:checked="${chiensi.coVo == 'r'}" name="coVo"
+																id="coVoDaDkkh" value="r"> <label
+																style="text-align: left" class="float-left">Có
+																vợ (đã đkkh)</label> <input type="radio"
+																class="float-left form-check-input mr-1"
+																th:checked="${chiensi.coVo == 'c'}" name="coVo"
+																id="coChuaDaDkkh" value="c"> <label
+																style="text-align: left" class="float-left">Có
+																vợ (chưa đkkh)</label> <input type="radio"
+																class="float-left form-check-input mr-1" name="coVo"
+																id="chuaCoVo" value=""
+																th:checked="${chiensi.coVo.empty}"> <label
+																style="text-align: left" class="float-left">Chưa
+																có vợ</label>
+
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-12">
+														<div class="form-group">
+															<input type="checkbox"
+																class="float-left form-check-input mr-1"
+																th:checked="${chiensi.boMat}" name="boMat" id="boMat"
+																placeholder="Bố mất"> <label
+																style="text-align: left" class="float-left">Bố
+																mất</label> <input type="checkbox"
+																class="float-left form-check-input mr-1"
+																th:checked="${chiensi.meMat}" name="meMat" id="meMat"
+																placeholder="Mẹ mất"> <label
+																style="text-align: left" class="float-left">Mẹ
+																mất</label> <input type="checkbox"
+																class="float-left form-check-input mr-1"
+																th:checked="${chiensi.boMeLiDi}" name="boMeLiDi"
+																id="boMeLiDi" placeholder="Bố mẹ li dị"> <label
+																style="text-align: left" class="float-left">Bố
+																mẹ li dị</label> <input type="checkbox"
+																class="float-left form-check-input mr-1"
+																th:checked="${chiensi.khongCoBo}" name="KhongCoBo"
+																id="khongCoBo" placeholder="Không có bố"> <label
+																style="text-align: left" class="float-left">Không
+																có bố</label>
+
+														</div>
+													</div>
 												</div>
 											</div>
 										</div>
 										<div class="row">
 											<div class="col-12">
 												<div class="form-group float-left">
-													<label style="float: left">Trực thuộc</label>
+													<label style="float: left">Trực thuộc</label> 
+													<select
+														class="form-control w-20 float-left" id="daiDoi"
+														name="daiDoi">
+														<option th:each="i : ${listDaiDoi}" th:value="${i.id}"
+															th:text="${i.tenDayDu}"
+															th:selected="${i.id == chiensi.daiDoi}"></option>
+													</select>
+														
+														 <select id="trungDoi"
+														name="TrungDoi"></select> <select id="tieuDoi"
+														name="tieuDoi"></select>
 												</div>
 											</div>
 										</div>
@@ -342,5 +455,60 @@
 	<script th:src="@{/js/typeahead.js}"></script>
 	<script th:src="@{/js/select2.js}"></script>
 	<!-- End custom js for this page-->
+
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		$("#dangVien").on("click", function() {
+			if ($("#dangVien:checked").length > 0) {
+				$(".dang-vien").show();
+			} else {
+				$(".dang-vien").hide();
+			}
+		})
+
+		$("#daiDoi").on(
+				"change",
+				function() {
+					$("#tieudoi").empty();
+					console.log($(this).val());
+					let id = $(this).val();
+					let link = /*[[@{/doanh-trai/truc-thuoc/}]]*/'';
+					$.ajax({
+						url : link + id,
+						success : function(result) {
+							$('#trungDoi').empty();
+							let i = 0;
+							result.forEach(function(item) {
+								$('#trungDoi').append(
+										'<option value=' + item.id +'>'
+												+ item.tenDayDu + '</option>');
+								i++;
+							});
+						}
+					});
+				});
+
+		$("#trungDoi").on(
+				"change",
+				function() {
+					console.log($(this).val());
+					let id = $(this).val();
+					let link = /*[[@{/doanh-trai/truc-thuoc}]]*/'';
+					$.ajax({
+						url : link + id,
+						success : function(result) {
+							$("#tieudoi").empty();
+							let i = 0;
+							result.forEach(function(item) {
+								$('#tieuDoi').append(
+										'<option value=' + item.id +'>'
+												+ item.tenDayDu + '</option>');
+								i++;
+							});
+						}
+					});
+				});
+		/*]]>*/
+	</script>
 </body>
 </html>

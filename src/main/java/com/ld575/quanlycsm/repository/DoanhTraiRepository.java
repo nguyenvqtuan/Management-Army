@@ -13,4 +13,6 @@ public interface DoanhTraiRepository extends CrudRepository<DoanhTraiEntity, Lon
 	public List<DoanhTraiEntity> findByCapDo(Integer level);
 	
 	public Optional<DoanhTraiEntity> findByTen(String val);
+
+	public List<DoanhTraiEntity> findByTrucThuoc(Long trucThuoc);
 }

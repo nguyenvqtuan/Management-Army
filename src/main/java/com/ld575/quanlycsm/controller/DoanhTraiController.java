@@ -40,6 +40,11 @@ public class DoanhTraiController {
 		return "/doanhtrai/list.html";
 	}
 	
+	@GetMapping("/truc-thuoc/{id}")
+	public List<DoanhTraiEntity> trucThuoc(@PathVariable("id") Long id) {
+		return doanhTraiService.findByTrucThuoc(id);
+	}
+	
 	@GetMapping("/form")
 	public String showInsert(Model model) {
 		model.addAttribute("title", "Thêm doanh trại");

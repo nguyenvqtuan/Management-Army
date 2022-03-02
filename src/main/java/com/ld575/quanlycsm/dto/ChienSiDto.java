@@ -15,10 +15,10 @@ public class ChienSiDto {
 	
 	private String hoTen;
 	
-	private String ngaySinh;
-	private String thangSinh;
-	private String namSinh;
-	private String tuoi;
+	private Integer ngaySinh;
+	private Integer thangSinh;
+	private Integer namSinh;
+	private Integer tuoi;
 	
 	private String qqPhuongXa;
 	private String qqQuanHuyen;
@@ -28,17 +28,38 @@ public class ChienSiDto {
 	private String nohnQuanHuyen;
 	private String nohnTinhThanh;
 	
-	
-	private String ngayVaoDoan;
-	private String thangVaoDoan;
-	private String namVaoDoan;
+	private Integer ngayVaoDoan;
+	private Integer thangVaoDoan;
+	private Integer namVaoDoan;
 	
 	private boolean dangVien;
+	
+	private Integer ngayVaoDang;
+	private Integer thangVaoDang;
+	private Integer namVaoDang;
 
 	private String sucKhoe;
 	private String trinhDo;
+	private String daQuaTruong;
 	
-	private String danToc;
-//	private DanTocDto danToc;
-//	private DoanhTraiDto doanhTrai;
+	private Long danToc;
+	private String tonGiao;
+	
+	private String ngheNghiepBanThan;
+	
+	private boolean hinhXam;
+	private boolean giuBua;
+	private boolean nguoiYeu;
+	private boolean hutThuoc;
+	private String soTruong;
+	
+	private boolean boMat;
+	private boolean meMat;
+	private boolean boMeLiDi;
+	private boolean khongCoBo;
+	private String coVo;
+	
+	private String daiDoi;
+	private String trungDoi;
+	private String tieuDoi;
 }

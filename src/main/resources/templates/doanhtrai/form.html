@@ -117,7 +117,6 @@
 						$("#strTrucThuoc").empty();
 						 $("#strTrucThuoc").val(item.strTrucThuoc);
 					}
-					console.log(item.strTrucThuoc);
 					$('#trucThuoc').append('<option value=' + item.id +'>' + item.strTrucThuoc + '</option>');
 					i++;
 				});
@@ -126,7 +125,6 @@
 	});
    $("#trucThuoc").on("change", function() {
 	   let strTrucThuoc = $("#trucThuoc option:selected").text();
-	   console.log(strTrucThuoc);
 	   $("#strTrucThuoc").empty().val(strTrucThuoc);
    })
   /*]]>*/
