@@ -46,9 +46,12 @@ public class DoanhTraiEntity {
 	
 	@Column
 	private Long trucThuoc;
-	
+
 	@Column
-	private String strTrucThuoc;
+	private String tenTrucThuoc;
+
+	@Column
+	private String tenDayDuTrucThuoc;
 	
 	@Column(columnDefinition = "integer COMMENT \"1: Cấp tiểu đội, 2: Cấp trung đội, 3: Cấp đại đội, 4: Cấp tiểu đoàn\"")
 	private Integer capDo;

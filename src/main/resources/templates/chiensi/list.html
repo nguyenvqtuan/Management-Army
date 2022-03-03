@@ -227,7 +227,7 @@
 																vợ (chưa đkkh)</label> <input type="radio"
 																class="float-left form-check-input mr-1" name="coVo"
 																id="chuaCoVo" value=""
-																th:checked="${chiensi.coVo.empty}"> <label
+																th:checked="${chiensi.coVo == ''}"> <label
 																style="text-align: left" class="float-left">Chưa
 																có vợ</label>
 
@@ -478,6 +478,9 @@
 						success : function(result) {
 							$('#trungDoi').empty();
 							let i = 0;
+							if (result == "") {
+								return;
+							}
 							result.forEach(function(item) {
 								$('#trungDoi').append(
 										'<option value=' + item.id +'>'
@@ -493,12 +496,15 @@
 				function() {
 					console.log($(this).val());
 					let id = $(this).val();
-					let link = /*[[@{/doanh-trai/truc-thuoc}]]*/'';
+					let link = /*[[@{/doanh-trai/truc-thuoc/}]]*/'';
 					$.ajax({
 						url : link + id,
 						success : function(result) {
 							$("#tieudoi").empty();
 							let i = 0;
+							if (result == "") {
+								return;
+							}
 							result.forEach(function(item) {
 								$('#tieuDoi').append(
 										'<option value=' + item.id +'>'

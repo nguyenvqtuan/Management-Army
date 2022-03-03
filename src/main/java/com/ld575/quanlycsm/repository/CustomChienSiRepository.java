@@ -635,6 +635,25 @@ public class CustomChienSiRepository {
 		return sb.toString();
 	}
 	
+	private String getConditionDoanhTrai(ChienSiDto chienSiDto) {
+		StringBuilder sb = new StringBuilder();
+		if (!commonService.isEmpty(chienSiDto.getDaiDoi())) {
+			sb.insert(0, " ( ");
+			sb.append("dtrai.khongCoBo IS NOT NULL");
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getDaiDoi())) {
+			sb.insert(0, " ( ");
+			sb.append("dtrai.khongCoBo IS NOT NULL");
+		}
+		
+		if (sb.length() == 0) {
+			return "";
+		}
+		sb.append(")");
+		return sb.toString();
+	}
+	
 	private void setParamsHoTen(Query query, ChienSiDto chienSiDto) {
 		if (!commonService.isEmpty(chienSiDto.getHoTen())) {
 			query.setParameter("hoTen", "%" + chienSiDto.getHoTen() + "%");

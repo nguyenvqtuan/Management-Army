@@ -60,13 +60,14 @@
 				          <label for="trucThuoc">Trực thuộc</label>
 				          <div th:if="${id != null}" id="contain-trucThuoc">
 				          	<input type="hidden" name="trucThuoc" th:value="${id}"/>
-				          	<input type="text" th:value="${strTrucThuoc}" disabled>
+				          	<input type="text" th:value="${tenDayDuTrucThuoc}" disabled>
 				          </div>
 				          <select class="form-control" id="trucThuoc" th:field="*{trucThuoc}">
                           </select>
 				        </div>
 				        <div>
-				        	<input type = "hidden" th:field="*{strTrucThuoc}" />
+				        	<input type="hidden" th:field="*{tenDayDuTrucThuoc}" />
+				        	<input type="hidden" th:field="*{tenTrucThuoc}" />
 				        	<input type="hidden" th:field="*{id}" />
 				        </div>
 				        <button type="submit" class="btn btn-primary me-2">Submit</button>
@@ -101,7 +102,7 @@
   <!-- End custom js for this page-->
   
   <script type="text/javascript" th:inline="javascript">
-  /*<![CDATA[*/
+  /*<![CDATA[*/ 
   $( "#capDo" ).on( "change", function() {
 	  let capDo = $(this).val();
 	  let link = /*[[@{/doanh-trai/getTrucThuoc/}]]*/'';
@@ -114,19 +115,26 @@
 				let i = 0;
 				result.forEach(function(item) {
 					if (i == 0) {
-						$("#strTrucThuoc").empty();
-						 $("#strTrucThuoc").val(item.strTrucThuoc);
+						$("#tenDayDuTrucThuoc").empty();
+						$("#tenDayDuTrucThuoc").val(item.tenDayDuTrucThuoc);
+						
+						$("#tenTrucThuoc").empty();
+						$("#tenTrucThuoc").val(item.tenTrucThuoc);
 					}
-					$('#trucThuoc').append('<option value=' + item.id +'>' + item.strTrucThuoc + '</option>');
+					console.log(item);
+					$('#trucThuoc').append('<option tenTrucThuoc="' + item.tenTrucThuoc + '" value="' + item.id +'">' + item.tenDayDuTrucThuoc + '</option>');
 					i++;
 				});
 			}
 		});
 	});
    $("#trucThuoc").on("change", function() {
-	   let strTrucThuoc = $("#trucThuoc option:selected").text();
-	   $("#strTrucThuoc").empty().val(strTrucThuoc);
-   })
+	   let tenDayDuTrucThuoc = $("#trucThuoc option:selected").text();
+	   $("#tenDayDuTrucThuoc").empty().val(tenDayDuTrucThuoc);
+	   
+	   let tenTrucThuoc = $("#trucThuoc option:selected").attr("tenTrucThuoc");
+	   $("#tenTrucThuoc").empty().val(tenTrucThuoc);
+   });
   /*]]>*/
   </script>
  </body>
