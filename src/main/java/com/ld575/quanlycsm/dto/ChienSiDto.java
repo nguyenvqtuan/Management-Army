@@ -59,7 +59,11 @@ public class ChienSiDto {
 	private boolean khongCoBo;
 	private String coVo;
 	
-	private String daiDoi;
-	private String trungDoi;
-	private String tieuDoi;
+	private Long idDaiDoi;
+	private Long idTrungDoi;
+	private Long idTieuDoi;
+	
+	private String strDaiDoi;
+	private String strTrungDoi;
+	private String strTieuDoi;
 }

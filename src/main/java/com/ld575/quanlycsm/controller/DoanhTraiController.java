@@ -1,4 +1,4 @@
-	package com.ld575.quanlycsm.controller;
+package com.ld575.quanlycsm.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +43,18 @@ public class DoanhTraiController {
 	
 	@GetMapping("/truc-thuoc/{id}")
 	public ResponseEntity<?> trucThuoc(@PathVariable("id") Long id) {
-		return ResponseEntity.ok(doanhTraiService.findByTrucThuoc(id));
+		List<DoanhTraiEntity> listDoanhTraiEntity = doanhTraiService.findByTrucThuoc(id);
+		String tenDayDu = "";
+		if (!listDoanhTraiEntity.isEmpty()) {
+			String[] arr = listDoanhTraiEntity.get(0).getTenDayDu().split(" ");
+			tenDayDu = arr[0] + " " + arr[1];
+		}
+		
+		List<DoanhTraiDto> listDoanhTrai = listDoanhTraiEntity.stream().map(e -> {
+			return DoanhTraiDto.builder().id(e.getId()).tenDayDu(e.getTenDayDu()).build();
+		}).collect(Collectors.toList());
+		listDoanhTrai.add(0, DoanhTraiDto.builder().id(0L).tenDayDu(tenDayDu).build());
+		return ResponseEntity.ok(listDoanhTrai);
 	}
 	
 	@GetMapping("/form")

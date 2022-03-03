@@ -47,6 +47,10 @@ public class DoanhTraiService {
 		return doanhTraiRepository.findByTrucThuoc(id);
 	}
 	
+	public List<DoanhTraiEntity> findByCapDoAndTrucThuoc(Integer capDo, Long trucThuoc) {
+		return doanhTraiRepository.findByCapDoAndTrucThuoc(capDo, trucThuoc);
+	}
+	
 	public void deleteById(Long id) {
 		doanhTraiRepository.deleteById(id);
 	}

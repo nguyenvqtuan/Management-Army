@@ -19,6 +19,11 @@
   <link rel="stylesheet" th:href="@{/css/vertical-layout-light/style.css}">
   <!-- endinject -->
   <link rel="shortcut icon" th:href="@{/images/favicon.png}" />
+  <style>
+  .color-red {
+  	color: red;
+  }
+  </style>
 </head>
 
 <body>
@@ -37,14 +42,114 @@
 				    <div class="card-body">
 				      <h4 class="card-title" th:text="${title}"></h4>
 				      <form class="forms-sample" method="POST" th:object="${dantoc}" th:action="@{/dan-toc/form}">
-				        <div class="form-group">
-				          <label for="ten">Tên dân tộc</label>
+				        <div class="form-group row">
+				          <label for="trucThuoc" class="col-3">Trực thuộc</label>
+				          <div class="col-9">
+				          	<select
+								class="form-control w-20 float-left" id="idDaiDoi"
+								name="idDaiDoi">
+								<option th:each="i : ${listDaiDoi}" th:value="${i.id}"
+									th:text="${i.tenDayDu}"
+									th:selected="${i.id == chiensi.idDaiDoi}"></option>
+							</select>
+							
+							 <select class="form-control w-20 float-left" id="idTrungDoi"
+							name="idTrungDoi">
+								<option th:each="i : ${listTrungDoi}" th:value="${i.id}"
+								th:text="${i.tenDayDu}"
+								th:selected="${i.id == chiensi.idTrungDoi}"></option>
+							</select> 
+							<select  class="form-control w-20 float-left" id="idTieuDoi"
+							name="idTieuDoi">
+								<option th:each="i : ${listTieuDoi}" th:value="${i.id}"
+								th:text="${i.tenDayDu}"
+								th:selected="${i.id == chiensi.idTieuDoi}"></option>
+							</select>
+				          </div>
+				        </div>
+				        <div class="form-group row">
+				          <label for="hoTen" class="col-3">Họ tên</label>
+				          <div class="col-9">
+				          	<input type="text" th:field="*{hoTen}" class="form-control" placeholder="Họ tên">
+				          </div>
+				          
+				        </div>
+				        <div class="form-group row">
+				          <label for="ten" class="col-3">Ngày sinh <span class="color-red">(*)</label>
+				          <div class="col-9">
+				          	<input type="text" th:field="*{ngaySinh}" class="form-control" placeholder="yyyy-MM-dd">
+				          </div>
+				          
+				        </div>
+				        <div class="form-group row">
+				          <label for="ten" class="col-3">Cấp bậc</label>
+				          <div class="col-9">
+				          	<input type="text" th:field="*{capBac}" class="form-control" placeholder="Cấp bậc">
+				          	<input type="text" th:field="*{thoiGianNhanCapBac}" class="form-control" placeholder="Thời gian nhận cấp bậc (yyyy-MM-dd)">
+				          </div>
+				          
+				        </div>
+				        <div class="form-group row">
+				          <label for="ten" class="col-3">Chức vụ</label>
+				          <div class="col-9">
+				          </div>
+				          <input type="text" th:field="*{chucVu}" class="form-control" placeholder="Chức vụ">
+				        </div>
+				        <div class="form-group row">
+				          <label for="ten" class="col-3">Ngày nhập ngũ</label>
+				          <div class="col-9">
+				          </div>
 				          <input type="text" th:field="*{ten}" class="form-control" placeholder="Tên dân tộc">
 				        </div>
-				        <div class="form-group">
-				          <label for="moTa">Mô tả</label>
-				          <input type="text" th:field="*{moTa}" name="moTa" value="${moTa}" class="form-control" id="moTa" placeholder="Mô tả">
+				        <div class="form-group row">
+				          <label for="ten" class="col-3">Trực thuộc</label>
+				          <div class="col-9">
+				          </div>
+				          <input type="text" th:field="*{ten}" class="form-control" placeholder="Tên dân tộc">
 				        </div>
+				        <div class="form-group row">
+				          <label for="ten" class="col-3">Trực thuộc</label>
+				          <div class="col-9">
+				          </div>
+				          <input type="text" th:field="*{ten}" class="form-control" placeholder="Tên dân tộc">
+				        </div>
+				        <div class="form-group row">
+				          <label for="ten" class="col-3">Trực thuộc</label>
+				          <div class="col-9">
+				          </div>
+				          <input type="text" th:field="*{ten}" class="form-control" placeholder="Tên dân tộc">
+				        </div>
+				        <div class="form-group row">
+				          <label for="ten" class="col-3">Trực thuộc</label>
+				          <div class="col-9">
+				          </div>
+				          <input type="text" th:field="*{chucVu}" class="form-control" placeholder="Chức vụ">
+				        </div>
+				        <div class="form-group row">
+				          <label for="ten" class="col-3">Trực thuộc</label>
+				          <div class="col-9">
+				          </div>
+				          <input type="text" th:field="*{ten}" class="form-control" placeholder="Tên dân tộc">
+				        </div>
+				        <div class="form-group row">
+				          <label for="ten" class="col-3">Trực thuộc</label>
+				          <div class="col-9">
+				          </div>
+				          <input type="text" th:field="*{ten}" class="form-control" placeholder="Tên dân tộc">
+				        </div>
+				        <div class="form-group row">
+				          <label for="ten" class="col-3">Trực thuộc</label>
+				          <div class="col-9">
+				          </div>
+				          <input type="text" th:field="*{ten}" class="form-control" placeholder="Tên dân tộc">
+				        </div>
+				        <div class="form-group row">
+				          <label for="ten" class="col-3">Trực thuộc</label>
+				          <div class="col-9">
+				          </div>
+				          <input type="text" th:field="*{ten}" class="form-control" placeholder="Tên dân tộc">
+				        </div>
+				        
 				        <div>
 				        	<input type="hidden" th:field="*{id}">
 				        </div>

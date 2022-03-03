@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -90,6 +91,7 @@ public class ChienSiService {
 	    		switch (cell.getCellType()) {
 	    		case STRING:
 	    			String[] arr = cell.getStringCellValue().split("-");
+	    			System.out.println(Arrays.toString(arr));
 	    			if (isValidDoanhTrai(arr)) {
 	    				res.setDoanhTrai(doanhTraiService.findByTen(arr[arr.length - 1]).get());
 	    			} else {
