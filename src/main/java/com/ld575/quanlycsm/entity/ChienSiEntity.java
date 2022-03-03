@@ -95,16 +95,16 @@ public class ChienSiEntity {
 	private String ngheNghiepMe;
 	
 	@Column
-	private boolean boMat;
+	private String boMat;
 	
 	@Column
-	private boolean meMat;
+	private String meMat;
 	
 	@Column
-	private boolean boMeLiDi;
+	private String boMeLiDi;
 	
 	@Column
-	private boolean khongCoBo;
+	private String khongCoBo;
 	
 	@Column
 	private String giaDinhAnhHuongCovid;

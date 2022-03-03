@@ -316,7 +316,8 @@ public class ChienSiService {
 	    	case 21: // Bố mất 
 	    		switch (cell.getCellType()) {
 	    		case STRING:
-	    			res.setBoMat(true);
+	    			String val = cell.getStringCellValue();
+	    			res.setBoMat(commonService.upperFirstCharInWords(val));
 	    			break;
 	    		default:
 	    			break;
@@ -325,7 +326,8 @@ public class ChienSiService {
 	    	case 22: // - Mẹ mất 
 	    		switch (cell.getCellType()) {
 	    		case STRING:
-	    			res.setMeMat(true);
+	    			String val = cell.getStringCellValue();
+	    			res.setMeMat(commonService.upperFirstCharInWords(val));
 	    			break;
 	    		default:
 	    			break;
@@ -334,7 +336,8 @@ public class ChienSiService {
 	    	case 23: // - Bố mẹ li dị 
 	    		switch (cell.getCellType()) {
 	    		case STRING:
-	    			res.setBoMeLiDi(true);;
+	    			String val = cell.getStringCellValue();
+	    			res.setBoMeLiDi(commonService.upperFirstCharInWords(val));
 	    			break;
 	    		default:
 	    			break;
@@ -343,7 +346,8 @@ public class ChienSiService {
 	    	case 24: // - Không có bố 
 	    		switch (cell.getCellType()) {
 	    		case STRING:
-	    			res.setKhongCoBo(true);
+	    			String val = cell.getStringCellValue();
+	    			res.setKhongCoBo(commonService.upperFirstCharInWords(val));
 	    			break;
 	    		default:
 	    			break;
