@@ -193,8 +193,9 @@
 				         	 <input type="radio" class="float-left form-check-input mr-1" th:checked="${chiensi.coVo == 'c'}" name="coVo" id="coChuaDaDkkh" value="c"> 
 				         	 <label style="text-align: left" class="float-left">Có vợ (chưa đkkh)</label> 
 				         	 
-				         	 <input type="radio" class="float-left form-check-input mr-1" name="coVo" id="chuaCoVo" value="" th:checked="${chiensi.coVo == ''}"> 
-				         	 <label style="text-align: left" class="float-left">Chưa có vợ</label>
+				         	 <input type="radio" class="float-left form-check-input mr-1" name="coVo" id="chuaCoVo"
+				         	  value="n" th:checked="${chiensi.coVo == 'n'}"> 
+				         	 <label style="text-align: left" class="float-left">Chưa có vợ</label> 
 				         	 <div class="row">
 				         	 	<div class="col-12">
 				         	 		<textarea class="form-control" th:field="*{ghiChuCoVo}" rows="4"></textarea>
@@ -313,66 +314,84 @@
   <script th:src="@{/js/select2.js}"></script>
   <script type="text/javascript" th:inline="javascript">
 		/*<![CDATA[*/
-		$("#dangVien").on("click", function() {
-			if ($("#dangVien:checked").length > 0) {
+		function emptyDangVien() {
+			$("#ngayVaoDang").val("");
+			$("#ngayVaoDangChinhThuc").val("");
+			$("#soTheDang").val("");
+		}
+		$(document).ready(function () {	
+			let isDangVien = /*[[${chiensi.getNgayVaoDang}]]*/'';
+			if (isDangVien != null) {
+				$("#dangVien").prop("checked", true);
 				$(".dang-vien").show();
 			} else {
+				$("#dangVien").prop("checked", false);
 				$(".dang-vien").hide();
+				emptyDangVien();
 			}
-		})
+			
+			$("#dangVien").on("click", function() {
+				if ($("#dangVien:checked").length > 0) {
+					$(".dang-vien").show();
+				} else {
+					$(".dang-vien").hide();
+					emptyDangVien();
+				}
+			})
 
-		$("#idDaiDoi").on(
-				"change",
-				function() {
-					$("#idTieuDoi").empty();
-					console.log($(this).val());
-					let id = $(this).val();
-					let link = /*[[@{/doanh-trai/truc-thuoc/}]]*/'';
-					$.ajax({
-						url : link + id,
-						success : function(result) {
-							$('#idTrungDoi').empty();
-							let i = 0;
-							if (result == "") {
-								return;
+			$("#idDaiDoi").on(
+					"change",
+					function() {
+						$("#idTieuDoi").empty();
+						console.log($(this).val());
+						let id = $(this).val();
+						let link = /*[[@{/doanh-trai/truc-thuoc/}]]*/'';
+						$.ajax({
+							url : link + id,
+							success : function(result) {
+								$('#idTrungDoi').empty();
+								let i = 0;
+								if (result == "") {
+									return;
+								}
+								result.forEach(function(item) {
+									$('#idTrungDoi').append(
+											'<option value=' + item.id +'>'
+													+ item.tenDayDu + '</option>');
+									i++;
+								});
 							}
-							result.forEach(function(item) {
-								$('#idTrungDoi').append(
-										'<option value=' + item.id +'>'
-												+ item.tenDayDu + '</option>');
-								i++;
-							});
-						}
+						});
 					});
-				});
 
-		$("#idTrungDoi").on(
-				"change",
-				function() {
-					let id = $(this).val();
-					let link = /*[[@{/doanh-trai/truc-thuoc/}]]*/'';
-					$.ajax({
-						url : link + id,
-						success : function(result) {
-							$('#idTieuDoi').empty();
-							let i = 0;
-							console.log(result);
-							if (result == "") {
-								return;
+			$("#idTrungDoi").on(
+					"change",
+					function() {
+						let id = $(this).val();
+						let link = /*[[@{/doanh-trai/truc-thuoc/}]]*/'';
+						$.ajax({
+							url : link + id,
+							success : function(result) {
+								$('#idTieuDoi').empty();
+								let i = 0;
+								console.log(result);
+								if (result == "") {
+									return;
+								}
+								result.forEach(function(item) {
+									$('#idTieuDoi').append(
+											'<option value=' + item.id +'>'
+													+ item.tenDayDu + '</option>');
+									i++;
+								});
 							}
-							result.forEach(function(item) {
-								$('#idTieuDoi').append(
-										'<option value=' + item.id +'>'
-												+ item.tenDayDu + '</option>');
-								i++;
-							});
-						}
+						});
 					});
-				});
-		$("#idTieuDoi").on("change", function() {
-			let valTieuDoi = $("#idTieuDoi option:selected").val();
-			console.log(valTieuDoi);
-			$("#idDoanhTrai").val(valTieuDoi);
+			$("#idTieuDoi").on("change", function() {
+				let valTieuDoi = $("#idTieuDoi option:selected").val();
+				console.log(valTieuDoi);
+				$("#idDoanhTrai").val(valTieuDoi);
+			});
 		});
 		/*]]>*/
 	</script>

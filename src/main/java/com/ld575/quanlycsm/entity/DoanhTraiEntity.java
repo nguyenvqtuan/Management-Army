@@ -48,6 +48,9 @@ public class DoanhTraiEntity {
 	private Long trucThuoc;
 
 	@Column
+	private String strIdTrucThuoc;
+	
+	@Column
 	private String tenTrucThuoc;
 
 	@Column

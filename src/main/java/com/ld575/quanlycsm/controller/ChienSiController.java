@@ -103,10 +103,27 @@ public class ChienSiController {
 	public String showUpdate(Model model, @PathVariable("id") Long id) {
 		model.addAttribute("title", "Cập nhật chiến sĩ");
 		Optional<ChienSiEntity> chienSiEntity = chienSiService.findById(id);
-		model.addAttribute("chiensi", getChienSiDto(chienSiEntity.get()));
+		ChienSiInsertDto chienSiDto = getChienSiDto(chienSiEntity.get());
+		model.addAttribute("chiensi", chienSiDto);
 		model.addAttribute("listTrinhDo", getListTrinhDo());
 		model.addAttribute("listDanToc", getListDanToc());
 		model.addAttribute("listDaiDoi", getListDoanhTraiDaiDoi());
+
+		List<DoanhTraiDto> listTrungDoi;
+		if (chienSiDto.getIdDaiDoi() != 0L) {
+			listTrungDoi = getListDoanhTraiTrungDoi(chienSiDto.getIdDaiDoi());
+		} else {
+			listTrungDoi = new ArrayList<>();
+		}
+		model.addAttribute("listTrungDoi", listTrungDoi);
+		
+		List<DoanhTraiDto> listTieuDoi;
+		if (chienSiDto.getIdTrungDoi() != 0L) {
+			listTieuDoi = getListDoanhTraiTieuDoi(chienSiDto.getIdTrungDoi());
+		} else {
+			listTieuDoi = new ArrayList<>();
+		}
+		model.addAttribute("listTieuDoi", listTieuDoi);
 		return "/chiensi/form";
 	}
 	
@@ -182,15 +199,17 @@ public class ChienSiController {
 	}
 	
 	private ChienSiInsertDto getChienSiDto(ChienSiEntity chienSiEntity) {
-		String[] arrIdDoanhTrai = chienSiEntity.getDoanhTrai().getTenTrucThuoc().split("-"); 
+		String[] arrIdDoanhTrai = chienSiEntity.getDoanhTrai().getStrIdTrucThuoc().split("-"); 
 		return ChienSiInsertDto
 		 	.builder()
+		 	.id(chienSiEntity.getId())
 		 	.hoTen(chienSiEntity.getHoTen())
 		 	.ngaySinh(chienSiEntity.getNgaySinh())
 		 	.capBac(chienSiEntity.getCapBac())
 		 	.thoiGianNhanCapBac(chienSiEntity.getThoiGianNhanCapBac())
 		 	.chucVu(chienSiEntity.getChucVu())
 		 	.ngayNhapNgu(chienSiEntity.getNgayNhapNgu())
+		 	.sucKhoe(chienSiEntity.getSucKhoe())
 		 	.ngayVaoDang(chienSiEntity.getNgayVaoDang())
 		 	.ngayVaoDangChinhThuc(chienSiEntity.getNgayVaoDangChinhThuc())
 		 	.soTheDang(chienSiEntity.getSoTheDang())
@@ -198,6 +217,8 @@ public class ChienSiController {
 		 	.ngheNghiepGiaDinh(chienSiEntity.getNgheNghiepGiaDinh())
 		 	.coMayAnhChiEm(chienSiEntity.getCoMayAnhChiEm())
 		 	.conThuMayTrongNha(chienSiEntity.getConThuMayTrongNha())
+		 	.coVo(Character.toString(chienSiEntity.getCoVo()))
+		 	.ghiChuCoVo(chienSiEntity.getGhiChuCoVo())
 		 	.hoTenCha(chienSiEntity.getHoTenCha())
 		 	.namSinhCha(chienSiEntity.getNamSinhCha())
 		 	.ngheNghiepCha(chienSiEntity.getNgheNghiepCha())
@@ -215,9 +236,22 @@ public class ChienSiController {
 		 	.ngheNghiepBanThan(chienSiEntity.getNgheNghiepBanThan())
 		 	.trinhDo(chienSiEntity.getTrinhDo())
 		 	.daQuaTruong(chienSiEntity.getDaQuaTruong())
+		 	.qqPhuongXa(chienSiEntity.getQqPhuongXa())
+		 	.qqQuanHuyen(chienSiEntity.getQqQuanHuyen())
+		 	.qqTinhThanh(chienSiEntity.getQqTinhThanh())
+		 	.nohnPhuongXa(chienSiEntity.getNohnPhuongXa())
+		 	.nohnQuanHuyen(chienSiEntity.getNohnQuanHuyen())
+		 	.nohnTinhThanh(chienSiEntity.getNohnTinhThanh())
+		 	.hinhXam(chienSiEntity.getHinhXam())
+		 	.giuBua(chienSiEntity.getGiuBua())
+		 	.nguoiYeu(chienSiEntity.getNguoiYeu())
+		 	.hutThuoc(chienSiEntity.getHutThuoc())
+		 	.soTruong(chienSiEntity.getSoTruong())
+		 	.ghiChu(chienSiEntity.getGhiChu())
 		 	.idDanToc(chienSiEntity.getDanToc().getId())
 		 	.idDoanhTrai(chienSiEntity.getDoanhTrai().getId())
-//		 	.idTrungDoi(doanhTraiService.findBy)
+		 	.idDaiDoi(doanhTraiService.findById(Long.parseLong(arrIdDoanhTrai[1])).get().getId())
+		 	.idTrungDoi(doanhTraiService.findById(Long.parseLong(arrIdDoanhTrai[0])).get().getId())
 		 	.idTieuDoi(chienSiEntity.getDoanhTrai().getId())
 		 	.build();
 	}

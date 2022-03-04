@@ -48,11 +48,16 @@ public class ChienSiService {
 	public ChienSiEntity save(ChienSiInsertDto chienSiDto) {
 		ChienSiEntity chienSiEntity = new ChienSiEntity();
 		
+		if (chienSiDto.getId() != 0L) {
+			chienSiEntity.setId(chienSiDto.getId());
+		}
+		
 		if (!commonService.isEmpty(chienSiDto.getHoTen())) {
 			chienSiEntity.setHoTen(chienSiDto.getHoTen());
 		}
+		
 		if (chienSiDto.getNgaySinh() != null) {
-			chienSiDto.setNgaySinh(chienSiDto.getNgaySinh());
+			chienSiEntity.setNgaySinh(chienSiDto.getNgaySinh());
 		}
 		
 		if (!commonService.isEmpty(chienSiDto.getCapBac())) {
@@ -80,7 +85,7 @@ public class ChienSiService {
 		}
 		
 		if (!commonService.isEmpty(chienSiDto.getSoTheDang())) {
-			chienSiEntity.setNgayVaoDangChinhThuc(chienSiDto.getNgayVaoDangChinhThuc());
+			chienSiEntity.setSoTheDang(chienSiDto.getSoTheDang());
 		}
 		
 		if (chienSiDto.getNgayVaoDoan() != null) {
@@ -675,9 +680,14 @@ public class ChienSiService {
 	    		switch (cell.getCellType()) {
 	    		case STRING:
 	    			String val = cell.getStringCellValue();
-	    			res.setCoVo(val.toCharArray()[0]);
+	    			if (commonService.isEmpty(val)) {
+	    				res.setCoVo('n');
+	    			} else {
+	    				res.setCoVo(val.toCharArray()[0]);
+	    			}
 	    			break;
 	    		default:
+	    			res.setCoVo('n');
 	    			break;
 	    		}
 	    		break;

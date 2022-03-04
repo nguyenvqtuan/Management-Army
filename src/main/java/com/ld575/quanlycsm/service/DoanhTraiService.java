@@ -26,6 +26,7 @@ public class DoanhTraiService {
 			.tenDayDu(doanhTraiDto.getTenDayDu())
 			.trucThuoc(doanhTraiDto.getTrucThuoc())
 			.capDo(doanhTraiDto.getCapDo())
+			.strIdTrucThuoc(doanhTraiDto.getStrIdTrucThuoc())
 			.tenTrucThuoc(doanhTraiDto.getTenTrucThuoc())
 			.tenDayDuTrucThuoc(doanhTraiDto.getTenDayDuTrucThuoc())
 			.build();

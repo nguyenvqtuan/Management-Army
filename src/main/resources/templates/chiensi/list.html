@@ -366,7 +366,9 @@
 											</thead>
 											<tbody>
 												<tr th:each="chiensi, iter : ${listChienSi}">
-													<td th:text="${iter.index + 1}"></td>
+													<td>
+													<a th:href="@{/chien-si/form/{id}(id=${chiensi.id})}" th:text="${iter.index + 1}">
+													</a></td>
 													<td><span th:text="${chiensi.doanhTrai.tenDayDu}"></span>
 														- <span th:text="${chiensi.doanhTrai.tenDayDuTrucThuoc}"></span>
 													</td>

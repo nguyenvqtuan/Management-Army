@@ -24,7 +24,7 @@ public class DoanhTraiDto {
 	private Long trucThuoc;
 	
 	private String tenDayDuTrucThuoc;
-	
+	private String strIdTrucThuoc;
 	private String tenTrucThuoc;
 	
 	private Integer capDo;
