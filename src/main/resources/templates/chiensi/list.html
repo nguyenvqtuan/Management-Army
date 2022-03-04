@@ -190,6 +190,14 @@
 														class="form-control float-left mr-1 w-25"
 														placeholder="Sở trường" aria-label=""
 														th:field="*{soTruong}">
+													<input type="text"
+														class="form-control float-left mr-1 w-25"
+														placeholder="Có mấy anh chị em" aria-label=""
+														th:field="*{coMayAnhChiEm}">
+														<input type="text"
+														class="form-control float-left mr-1 w-25"
+														placeholder="Con thứ mấy trong nhà" aria-label=""
+														th:field="*{conThuMayTrongNha}">
 												</div>
 												<div class="row">
 													<div class="col-12">
@@ -214,7 +222,14 @@
 																th:checked="${chiensi.hutThuoc}" name="hutThuoc"
 																id="hutThuoc" placeholder="Hút Thuốc"> <label
 																style="text-align: left" class="float-left">Hút
-																thuốc</label> <input type="radio"
+																thuốc</label>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-12">
+														<div class="form-group">
+															<input type="radio"
 																class="float-left form-check-input mr-1"
 																th:checked="${chiensi.coVo == 'r'}" name="coVo"
 																id="coVoDaDkkh" value="r"> <label
@@ -230,7 +245,6 @@
 																th:checked="${chiensi.coVo == ''}"> <label
 																style="text-align: left" class="float-left">Chưa
 																có vợ</label>
-
 														</div>
 													</div>
 												</div>
@@ -266,19 +280,28 @@
 										</div>
 										<div class="row">
 											<div class="col-12">
-												<div class="form-group float-left">
+												<div class="form-group">
 													<label style="float: left">Trực thuộc</label> 
 													<select
-														class="form-control w-20 float-left" id="daiDoi"
-														name="daiDoi">
+														class="form-control w-20 float-left" id="idDaiDoi"
+														name="idDaiDoi">
 														<option th:each="i : ${listDaiDoi}" th:value="${i.id}"
 															th:text="${i.tenDayDu}"
-															th:selected="${i.id == chiensi.daiDoi}"></option>
+															th:selected="${i.id == chiensi.idDaiDoi}"></option>
 													</select>
 														
-														 <select id="trungDoi"
-														name="TrungDoi"></select> <select id="tieuDoi"
-														name="tieuDoi"></select>
+														 <select class="form-control w-20 float-left" id="idTrungDoi"
+														name="idTrungDoi">
+															<option th:each="i : ${listTrungDoi}" th:value="${i.id}"
+															th:text="${i.tenDayDu}"
+															th:selected="${i.id == chiensi.idTrungDoi}"></option>
+														</select> 
+														<select  class="form-control w-20 float-left" id="idTieuDoi"
+														name="idTieuDoi">
+															<option th:each="i : ${listTieuDoi}" th:value="${i.id}"
+															th:text="${i.tenDayDu}"
+															th:selected="${i.id == chiensi.idTieuDoi}"></option>
+														</select>
 												</div>
 											</div>
 										</div>
@@ -345,7 +368,7 @@
 												<tr th:each="chiensi, iter : ${listChienSi}">
 													<td th:text="${iter.index + 1}"></td>
 													<td><span th:text="${chiensi.doanhTrai.tenDayDu}"></span>
-														- <span th:text="${chiensi.doanhTrai.strTrucThuoc}"></span>
+														- <span th:text="${chiensi.doanhTrai.tenDayDuTrucThuoc}"></span>
 													</td>
 													<td th:text="${chiensi.hoTen}"></td>
 													<td th:text="${chiensi.ngaySinh}"></td>
@@ -466,23 +489,23 @@
 			}
 		})
 
-		$("#daiDoi").on(
+		$("#idDaiDoi").on(
 				"change",
 				function() {
-					$("#tieudoi").empty();
+					$("#idTieuDoi").empty();
 					console.log($(this).val());
 					let id = $(this).val();
 					let link = /*[[@{/doanh-trai/truc-thuoc/}]]*/'';
 					$.ajax({
 						url : link + id,
 						success : function(result) {
-							$('#trungDoi').empty();
+							$('#idTrungDoi').empty();
 							let i = 0;
 							if (result == "") {
 								return;
 							}
 							result.forEach(function(item) {
-								$('#trungDoi').append(
+								$('#idTrungDoi').append(
 										'<option value=' + item.id +'>'
 												+ item.tenDayDu + '</option>');
 								i++;
@@ -491,22 +514,22 @@
 					});
 				});
 
-		$("#trungDoi").on(
+		$("#idTrungDoi").on(
 				"change",
 				function() {
-					console.log($(this).val());
 					let id = $(this).val();
 					let link = /*[[@{/doanh-trai/truc-thuoc/}]]*/'';
 					$.ajax({
 						url : link + id,
 						success : function(result) {
-							$("#tieudoi").empty();
+							$('#idTieuDoi').empty();
 							let i = 0;
+							console.log(result);
 							if (result == "") {
 								return;
 							}
 							result.forEach(function(item) {
-								$('#tieuDoi').append(
+								$('#idTieuDoi').append(
 										'<option value=' + item.id +'>'
 												+ item.tenDayDu + '</option>');
 								i++;

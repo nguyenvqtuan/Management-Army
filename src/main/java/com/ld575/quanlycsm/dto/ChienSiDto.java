@@ -1,4 +1,4 @@
-package com.ld575.quanlycsm.dto;
+	package com.ld575.quanlycsm.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,7 +46,9 @@ public class ChienSiDto {
 	private String tonGiao;
 	
 	private String ngheNghiepBanThan;
-	
+	private Integer coMayAnhChiEm;
+	private Integer conThuMayTrongNha;
+		
 	private boolean hinhXam;
 	private boolean giuBua;
 	private boolean nguoiYeu;

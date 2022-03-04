@@ -49,12 +49,14 @@ public class CustomChienSiRepository {
 		setParamsDangVien(query, chienSiDto);
 		setParamsSucKhoe(query, chienSiDto);
 		setParamsTrinhDo(query, chienSiDto);
-		setParamsDanToc(query, chienSiDto);
+		setParamsDanToc(query, chienSiDto);	
 		setParamsTonGiao(query, chienSiDto);
 		setParamsNgheNghiepBanThan(query, chienSiDto);
 		setParamsSoThich(query, chienSiDto);
 		setParamsCoVo(query, chienSiDto);
 		setParamsTrucThuoc(query, chienSiDto);
+		setParamsCoMayAnhChiEm(query, chienSiDto);
+		setParamsConThuMayTrongNha(query, chienSiDto);
 	}
 	
 	private String getFromQuery() {
@@ -264,13 +266,30 @@ public class CustomChienSiRepository {
 		if ((chienSiDto.getIdDaiDoi() != null && chienSiDto.getIdDaiDoi() != 0L) ||
 				(chienSiDto.getIdTrungDoi() != null && chienSiDto.getIdTrungDoi() != 0L) ||
 				(chienSiDto.getIdTieuDoi() != null && chienSiDto.getIdTieuDoi() != 0L)) {
-			Map<Long, String> mapTrucThuoc = new HashMap<>();
 			if (sb.length() == 0) {
 				sb.insert(0, " WHERE ");
 			} else {
 				sb.append(" AND ");
 			}
 			sb.append(getConditionDoanhTrai(chienSiDto));
+		}
+		
+		if (chienSiDto.getCoMayAnhChiEm() != null && chienSiDto.getCoMayAnhChiEm() != 0) {
+			if (sb.length() == 0) {
+				sb.insert(0, " WHERE ");
+			} else {
+				sb.append(" AND ");
+			}
+			sb.append(getConditionCoMayAnhChiEm(chienSiDto));
+		}
+		
+		if (chienSiDto.getConThuMayTrongNha() != null && chienSiDto.getConThuMayTrongNha() != 0) {
+			if (sb.length() == 0) {
+				sb.insert(0, " WHERE ");
+			} else {
+				sb.append(" AND ");
+			}
+			sb.append(getConditionConThuMayTrongNha(chienSiDto));
 		}
 		
 		return sb.toString();
@@ -686,6 +705,32 @@ public class CustomChienSiRepository {
 		return sb.toString();
 	}
 	
+	private String getConditionCoMayAnhChiEm(ChienSiDto chienSiDto) {
+		StringBuilder sb = new StringBuilder();
+		if (chienSiDto.getCoMayAnhChiEm() != null && chienSiDto.getCoMayAnhChiEm() != 0) {
+			sb.insert(0, " ( ");
+			sb.append("cs.coMayAnhChiEm = :coMayAnhChiEm");
+		}
+		if (sb.length() == 0) {
+			return "";
+		}
+		sb.append(")");
+		return sb.toString();
+	}
+	
+	private String getConditionConThuMayTrongNha(ChienSiDto chienSiDto) {
+		StringBuilder sb = new StringBuilder();
+		if (chienSiDto.getConThuMayTrongNha() != null && chienSiDto.getConThuMayTrongNha() != 0) {
+			sb.insert(0, " ( ");
+			sb.append("cs.conThuMayTrongNha = :conThuMayTrongNha");
+		}
+		if (sb.length() == 0) {
+			return "";
+		}
+		sb.append(")");
+		return sb.toString();
+	}
+	
 	private void setParamsHoTen(Query query, ChienSiDto chienSiDto) {
 		if (!commonService.isEmpty(chienSiDto.getHoTen())) {
 			query.setParameter("hoTen", "%" + chienSiDto.getHoTen() + "%");
@@ -818,6 +863,18 @@ public class CustomChienSiRepository {
 		}
 		if (chienSiDto.getIdTieuDoi() != null && chienSiDto.getIdTieuDoi() != 0L) {
 			query.setParameter("tieuDoi", "%" + doanhTraiRepository.findById(chienSiDto.getIdTieuDoi()).get().getTen() + "%");
+		}
+	}
+	
+	private void setParamsCoMayAnhChiEm(Query query, ChienSiDto chienSiDto) {
+		if (chienSiDto.getCoMayAnhChiEm() != null && chienSiDto.getCoMayAnhChiEm() != 0) {
+			query.setParameter("coMayAnhChiEm", chienSiDto.getCoMayAnhChiEm());
+		}
+	}
+	
+	private void setParamsConThuMayTrongNha(Query query, ChienSiDto chienSiDto) {
+		if (chienSiDto.getConThuMayTrongNha() != null && chienSiDto.getConThuMayTrongNha() != 0) {
+			query.setParameter("conThuMayTrongNha", chienSiDto.getConThuMayTrongNha());
 		}
 	}
 }

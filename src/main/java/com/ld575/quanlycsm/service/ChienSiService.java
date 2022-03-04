@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ld575.quanlycsm.dto.ChienSiDto;
+import com.ld575.quanlycsm.dto.ChienSiInsertDto;
 import com.ld575.quanlycsm.entity.ChienSiEntity;
 import com.ld575.quanlycsm.entity.DoanhTraiEntity;
 import com.ld575.quanlycsm.repository.ChienSiRepository;
@@ -44,8 +45,217 @@ public class ChienSiService {
 	@Autowired
 	private CustomChienSiRepository customChienSiRepository;
 
-	public ChienSiEntity save(ChienSiEntity chienSiEntity) {
+	public ChienSiEntity save(ChienSiInsertDto chienSiDto) {
+		ChienSiEntity chienSiEntity = new ChienSiEntity();
+		
+		if (!commonService.isEmpty(chienSiDto.getHoTen())) {
+			chienSiEntity.setHoTen(chienSiDto.getHoTen());
+		}
+		if (chienSiDto.getNgaySinh() != null) {
+			chienSiDto.setNgaySinh(chienSiDto.getNgaySinh());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getCapBac())) {
+			chienSiEntity.setCapBac(chienSiDto.getCapBac());
+		}
+		
+		if (chienSiDto.getThoiGianNhanCapBac() != null) {
+			chienSiEntity.setThoiGianNhanCapBac(chienSiDto.getThoiGianNhanCapBac());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getChucVu())) {
+			chienSiEntity.setChucVu(chienSiDto.getChucVu());
+		}
+		
+		if (chienSiDto.getNgayNhapNgu() != null) {
+			chienSiEntity.setNgayNhapNgu(chienSiDto.getNgayNhapNgu());
+		}
+		
+		if (chienSiDto.getNgayVaoDang() != null) {
+			chienSiEntity.setNgayVaoDang(chienSiDto.getNgayVaoDang());
+		}
+		
+		if (chienSiDto.getNgayVaoDangChinhThuc() != null) {
+			chienSiEntity.setNgayVaoDangChinhThuc(chienSiDto.getNgayVaoDangChinhThuc());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getSoTheDang())) {
+			chienSiEntity.setNgayVaoDangChinhThuc(chienSiDto.getNgayVaoDangChinhThuc());
+		}
+		
+		if (chienSiDto.getNgayVaoDoan() != null) {
+			chienSiEntity.setNgayVaoDoan(chienSiDto.getNgayVaoDoan());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getNgheNghiepGiaDinh())) {
+			chienSiEntity.setNgheNghiepGiaDinh(chienSiDto.getNgheNghiepGiaDinh());
+		}
+		
+		if (chienSiDto.getCoMayAnhChiEm() != 0) {
+			chienSiEntity.setCoMayAnhChiEm(chienSiDto.getCoMayAnhChiEm());
+		}
+		
+		if (chienSiDto.getConThuMayTrongNha() != 0) {
+			chienSiEntity.setConThuMayTrongNha(chienSiDto.getConThuMayTrongNha());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getHoTenCha())) {
+			chienSiEntity.setHoTenCha(chienSiDto.getHoTenCha());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getNgheNghiepCha())) {
+			chienSiEntity.setNgheNghiepCha(chienSiDto.getNgheNghiepCha());
+		}
+		
+		if (chienSiDto.getNamSinhCha() != 0) {
+			chienSiEntity.setNamSinhCha(chienSiDto.getNamSinhCha());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getHoTenMe())) {
+			chienSiEntity.setHoTenMe(chienSiDto.getHoTenMe());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getNgheNghiepMe())) {
+			chienSiEntity.setNgheNghiepMe(chienSiDto.getNgheNghiepMe());
+		}
+		
+		if (chienSiDto.getNamSinhMe() != 0) {
+			chienSiEntity.setNamSinhMe(chienSiDto.getNamSinhMe());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getBoMat())) {
+			chienSiEntity.setBoMat(chienSiDto.getBoMat());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getMeMat())) {
+			chienSiEntity.setMeMat(chienSiDto.getMeMat());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getMeMat())) {
+			chienSiEntity.setMeMat(chienSiDto.getMeMat());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getBoMeLiDi())) {
+			chienSiEntity.setBoMeLiDi(chienSiDto.getBoMeLiDi());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getKhongCoBo())) {
+			chienSiEntity.setKhongCoBo(chienSiDto.getKhongCoBo());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getGiaDinhAnhHuongCovid())) {
+			chienSiEntity.setGiaDinhAnhHuongCovid(chienSiDto.getGiaDinhAnhHuongCovid());
+		}
+		if (!commonService.isEmpty(chienSiDto.getGiaDinhKhoKhan())) {
+			chienSiEntity.setGiaDinhKhoKhan(chienSiDto.getGiaDinhKhoKhan());
+		}
+		if (!commonService.isEmpty(chienSiDto.getNguoiQuenTrongQuanDoi())) {
+			chienSiEntity.setNguoiQuenTrongQuanDoi(chienSiDto.getNguoiQuenTrongQuanDoi());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getBoMeLaLietSiHoacQuanNhan())) {
+			chienSiEntity.setBoMeLaLietSiHoacQuanNhan(chienSiDto.getBoMeLaLietSiHoacQuanNhan());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getNgheNghiepBanThan())) {
+			chienSiEntity.setNgheNghiepBanThan(chienSiDto.getNgheNghiepBanThan());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getTrinhDo())) {
+			chienSiEntity.setTrinhDo(chienSiDto.getTrinhDo());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getDaQuaTruong())) {
+			chienSiEntity.setDaQuaTruong(chienSiDto.getDaQuaTruong());
+		}
+		
+		if (chienSiDto.getIdDanToc() != 0) {
+			chienSiEntity.setDanToc(danTocService.findById(chienSiDto.getIdDanToc()).get());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getTonGiao())) {
+			chienSiEntity.setTonGiao(chienSiDto.getTonGiao());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getSucKhoe())) {
+			chienSiEntity.setSucKhoe(chienSiDto.getSucKhoe());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getCoVo())) {
+			chienSiEntity.setCoVo(chienSiDto.getCoVo().toCharArray()[0]);
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getGhiChuCoVo())) {
+			chienSiEntity.setGhiChuCoVo(chienSiDto.getGhiChuCoVo());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getQqPhuongXa())) {
+			chienSiEntity.setQqPhuongXa(chienSiDto.getQqPhuongXa());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getQqQuanHuyen())) {
+			chienSiEntity.setQqQuanHuyen(chienSiDto.getQqQuanHuyen());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getQqTinhThanh())) {
+			chienSiEntity.setQqTinhThanh(chienSiDto.getQqTinhThanh());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getNohnPhuongXa())) {
+			chienSiEntity.setNohnPhuongXa(chienSiDto.getNohnPhuongXa());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getNohnQuanHuyen())) {
+			chienSiEntity.setNohnPhuongXa(chienSiDto.getNohnQuanHuyen());
+		}
+		if (!commonService.isEmpty(chienSiDto.getNohnPhuongXa())) {
+			chienSiEntity.setNohnPhuongXa(chienSiDto.getNohnPhuongXa());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getNohnQuanHuyen())) {
+			chienSiEntity.setNohnQuanHuyen(chienSiDto.getNohnQuanHuyen());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getNohnTinhThanh())) {
+			chienSiEntity.setNohnTinhThanh(chienSiDto.getNohnTinhThanh());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getHinhXam())) {
+			chienSiEntity.setHinhXam(chienSiDto.getHinhXam());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getGiuBua())) {
+			chienSiEntity.setGiuBua(chienSiDto.getGiuBua());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getNguoiYeu())) {
+			chienSiEntity.setNguoiYeu(chienSiDto.getNguoiYeu());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getHutThuoc())) {
+			chienSiEntity.setHutThuoc(chienSiDto.getHutThuoc());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getSoTruong())) {
+			chienSiEntity.setSoTruong(chienSiDto.getSoTruong());
+		}
+		
+		if (chienSiDto.getIdDoanhTrai() != null && chienSiDto.getIdDoanhTrai() != 0) {
+			chienSiEntity.setDoanhTrai(doanhTraiService.findById(chienSiDto.getIdDoanhTrai()).get());
+		}
+		
+		if (!commonService.isEmpty(chienSiDto.getGhiChu())) {
+			chienSiEntity.setGhiChu(chienSiDto.getGhiChu());
+		}
+		
+		if (chienSiEntity.getId() != null) {
+			chienSiEntity.setId(chienSiDto.getId());
+		}
 		return chienSiRepository.save(chienSiEntity);
+	}
+	
+	public void save(ChienSiEntity chienSiEntity) {
+		chienSiRepository.save(chienSiEntity);
 	}
 
 	public Iterable<ChienSiEntity> findAll() {

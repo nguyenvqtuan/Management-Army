@@ -41,9 +41,9 @@
 				  <div class="card">
 				    <div class="card-body">
 				      <h4 class="card-title" th:text="${title}"></h4>
-				      <form class="forms-sample" method="POST" th:object="${dantoc}" th:action="@{/dan-toc/form}">
+				      <form class="forms-sample" method="POST" th:object="${chiensi}" th:action="@{/chien-si/form}">
 				        <div class="form-group row">
-				          <label for="trucThuoc" class="col-3">Trực thuộc</label>
+				          <label for="trucThuoc" class="col-3">Trực thuộc <span class="color-red">(*)</span></label>
 				          <div class="col-9">
 				          	<select
 								class="form-control w-20 float-left" id="idDaiDoi"
@@ -68,21 +68,21 @@
 				          </div>
 				        </div>
 				        <div class="form-group row">
-				          <label for="hoTen" class="col-3">Họ tên</label>
+				          <label for="hoTen" class="col-3">Họ tên <span class="color-red">(*)</span></label>
 				          <div class="col-9">
 				          	<input type="text" th:field="*{hoTen}" class="form-control" placeholder="Họ tên">
 				          </div>
 				          
 				        </div>
 				        <div class="form-group row">
-				          <label for="ten" class="col-3">Ngày sinh <span class="color-red">(*)</label>
+				          <label for="ngaySinh" class="col-3">Ngày sinh <span class="color-red">(*)</span></label>
 				          <div class="col-9">
 				          	<input type="text" th:field="*{ngaySinh}" class="form-control" placeholder="yyyy-MM-dd">
 				          </div>
 				          
 				        </div>
 				        <div class="form-group row">
-				          <label for="ten" class="col-3">Cấp bậc</label>
+				          <label for="capBac" class="col-3">Cấp bậc <span class="color-red">(*)</span></label>
 				          <div class="col-9">
 				          	<input type="text" th:field="*{capBac}" class="form-control" placeholder="Cấp bậc">
 				          	<input type="text" th:field="*{thoiGianNhanCapBac}" class="form-control" placeholder="Thời gian nhận cấp bậc (yyyy-MM-dd)">
@@ -90,67 +90,196 @@
 				          
 				        </div>
 				        <div class="form-group row">
-				          <label for="ten" class="col-3">Chức vụ</label>
+				          <label for="chucVu" class="col-3">Chức vụ <span class="color-red">(*)</span></label>
 				          <div class="col-9">
+				          	<input type="text" th:field="*{chucVu}" class="form-control" placeholder="Chức vụ">
 				          </div>
-				          <input type="text" th:field="*{chucVu}" class="form-control" placeholder="Chức vụ">
+				          
 				        </div>
 				        <div class="form-group row">
 				          <label for="ten" class="col-3">Ngày nhập ngũ</label>
 				          <div class="col-9">
+				          	<input type="text" th:field="*{ngayNhapNgu}" class="form-control" placeholder="yyyy-MM-dd">
 				          </div>
-				          <input type="text" th:field="*{ten}" class="form-control" placeholder="Tên dân tộc">
+				          
+				        </div>
+				         <div class="form-group row">
+				          <label for="ten" class="col-3">Sức khỏe</label>
+				          <div class="col-9">
+				          	<input type="text" th:field="*{sucKhoe}" class="form-control" placeholder="Sức khỏe">
+				          </div>
+				          
 				        </div>
 				        <div class="form-group row">
-				          <label for="ten" class="col-3">Trực thuộc</label>
+				          <label class="col-3">Đảng viên</label>
 				          <div class="col-9">
+				          	<input type="checkbox"
+								class="float-left form-check-input mr-1"
+								id="dangVien"> 
+							<label style="float: left">Đảng
+								viên</label> 
+							<input type="text" th:field="*{ngayVaoDang}" class="form-control dang-vien" placeholder="Ngày vào Đảng (yyyy-MM-dd)">
+				          	<input type="text" th:field="*{ngayVaoDangChinhThuc}" class="form-control dang-vien" placeholder="Ngày vào Đảng chính thức (yyyy-MM-dd)">
+				          	<input type="text" th:field="*{soTheDang}" class="form-control dang-vien" placeholder="Số thẻ Đảng">
 				          </div>
-				          <input type="text" th:field="*{ten}" class="form-control" placeholder="Tên dân tộc">
 				        </div>
 				        <div class="form-group row">
-				          <label for="ten" class="col-3">Trực thuộc</label>
+				          <label for="ngayVaoDoan" class="col-3">Đoàn viên</label>
 				          <div class="col-9">
+				         	 <input type="text" th:field="*{ngayVaoDoan}" class="form-control" placeholder="Ngày vào Đoàn (yyyy-MM-dd)">
 				          </div>
-				          <input type="text" th:field="*{ten}" class="form-control" placeholder="Tên dân tộc">
+				          
 				        </div>
 				        <div class="form-group row">
-				          <label for="ten" class="col-3">Trực thuộc</label>
+				          <label class="col-3">Gia đình</label>
 				          <div class="col-9">
+				          	<input type="text" th:field="*{ngheNghiepGiaDinh}" class="form-control" placeholder="Nghề nghiệp gia đình">
+				          	<input type="text" th:field="*{hoTenCha}" class="form-control" placeholder="Họ tên cha">
+				          	<input type="text" th:field="*{namSinhCha}" class="form-control" placeholder="Năm sinh cha">
+				          	<input type="text" th:field="*{ngheNghiepCha}" class="form-control" placeholder="Nghề nghiệp cha">
+				          	<input type="text" th:field="*{hoTenMe}" class="form-control" placeholder="Họ tên mẹ">
+				          	<input type="text" th:field="*{namSinhMe}" class="form-control" placeholder="Năm sinh mẹ">
+				          	<input type="text" th:field="*{ngheNghiepMe}" class="form-control" placeholder="Nghề nghiệp mẹ">
 				          </div>
-				          <input type="text" th:field="*{ten}" class="form-control" placeholder="Tên dân tộc">
 				        </div>
 				        <div class="form-group row">
-				          <label for="ten" class="col-3">Trực thuộc</label>
+				          <label class="col-3">Gia đình</label>
 				          <div class="col-9">
+				          	<input type="text" class="form-control" th:field="*{boMat}" name="boMat" id="boMat" placeholder="Bố mất">
+				          	<input type="text" class="form-control" th:field="*{meMat}" name="meMat" id="meMat" placeholder="Mẹ mất"> 
+				          	<input type="text" class="form-control"	th:field="*{boMeLiDi}" name="boMeLiDi" id="boMeLiDi" placeholder="Bố mẹ li dị"> 
+				          	<input type="text" class="form-control" th:field="*{khongCoBo}" name="KhongCoBo" id="khongCoBo" placeholder="Không có bố"> 
+				          	
 				          </div>
-				          <input type="text" th:field="*{chucVu}" class="form-control" placeholder="Chức vụ">
 				        </div>
 				        <div class="form-group row">
-				          <label for="ten" class="col-3">Trực thuộc</label>
+				          <label class="col-3">Gia đình ảnh hưởng covid</label>
 				          <div class="col-9">
+				          	<textarea class="form-control" th:field="*{giaDinhAnhHuongCovid}" rows="4"></textarea>
 				          </div>
-				          <input type="text" th:field="*{ten}" class="form-control" placeholder="Tên dân tộc">
+				        </div>
+				         <div class="form-group row">
+				          <label class="col-3">Gia đình khó khăn</label>
+				          <div class="col-9">
+				          	<textarea class="form-control" th:field="*{giaDinhKhoKhan}" rows="4"></textarea>
+				          </div>
 				        </div>
 				        <div class="form-group row">
-				          <label for="ten" class="col-3">Trực thuộc</label>
+				          <label class="col-3">Gia đình có người quen trong quân đội</label>
 				          <div class="col-9">
+				          	<textarea class="form-control" th:field="*{nguoiQuenTrongQuanDoi}" rows="4"></textarea>
 				          </div>
-				          <input type="text" th:field="*{ten}" class="form-control" placeholder="Tên dân tộc">
 				        </div>
 				        <div class="form-group row">
-				          <label for="ten" class="col-3">Trực thuộc</label>
+				          <label class="col-3">Bố mẹ đang là liệt sĩ - Quân nhân</label>
 				          <div class="col-9">
+				          	<textarea class="form-control" th:field="*{boMeLaLietSiHoacQuanNhan}" rows="4"></textarea>
 				          </div>
-				          <input type="text" th:field="*{ten}" class="form-control" placeholder="Tên dân tộc">
 				        </div>
 				        <div class="form-group row">
-				          <label for="ten" class="col-3">Trực thuộc</label>
+				          <label class="col-3">Bản thân</label>
 				          <div class="col-9">
+				         	 <input type="text" th:field="*{coMayAnhChiEm}" class="form-control" placeholder="Có mấy anh chị em">
+				         	 <input type="text" th:field="*{conThuMayTrongNha}" class="form-control" placeholder="Con thứ mấy trong nhà">
+				         	 <input type="text" th:field="*{ngheNghiepBanThan}" class="form-control" placeholder="Nghề nghiệp bản thân">
 				          </div>
-				          <input type="text" th:field="*{ten}" class="form-control" placeholder="Tên dân tộc">
 				        </div>
-				        
+				        <div class="form-group row">
+				          <label class="col-3">Có vợ</label>
+				          <div class="col-9">
+				         	 <input type="radio" class="float-left form-check-input mr-1" th:checked="${chiensi.coVo == 'r'}" name="coVo" id="coVoDaDkkh" value="r"> 
+				         	 <label style="text-align: left" class="float-left">Có vợ (đã đkkh)</label> 
+				         	 
+				         	 <input type="radio" class="float-left form-check-input mr-1" th:checked="${chiensi.coVo == 'c'}" name="coVo" id="coChuaDaDkkh" value="c"> 
+				         	 <label style="text-align: left" class="float-left">Có vợ (chưa đkkh)</label> 
+				         	 
+				         	 <input type="radio" class="float-left form-check-input mr-1" name="coVo" id="chuaCoVo" value="" th:checked="${chiensi.coVo == ''}"> 
+				         	 <label style="text-align: left" class="float-left">Chưa có vợ</label>
+				         	 <div class="row">
+				         	 	<div class="col-12">
+				         	 		<textarea class="form-control" th:field="*{ghiChuCoVo}" rows="4"></textarea>
+				         	 	</div>
+				         	 </div>
+				          </div>
+				        </div>
+				        <div class="form-group row">
+				          <label class="col-3">Trình độ</label>
+				          <div class="col-9">
+				            <select class="form-control w-20 float-left" id="trinhDo"name="trinhDo">
+							  <option th:each="i : ${listTrinhDo}" th:value="${i.id}" th:text="${i.ten}" th:selected="${i.id} == ${chiensi.trinhDo}"></option>
+						     </select>
+				          	<input type="text" th:field="*{daQuaTruong}" class="form-control" placeholder="Đã qua trường"> 
+				          </div>
+				        </div>
+				        <div class="form-group row">
+				          <label class="col-3">Dân tộc <span class="color-red">(*)</span></label>
+				          <div class="col-9">
+				          	<select class="form-control w-20 float-left" id="IdDanToc" name="IdDanToc">
+								<option th:each="i : ${listDanToc}" th:value="${i.id}" th:text="${i.ten}" th:selected="${i.id == chiensi.IdDanToc}"></option>
+							</select>
+				          </div>
+				          
+				        </div>
+				        <div class="form-group row">
+				          <label class="col-3">Tôn giáo</label>
+				          <div class="col-9">
+				          	<input type="text" th:field="*{tonGiao}" class="form-control" placeholder="Tôn giáo">
+				          </div>
+				        </div>
+				        <div class="form-group row">
+				          <label class="col-3">Quê quán</label>
+				          <div class="col-9">
+				          	<input type="text" th:field="*{qqTinhThanh}" class="form-control" placeholder="Tỉnh/Thành">
+				          	<input type="text" th:field="*{qqQuanHuyen}" class="form-control" placeholder="Quận/Huyện">
+				        	<input type="text" th:field="*{qqPhuongXa}" class="form-control" placeholder="Phường/Xã">
+				          </div>
+				        </div>
+				        <div class="form-group row">
+				          <label class="col-3">Nơi ở hiện tại</label>
+				          <div class="col-9">
+				          	<input type="text" th:field="*{nohnTinhThanh}" class="form-control" placeholder="Tỉnh/Thành">
+				          	<input type="text" th:field="*{nohnQuanHuyen}" class="form-control" placeholder="Quận/Huyện">
+				        	<input type="text" th:field="*{nohnPhuongXa}" class="form-control" placeholder="Phường/Xã">
+				          </div>
+				        </div>
+				        <div class="form-group row">
+				          <label class="col-3">Hình xăm</label>
+				          <div class="col-9">
+				          	<input type="text" th:field="*{hinhXam}" class="form-control" placeholder="Hình xăm">
+				          </div>
+				        </div>
+				        <div class="form-group row">
+				          <label class="col-3">Giữ bùa</label>
+				          <div class="col-9">
+				          	<input type="text" th:field="*{giuBua}" class="form-control" placeholder="Giữ bùa">
+				          </div>
+				        </div>
+				        <div class="form-group row">
+				          <label class="col-3">Người yêu</label>
+				          <div class="col-9">
+				          	<input type="text" th:field="*{nguoiYeu}" class="form-control" placeholder="Người yêu">
+				          </div>
+				        </div>
+				        <div class="form-group row">
+				          <label class="col-3">Hút thuốc</label>
+				          <div class="col-9">
+				          	<input type="text" th:field="*{hutThuoc}" class="form-control" placeholder="Hút thuốc">
+				          </div>
+				        </div>
+				        <div class="form-group row">
+				          <label class="col-3">Sở trường</label>
+				          <div class="col-9">
+				          	<input type="text" th:field="*{soTruong}" class="form-control" placeholder="Sở trường">
+				          </div>
+				        </div>
+				        <div class="form-group row">
+				          <label class="col-3">Ghi chú</label>
+				          <div class="col-9">
+				          	<input type="text" th:field="*{ghiChu}" class="form-control" placeholder="Ghi chú">
+				          </div>
+				        </div>
 				        <div>
+				        	<input type="hidden" th:field="*{idDoanhTrai}">
 				        	<input type="hidden" th:field="*{id}">
 				        </div>
 				        <button type="submit" class="btn btn-primary me-2">Submit</button>
@@ -182,6 +311,71 @@
   <script th:src="@{/js/file-upload.js}"></script>
   <script th:src="@{/js/typeahead.js}"></script>
   <script th:src="@{/js/select2.js}"></script>
+  <script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		$("#dangVien").on("click", function() {
+			if ($("#dangVien:checked").length > 0) {
+				$(".dang-vien").show();
+			} else {
+				$(".dang-vien").hide();
+			}
+		})
+
+		$("#idDaiDoi").on(
+				"change",
+				function() {
+					$("#idTieuDoi").empty();
+					console.log($(this).val());
+					let id = $(this).val();
+					let link = /*[[@{/doanh-trai/truc-thuoc/}]]*/'';
+					$.ajax({
+						url : link + id,
+						success : function(result) {
+							$('#idTrungDoi').empty();
+							let i = 0;
+							if (result == "") {
+								return;
+							}
+							result.forEach(function(item) {
+								$('#idTrungDoi').append(
+										'<option value=' + item.id +'>'
+												+ item.tenDayDu + '</option>');
+								i++;
+							});
+						}
+					});
+				});
+
+		$("#idTrungDoi").on(
+				"change",
+				function() {
+					let id = $(this).val();
+					let link = /*[[@{/doanh-trai/truc-thuoc/}]]*/'';
+					$.ajax({
+						url : link + id,
+						success : function(result) {
+							$('#idTieuDoi').empty();
+							let i = 0;
+							console.log(result);
+							if (result == "") {
+								return;
+							}
+							result.forEach(function(item) {
+								$('#idTieuDoi').append(
+										'<option value=' + item.id +'>'
+												+ item.tenDayDu + '</option>');
+								i++;
+							});
+						}
+					});
+				});
+		$("#idTieuDoi").on("change", function() {
+			let valTieuDoi = $("#idTieuDoi option:selected").val();
+			console.log(valTieuDoi);
+			$("#idDoanhTrai").val(valTieuDoi);
+		});
+		/*]]>*/
+	</script>
   <!-- End custom js for this page-->
  </body>
  </html>
