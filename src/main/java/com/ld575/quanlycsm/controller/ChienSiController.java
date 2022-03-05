@@ -1,5 +1,6 @@
 package com.ld575.quanlycsm.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,7 @@ import com.ld575.quanlycsm.entity.DoanhTraiEntity;
 import com.ld575.quanlycsm.service.ChienSiService;
 import com.ld575.quanlycsm.service.DanTocService;
 import com.ld575.quanlycsm.service.DoanhTraiService;
+import com.ld575.quanlycsm.service.ExportHelper;
 
 @Controller
 @RequestMapping("/chien-si")
@@ -39,6 +41,15 @@ public class ChienSiController {
 	
 	@Autowired
 	private DoanhTraiService doanhTraiService;
+	
+	@Autowired
+	private ExportHelper exportHelper;
+	
+	@GetMapping("/testExport")
+	public String index() throws IOException {
+		exportHelper.export();	
+        return "";
+	}
 	
 	@GetMapping(value = {"/", "/list"})
 	public String list(Model model, @ModelAttribute("chiensi") ChienSiDto chienSiDto) {
@@ -135,6 +146,11 @@ public class ChienSiController {
 		}
 		chienSiService.deleteById(id);
 		return "redirect:/chien-si/list";
+	}
+	
+	@GetMapping("/export")
+	public String export() {
+		return "/chiensi/export";
 	}
 	
 	private List<TrinhDoDto> getListTrinhDo() {
