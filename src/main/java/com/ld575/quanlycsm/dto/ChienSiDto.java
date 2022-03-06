@@ -1,4 +1,4 @@
-	package com.ld575.quanlycsm.dto;
+package com.ld575.quanlycsm.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

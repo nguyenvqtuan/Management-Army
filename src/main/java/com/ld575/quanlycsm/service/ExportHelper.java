@@ -17,14 +17,16 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ld575.quanlycsm.dto.CountChienSiDto;
 import com.ld575.quanlycsm.entity.ChienSiEntity;
-import com.ld575.quanlycsm.repository.ChienSiRepository;
+import com.ld575.quanlycsm.repository.ExportChienSiRepository;
 
 @Component
 public class ExportHelper {
 	
+	private static int DEFAULT_DISTANCE_STATISTICAL = 2;
 	@Autowired
-	private ChienSiRepository chienSiRepository;
+	private ExportChienSiRepository chienSiRepository;
 
 	private int rowIdx = 0;
 	
@@ -38,6 +40,7 @@ public class ExportHelper {
         
         createHeader(workbook, sheet);
         createContent(workbook, sheet);
+//        createContent(workbook, sheet);
         
         // .xlsx is the format for Excel Sheets...
         // writing the workbook into the file...
@@ -58,29 +61,35 @@ public class ExportHelper {
 	}
 	
 	private void createContent(XSSFWorkbook workbook, XSSFSheet sheet) {
-		setHomeTown(workbook, sheet);
-		setEthnic(workbook, sheet);
-		setReligion(workbook, sheet);
-		setLeagure(workbook, sheet);
-		setDegree(workbook, sheet);
-		setWedded(workbook, sheet);
-		setHealth(workbook, sheet);
-		setAge(workbook, sheet);
-		setDadPassed(workbook, sheet);
-		setMomPassed(workbook, sheet);
-		setDivorcedParents(workbook, sheet);
-		setNoFather(workbook, sheet);
-		setTattoo(workbook, sheet);
-		setKeepCharms(workbook, sheet);
-		setLover(workbook, sheet);
-		setSmoker(workbook, sheet);
-		setGoToBar(workbook, sheet);
-		setDifficultFamily(workbook, sheet);
-		setAcquaintanceInTheArmy(workbook, sheet);
-		setForte(workbook, sheet);
-		
-		mergeCell(sheet);
+		createHomeTown(workbook, sheet);
+		createEthnic(workbook, sheet);
+		createReligion(workbook, sheet);
 	}
+	
+//	private void createContent(XSSFWorkbook workbook, XSSFSheet sheet) {
+//		setHomeTown(workbook, sheet);
+//		setEthnic(workbook, sheet);
+//		setReligion(workbook, sheet);
+//		setLeagure(workbook, sheet);
+//		setDegree(workbook, sheet);
+//		setWedded(workbook, sheet);
+//		setHealth(workbook, sheet);
+//		setAge(workbook, sheet);
+//		setDadPassed(workbook, sheet);
+//		setMomPassed(workbook, sheet);
+//		setDivorcedParents(workbook, sheet);
+//		setNoFather(workbook, sheet);
+//		setTattoo(workbook, sheet);
+//		setKeepCharms(workbook, sheet);
+//		setLover(workbook, sheet);
+//		setSmoker(workbook, sheet);
+//		setGoToBar(workbook, sheet);
+//		setDifficultFamily(workbook, sheet);
+//		setAcquaintanceInTheArmy(workbook, sheet);
+//		setForte(workbook, sheet);
+//		
+//		mergeCell(sheet);
+//	}
 	
 	private void mergeCell(XSSFSheet sheet) {
 		sheet.addMergedRegion(CellRangeAddress.valueOf("B2:AT2"));
@@ -115,7 +124,8 @@ public class ExportHelper {
 	}
 	
 	private void setTitle(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.createRow(1);
+		rowIdx = 1;
+		XSSFRow row = getRow(sheet, rowIdx);
 		
 		CellStyle cellStyleHeader = workbook.createCellStyle();
 		cellStyleHeader.setFont(getFont(workbook, (short) 10, (short) 18));
@@ -132,9 +142,10 @@ public class ExportHelper {
 	}
 	
 	private void setNumberOfTrops(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.createRow(3);
+		rowIdx = 3;
+		XSSFRow row = sheet.createRow(rowIdx);
 		
-		XSSFCell cell = row.createCell(43);
+		XSSFCell cell = row.createCell(8);
 		
 		CellStyle cellStyleHeader = workbook.createCellStyle();
 		cellStyleHeader.setFont(getFont(workbook, (short) 10, (short) 13));
@@ -145,29 +156,40 @@ public class ExportHelper {
 		
 		cell.setCellStyle(cellStyleHeader);
 		
-		long numberOfTrops = chienSiRepository.count();
+		long numberOfTrops = chienSiRepository.countSoldier().getAmount();
 		cell.setCellValue("Tổng quân số: " + numberOfTrops + " đ/c");
 	}
 	
-	private void setHomeTown(XSSFWorkbook workbook, XSSFSheet sheet) {
-		setHeaderHomeTown(workbook, sheet);
-		setContentHomeTown(workbook, sheet);
+	private void createHomeTown(XSSFWorkbook workbook, XSSFSheet sheet) {
+		createHeaderHomeTown(workbook, sheet);
+		createContentHomeTown(workbook, sheet);
 	}
 	
-	private void setHeaderHomeTown(XSSFWorkbook workbook, XSSFSheet sheet) {
+	private void createEthnic(XSSFWorkbook workbook, XSSFSheet sheet) {
+		createHeaderEthnic(workbook, sheet);
+		createContentEthnic(workbook, sheet);
+	}
+	
+	private void createReligion(XSSFWorkbook workbook, XSSFSheet sheet) {
+		createHeaderReligion(workbook, sheet);
+		createContentReligion(workbook, sheet);
+	}
+	
+	private void createHeaderHomeTown(XSSFWorkbook workbook, XSSFSheet sheet) {
 		rowIdx = 5;
-		XSSFRow row = sheet.createRow(rowIdx);
+		XSSFRow row = getRow(sheet, rowIdx);
 		
 		XSSFCell cell = row.createCell(1);
 		cell.setCellStyle(getStyleMiddle(workbook));
 		
+		sheet.addMergedRegion(CellRangeAddress.valueOf("B" + (rowIdx + 1) + ":D" + (rowIdx + 2)));
 		cell.setCellValue("Quê quán");
-		setDetailHomeTown(workbook, sheet);
+		createHeaderDetailHomeTown(workbook, sheet);
 	}
 	
-	private void setDetailHomeTown(XSSFWorkbook workbook, XSSFSheet sheet) {
-		rowIdx = 7;
-		XSSFRow row = sheet.createRow(rowIdx);
+	private void createHeaderDetailHomeTown(XSSFWorkbook workbook, XSSFSheet sheet) {
+		rowIdx += DEFAULT_DISTANCE_STATISTICAL;
+		XSSFRow row = getRow(sheet, rowIdx);
 		
 		XSSFCell cell = row.createCell(1);
 		
@@ -182,55 +204,120 @@ public class ExportHelper {
 		XSSFCell cell3 = row.createCell(3);
 		cell3.setCellStyle(getStyleMiddle(workbook));
 		cell3.setCellValue("Phường/Xã");
+		rowIdx++;
 	}
 	
-	private void setContentHomeTown(XSSFWorkbook workbook, XSSFSheet sheet) {
-		List<ChienSiEntity> listChienSiQqTinhThanh = chienSiRepository.countQqTinhThanh();
-		for (ChienSiEntity chienSiEntity : listChienSiQqTinhThanh) {
-			createContentHomeTownCity(sheet);
+	private void createContentHomeTown(XSSFWorkbook workbook, XSSFSheet sheet) {
+		List<CountChienSiDto> listCountQqTinhThanh = chienSiRepository.countQqTinhThanh();
+		for (CountChienSiDto chienSiDto : listCountQqTinhThanh) {
+			createContentHomeTownCity(workbook, sheet, chienSiDto);
+			List<CountChienSiDto> listCountQqQuanHuyen = chienSiRepository.countQqQuanHuyen(chienSiDto.getTen());
+			for (CountChienSiDto chienSiQuanHuyen : listCountQqQuanHuyen) {
+				createContentHomeTownDistrict(workbook, sheet, chienSiQuanHuyen);
+				List<CountChienSiDto> listCountQqPhuongXa = chienSiRepository.countQqPhuongXa(chienSiDto.getTen(), chienSiQuanHuyen.getTen());
+				listCountQqPhuongXa.stream().forEach(chienSiPhuongXa -> {
+					createContentHomeTownWards(workbook, sheet, chienSiPhuongXa);
+					rowIdx++;
+				});
+				
+				if (listCountQqPhuongXa.size() == 0) {
+					rowIdx++;
+				}
+				
+			}
+			if (listCountQqQuanHuyen.size() == 0) {
+				rowIdx++;
+			}
 		}
 	}
 	
-	private void createContentHomeTownCity(XSSFWorkbook workbook, XSSFSheet sheet, ChienSiEntity chienSiEntity) {
-		XSSFRow row = sheet.createRow(++rowIdx);
+	private void createContentHomeTownCity(XSSFWorkbook workbook, XSSFSheet sheet, CountChienSiDto chienSiDto) {
+		XSSFRow row = getRow(sheet, rowIdx);
 		XSSFCell cell = row.createCell(1);
-		cell.setCellValue(getStyleContent(workbook));
-		
+		cell.setCellStyle(getStyleContent(workbook));
+		cell.setCellValue(chienSiDto.getTen() + ": " + chienSiDto.getAmount());
 	}
 	
-	private void setEthnic(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(5);
+	private void createContentHomeTownDistrict(XSSFWorkbook workbook, XSSFSheet sheet, CountChienSiDto chienSiDto) {
+		XSSFRow row = getRow(sheet, rowIdx);
+		XSSFCell cell = row.createCell(2);
+		cell.setCellStyle(getStyleContent(workbook));
+		cell.setCellValue(chienSiDto.getTen() + ": " + chienSiDto.getAmount());
+	}
+	
+	private void createContentHomeTownWards(XSSFWorkbook workbook, XSSFSheet sheet, CountChienSiDto chienSiDto) {
+		XSSFRow row = getRow(sheet, rowIdx);
+		XSSFCell cell = row.createCell(3);
+		cell.setCellStyle(getStyleContent(workbook));
+		cell.setCellValue(chienSiDto.getTen() + ": " + chienSiDto.getAmount());
+	}
+	
+	private void createContentEthnic(XSSFWorkbook workbook, XSSFSheet sheet) {
+		List<CountChienSiDto> listCountDanToc = chienSiRepository.countDanToc();
+		listCountDanToc.stream().forEach(chienSiDto -> {
+			XSSFRow row = getRow(sheet, rowIdx);
+			XSSFCell cell = row.createCell(1);
+			cell.setCellStyle(getStyleContent(workbook));
+			cell.setCellValue(chienSiDto.getTen() + ": " + chienSiDto.getAmount());
+			rowIdx++;
+		});
+	}
+	
+	private void createContentReligion(XSSFWorkbook workbook, XSSFSheet sheet) {
+		List<CountChienSiDto> listCountDanToc = chienSiRepository.countTonGiao();
+		listCountDanToc.stream().forEach(chienSiDto -> {
+			XSSFRow row = getRow(sheet, rowIdx);
+			XSSFCell cell = row.createCell(1);
+			cell.setCellStyle(getStyleContent(workbook));
+			cell.setCellValue(chienSiDto.getTen() + ": " + chienSiDto.getAmount());
+			String[] arrChienSi = chienSiDto.getDetail().split(", ");
+			XSSFCell cell2 = row.createCell(2);
+			for (String str : arrChienSi) {
+				cell2.setCellValue(str + "\n");
+			}
+			rowIdx++;
+		});
+	}
+	
+	private void createHeaderEthnic(XSSFWorkbook workbook, XSSFSheet sheet) {
+		rowIdx += DEFAULT_DISTANCE_STATISTICAL;
+		XSSFRow row = getRow(sheet, rowIdx);
 		
-		XSSFCell cell = row.createCell(4);
+		XSSFCell cell = row.createCell(1);
 		
 		cell.setCellStyle(getStyleMiddle(workbook));
 		cell.setCellValue("Dân tộc");
 		
-		setThnicDetail(workbook, sheet);
+		createHeaderEthnicDetail(workbook, sheet);
+		rowIdx++;
 	}
 	
-	private void setThnicDetail(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(7);
+	private void createHeaderEthnicDetail(XSSFWorkbook workbook, XSSFSheet sheet) {
+		rowIdx++;
+		XSSFRow row = getRow(sheet, rowIdx);
 		
-		XSSFCell cell = row.createCell(4);
+		XSSFCell cell = row.createCell(1);
 		
 		cell.setCellStyle(getStyleMiddle(workbook));
 		cell.setCellValue("Số lượng");
 	}
 	
-	private void setReligion(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(5);
+	private void createHeaderReligion(XSSFWorkbook workbook, XSSFSheet sheet) {
+		rowIdx += DEFAULT_DISTANCE_STATISTICAL;
+		XSSFRow row = getRow(sheet, rowIdx);
 		
 		XSSFCell cell = row.createCell(5);
 		
 		cell.setCellStyle(getStyleMiddle(workbook));
 		cell.setCellValue("Tôn giáo");
 		
-		setReligionDetail(workbook, sheet);
+		setHeaderReligionDetail(workbook, sheet);
+		rowIdx++;
 	}
 	
-	private void setReligionDetail(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(7);
+	private void setHeaderReligionDetail(XSSFWorkbook workbook, XSSFSheet sheet) {
+		rowIdx++;
+		XSSFRow row = getRow(sheet, rowIdx);
 		
 		XSSFCell cell = row.createCell(5);
 		
@@ -719,5 +806,9 @@ public class ExportHelper {
 		cellStyle.setBorderLeft(BorderStyle.THIN);
 		cellStyle.setBorderTop(BorderStyle.THIN);
 		cellStyle.setBorderRight(BorderStyle.THIN);
+	}
+	
+	private XSSFRow getRow(XSSFSheet sheet, int rowIdx) {
+		return sheet.getRow(rowIdx) == null ? sheet.createRow(rowIdx) : sheet.getRow(rowIdx);
 	}
 }
