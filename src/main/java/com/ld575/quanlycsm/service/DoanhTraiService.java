@@ -21,6 +21,15 @@ public class DoanhTraiService {
 	}
 	
 	public void save(DoanhTraiDto doanhTraiDto) {
+		String[] arr = doanhTraiDto.getTenTrucThuoc().split("-");
+		String daiDoi = "";
+		String trungDoi = "";
+		if (arr.length == 2) {
+			daiDoi = arr[0];
+		} else if (arr.length == 3) {
+			daiDoi = arr[1];
+			trungDoi = arr[0];
+		}
 		DoanhTraiEntity doanhTrai = DoanhTraiEntity.builder()
 			.ten(doanhTraiDto.getTen())
 			.tenDayDu(doanhTraiDto.getTenDayDu())
@@ -28,6 +37,8 @@ public class DoanhTraiService {
 			.capDo(doanhTraiDto.getCapDo())
 			.strIdTrucThuoc(doanhTraiDto.getStrIdTrucThuoc())
 			.tenTrucThuoc(doanhTraiDto.getTenTrucThuoc())
+			.trucThuocTrungDoi(trungDoi)
+			.trucThuocDaiDoi(daiDoi)
 			.tenDayDuTrucThuoc(doanhTraiDto.getTenDayDuTrucThuoc())
 			.build();
 		if (doanhTraiDto.getId() != null) {

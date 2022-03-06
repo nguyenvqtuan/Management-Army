@@ -162,7 +162,7 @@ public class DoanhTraiController {
 					tenTrucThuoc.append("-");
 				}
 				if (tenDayDuTrucThuoc.length() != 0) {
-					tenDayDuTrucThuoc.append(" - ");
+					tenDayDuTrucThuoc.append("-");
 				}
 				current = mapTrucThuoc.get(current);
 				String[] arr = mapTrucThuocStr.get(current).split("-");

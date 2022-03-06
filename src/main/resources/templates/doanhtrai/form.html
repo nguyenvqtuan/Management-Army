@@ -59,7 +59,7 @@
 				        <div class="form-group">
 				          <label for="trucThuoc">Trực thuộc</label>
 				          <div th:if="${id != null}" id="contain-trucThuoc">
-				          	<input type="hidden" name="trucThuoc" th:value="${id}"/>
+				          	<input type="hidden" name="trucThuoc" th:value="${doanhTrai.trucThuoc}"/>
 				          	<input type="text" th:value="${tenDayDuTrucThuoc}" disabled>
 				          </div>
 				          <select class="form-control" id="trucThuoc" th:field="*{trucThuoc}">
