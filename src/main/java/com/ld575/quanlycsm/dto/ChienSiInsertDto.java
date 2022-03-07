@@ -91,6 +91,7 @@ public class ChienSiInsertDto {
 	private String nguoiYeu;
 	private String hutThuoc;
 	private String soTruong;
+	private String diBar;
 	private String ghiChu;
 	
 	private Long idDoanhTrai;

@@ -24,7 +24,7 @@ public class CommonService {
 	}
 	
 	public boolean isEmpty(String s) {
-		return s == null || s.isEmpty();
+		return s == null || s.isEmpty() || s == "null";
 	}
 	
 	public String upperFirstCharacter(String str) {

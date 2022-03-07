@@ -1,11 +1,17 @@
 package com.ld575.quanlycsm.controller;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.poi.util.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,30 +41,24 @@ public class ChienSiController {
 
 	@Autowired
 	private ChienSiService chienSiService;
-	
+
 	@Autowired
 	private DanTocService danTocService;
-	
+
 	@Autowired
 	private DoanhTraiService doanhTraiService;
-	
+
 	@Autowired
 	private ExportHelper exportHelper;
-	
-	@GetMapping("/testExport")
-	public String index() throws IOException {
-		exportHelper.export();	
-        return "";
-	}
-	
-	@GetMapping(value = {"/", "/list"})
+
+	@GetMapping(value = { "/", "/list" })
 	public String list(Model model, @ModelAttribute("chiensi") ChienSiDto chienSiDto) {
 		List<ChienSiEntity> listChienSi = chienSiService.findByCondition(chienSiDto);
 		model.addAttribute("listChienSi", listChienSi);
 		model.addAttribute("listTrinhDo", getListTrinhDo());
 		model.addAttribute("listDanToc", getListDanToc());
 		model.addAttribute("listDaiDoi", getListDoanhTraiDaiDoi());
-		
+
 		List<DoanhTraiDto> listTrungDoi;
 		if (chienSiDto.getIdDaiDoi() != null && chienSiDto.getIdDaiDoi() != 0L) {
 			listTrungDoi = getListDoanhTraiTrungDoi(chienSiDto.getIdDaiDoi());
@@ -66,7 +66,7 @@ public class ChienSiController {
 			listTrungDoi = new ArrayList<>();
 		}
 		model.addAttribute("listTrungDoi", listTrungDoi);
-		
+
 		List<DoanhTraiDto> listTieuDoi;
 		if (chienSiDto.getIdTrungDoi() != null && chienSiDto.getIdTrungDoi() != 0L) {
 			listTieuDoi = getListDoanhTraiTieuDoi(chienSiDto.getIdTrungDoi());
@@ -77,12 +77,12 @@ public class ChienSiController {
 		model.addAttribute("chiensi", chienSiDto == null ? new ChienSiDto() : chienSiDto);
 		return "/chiensi/list.html";
 	}
-	
+
 	@GetMapping("/upload")
 	public String showImport() {
 		return "/chiensi/import.html";
 	}
-	
+
 	@PostMapping("/upload")
 	public String uploadFile(@RequestParam("file") MultipartFile file) {
 		try {
@@ -93,7 +93,7 @@ public class ChienSiController {
 			return "redirect:/chien-si/list";
 		}
 	}
-	
+
 	@GetMapping("/form")
 	public String insert(Model model) {
 		model.addAttribute("title", "Thêm chiến sĩ");
@@ -103,13 +103,13 @@ public class ChienSiController {
 		model.addAttribute("listDaiDoi", getListDoanhTraiDaiDoi());
 		return "/chiensi/form";
 	}
-	
+
 	@PostMapping("/form")
 	public String insert(Model model, @ModelAttribute("chiensi") ChienSiInsertDto chienSiDto) {
 		chienSiService.save(chienSiDto);
 		return "redirect:/chien-si/list";
 	}
-	
+
 	@GetMapping("/form/{id}")
 	public String showUpdate(Model model, @PathVariable("id") Long id) {
 		model.addAttribute("title", "Cập nhật chiến sĩ");
@@ -127,7 +127,7 @@ public class ChienSiController {
 			listTrungDoi = new ArrayList<>();
 		}
 		model.addAttribute("listTrungDoi", listTrungDoi);
-		
+
 		List<DoanhTraiDto> listTieuDoi;
 		if (chienSiDto.getIdTrungDoi() != 0L) {
 			listTieuDoi = getListDoanhTraiTieuDoi(chienSiDto.getIdTrungDoi());
@@ -137,7 +137,7 @@ public class ChienSiController {
 		model.addAttribute("listTieuDoi", listTieuDoi);
 		return "/chiensi/form";
 	}
-	
+
 	@GetMapping("/delete/{id}")
 	public String delete(@PathVariable("id") Long id) {
 		Optional<ChienSiEntity> danTocEntity = chienSiService.findById(id);
@@ -147,12 +147,24 @@ public class ChienSiController {
 		chienSiService.deleteById(id);
 		return "redirect:/chien-si/list";
 	}
-	
-	@GetMapping("/export")
-	public String export() {
-		return "/chiensi/export";
+
+	@GetMapping("/download")
+	public String showExport() {
+		return "/chiensi/download";
 	}
-	
+
+	@PostMapping("/download")
+	public void export(HttpServletResponse response, @RequestParam("namNhapNgu") String namNhapNgu)
+			throws IOException {
+		ByteArrayInputStream byteArrayInputStream = exportHelper.export(namNhapNgu);
+		response.setContentType("application/octet-stream");
+		LocalDateTime now = LocalDateTime.now();
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");  
+        String formatDateTime = now.format(format);  
+		response.setHeader("Content-Disposition", "attachment; filename=thong-ke-csm-" + namNhapNgu + " _" + formatDateTime + ".xlsx");
+		IOUtils.copy(byteArrayInputStream, response.getOutputStream());
+	}
+
 	private List<TrinhDoDto> getListTrinhDo() {
 		List<TrinhDoDto> listTrinhDo = new ArrayList<>();
 		listTrinhDo.add(new TrinhDoDto("", "Trình độ"));
@@ -173,7 +185,7 @@ public class ChienSiController {
 		listTrinhDo.add(new TrinhDoDto("1", "1"));
 		return listTrinhDo;
 	}
-	
+
 	private List<DanTocEntity> getListDanToc() {
 		Iterable<DanTocEntity> listDanToc = danTocService.findAll();
 		List<DanTocEntity> res = new ArrayList<>();
@@ -183,92 +195,67 @@ public class ChienSiController {
 		}
 		return res;
 	}
-	
+
 	private List<DoanhTraiDto> getListDoanhTraiDaiDoi() {
 		List<DoanhTraiEntity> listDoanhTraiEntity = doanhTraiService.findByLevel(3);
 		List<DoanhTraiDto> listDoanhTrai = listDoanhTraiEntity.stream().map(e -> {
 			return DoanhTraiDto.builder().id(e.getId()).tenDayDu(e.getTenDayDu()).build();
 		}).collect(Collectors.toList());
-		
+
 		listDoanhTrai.add(0, DoanhTraiDto.builder().id(0L).tenDayDu("Đại đội").build());
 		return listDoanhTrai;
 	}
-	
+
 	private List<DoanhTraiDto> getListDoanhTraiTrungDoi(Long idDaiDoi) {
 		List<DoanhTraiEntity> listDoanhTraiEntity = doanhTraiService.findByCapDoAndTrucThuoc(2, idDaiDoi);
 		List<DoanhTraiDto> listDoanhTrai = listDoanhTraiEntity.stream().map(e -> {
 			return DoanhTraiDto.builder().id(e.getId()).tenDayDu(e.getTenDayDu()).build();
 		}).collect(Collectors.toList());
-		
+
 		listDoanhTrai.add(0, DoanhTraiDto.builder().id(0L).tenDayDu("Trung đội").build());
 		return listDoanhTrai;
 	}
-	
+
 	private List<DoanhTraiDto> getListDoanhTraiTieuDoi(Long idTrungDoi) {
 		List<DoanhTraiEntity> listDoanhTraiEntity = doanhTraiService.findByCapDoAndTrucThuoc(1, idTrungDoi);
 		List<DoanhTraiDto> listDoanhTrai = listDoanhTraiEntity.stream().map(e -> {
 			return DoanhTraiDto.builder().id(e.getId()).tenDayDu(e.getTenDayDu()).build();
 		}).collect(Collectors.toList());
-		
+
 		listDoanhTrai.add(0, DoanhTraiDto.builder().id(0L).tenDayDu("Tiểu đội").build());
 		return listDoanhTrai;
 	}
-	
+
 	private ChienSiInsertDto getChienSiDto(ChienSiEntity chienSiEntity) {
-		String[] arrIdDoanhTrai = chienSiEntity.getDoanhTrai().getStrIdTrucThuoc().split("-"); 
-		return ChienSiInsertDto
-		 	.builder()
-		 	.id(chienSiEntity.getId())
-		 	.hoTen(chienSiEntity.getHoTen())
-		 	.ngaySinh(chienSiEntity.getNgaySinh())
-		 	.capBac(chienSiEntity.getCapBac())
-		 	.thoiGianNhanCapBac(chienSiEntity.getThoiGianNhanCapBac())
-		 	.chucVu(chienSiEntity.getChucVu())
-		 	.ngayNhapNgu(chienSiEntity.getNgayNhapNgu())
-		 	.sucKhoe(chienSiEntity.getSucKhoe())
-		 	.ngayVaoDang(chienSiEntity.getNgayVaoDang())
-		 	.ngayVaoDangChinhThuc(chienSiEntity.getNgayVaoDangChinhThuc())
-		 	.soTheDang(chienSiEntity.getSoTheDang())
-		 	.ngayVaoDoan(chienSiEntity.getNgayVaoDoan())
-		 	.ngheNghiepGiaDinh(chienSiEntity.getNgheNghiepGiaDinh())
-		 	.coMayAnhChiEm(chienSiEntity.getCoMayAnhChiEm())
-		 	.conThuMayTrongNha(chienSiEntity.getConThuMayTrongNha())
-		 	.coVo(Character.toString(chienSiEntity.getCoVo()))
-		 	.ghiChuCoVo(chienSiEntity.getGhiChuCoVo())
-		 	.hoTenCha(chienSiEntity.getHoTenCha())
-		 	.namSinhCha(chienSiEntity.getNamSinhCha())
-		 	.ngheNghiepCha(chienSiEntity.getNgheNghiepCha())
-		 	.hoTenMe(chienSiEntity.getHoTenMe())
-		 	.namSinhMe(chienSiEntity.getNamSinhMe())
-		 	.ngheNghiepMe(chienSiEntity.getNgheNghiepMe())
-		 	.boMat(chienSiEntity.getBoMat())
-		 	.meMat(chienSiEntity.getMeMat())
-		 	.boMeLiDi(chienSiEntity.getBoMeLiDi())
-		 	.khongCoBo(chienSiEntity.getKhongCoBo())
-		 	.giaDinhAnhHuongCovid(chienSiEntity.getGiaDinhAnhHuongCovid())
-		 	.giaDinhKhoKhan(chienSiEntity.getGiaDinhKhoKhan())
-		 	.nguoiQuenTrongQuanDoi(chienSiEntity.getNguoiQuenTrongQuanDoi())
-		 	.boMeLaLietSiHoacQuanNhan(chienSiEntity.getBoMeLaLietSiHoacQuanNhan())
-		 	.ngheNghiepBanThan(chienSiEntity.getNgheNghiepBanThan())
-		 	.trinhDo(chienSiEntity.getTrinhDo())
-		 	.daQuaTruong(chienSiEntity.getDaQuaTruong())
-		 	.qqPhuongXa(chienSiEntity.getQqPhuongXa())
-		 	.qqQuanHuyen(chienSiEntity.getQqQuanHuyen())
-		 	.qqTinhThanh(chienSiEntity.getQqTinhThanh())
-		 	.nohnPhuongXa(chienSiEntity.getNohnPhuongXa())
-		 	.nohnQuanHuyen(chienSiEntity.getNohnQuanHuyen())
-		 	.nohnTinhThanh(chienSiEntity.getNohnTinhThanh())
-		 	.hinhXam(chienSiEntity.getHinhXam())
-		 	.giuBua(chienSiEntity.getGiuBua())
-		 	.nguoiYeu(chienSiEntity.getNguoiYeu())
-		 	.hutThuoc(chienSiEntity.getHutThuoc())
-		 	.soTruong(chienSiEntity.getSoTruong())
-		 	.ghiChu(chienSiEntity.getGhiChu())
-		 	.idDanToc(chienSiEntity.getDanToc().getId())
-		 	.idDoanhTrai(chienSiEntity.getDoanhTrai().getId())
-		 	.idDaiDoi(doanhTraiService.findById(Long.parseLong(arrIdDoanhTrai[1])).get().getId())
-		 	.idTrungDoi(doanhTraiService.findById(Long.parseLong(arrIdDoanhTrai[0])).get().getId())
-		 	.idTieuDoi(chienSiEntity.getDoanhTrai().getId())
-		 	.build();
+		String[] arrIdDoanhTrai = chienSiEntity.getDoanhTrai().getStrIdTrucThuoc().split("-");
+		return ChienSiInsertDto.builder().id(chienSiEntity.getId()).hoTen(chienSiEntity.getHoTen())
+				.ngaySinh(chienSiEntity.getNgaySinh()).capBac(chienSiEntity.getCapBac())
+				.thoiGianNhanCapBac(chienSiEntity.getThoiGianNhanCapBac()).chucVu(chienSiEntity.getChucVu())
+				.ngayNhapNgu(chienSiEntity.getNgayNhapNgu()).sucKhoe(chienSiEntity.getSucKhoe())
+				.ngayVaoDang(chienSiEntity.getNgayVaoDang())
+				.ngayVaoDangChinhThuc(chienSiEntity.getNgayVaoDangChinhThuc()).soTheDang(chienSiEntity.getSoTheDang())
+				.ngayVaoDoan(chienSiEntity.getNgayVaoDoan()).ngheNghiepGiaDinh(chienSiEntity.getNgheNghiepGiaDinh())
+				.coMayAnhChiEm(chienSiEntity.getCoMayAnhChiEm()).conThuMayTrongNha(chienSiEntity.getConThuMayTrongNha())
+				.coVo(Character.toString(chienSiEntity.getCoVo())).ghiChuCoVo(chienSiEntity.getGhiChuCoVo())
+				.hoTenCha(chienSiEntity.getHoTenCha()).namSinhCha(chienSiEntity.getNamSinhCha())
+				.ngheNghiepCha(chienSiEntity.getNgheNghiepCha()).hoTenMe(chienSiEntity.getHoTenMe())
+				.namSinhMe(chienSiEntity.getNamSinhMe()).ngheNghiepMe(chienSiEntity.getNgheNghiepMe())
+				.boMat(chienSiEntity.getBoMat()).meMat(chienSiEntity.getMeMat()).boMeLiDi(chienSiEntity.getBoMeLiDi())
+				.khongCoBo(chienSiEntity.getKhongCoBo()).giaDinhAnhHuongCovid(chienSiEntity.getGiaDinhAnhHuongCovid())
+				.giaDinhKhoKhan(chienSiEntity.getGiaDinhKhoKhan())
+				.nguoiQuenTrongQuanDoi(chienSiEntity.getNguoiQuenTrongQuanDoi())
+				.boMeLaLietSiHoacQuanNhan(chienSiEntity.getBoMeLaLietSiHoacQuanNhan())
+				.ngheNghiepBanThan(chienSiEntity.getNgheNghiepBanThan()).trinhDo(chienSiEntity.getTrinhDo())
+				.daQuaTruong(chienSiEntity.getDaQuaTruong()).qqPhuongXa(chienSiEntity.getQqPhuongXa())
+				.qqQuanHuyen(chienSiEntity.getQqQuanHuyen()).qqTinhThanh(chienSiEntity.getQqTinhThanh())
+				.nohnPhuongXa(chienSiEntity.getNohnPhuongXa()).nohnQuanHuyen(chienSiEntity.getNohnQuanHuyen())
+				.nohnTinhThanh(chienSiEntity.getNohnTinhThanh()).hinhXam(chienSiEntity.getHinhXam())
+				.giuBua(chienSiEntity.getGiuBua()).nguoiYeu(chienSiEntity.getNguoiYeu())
+				.hutThuoc(chienSiEntity.getHutThuoc()).soTruong(chienSiEntity.getSoTruong())
+				.ghiChu(chienSiEntity.getGhiChu()).idDanToc(chienSiEntity.getDanToc().getId())
+				.idDoanhTrai(chienSiEntity.getDoanhTrai().getId())
+				.idDaiDoi(doanhTraiService.findById(Long.parseLong(arrIdDoanhTrai[1])).get().getId())
+				.idTrungDoi(doanhTraiService.findById(Long.parseLong(arrIdDoanhTrai[0])).get().getId())
+				.idTieuDoi(chienSiEntity.getDoanhTrai().getId()).build();
 	}
 }

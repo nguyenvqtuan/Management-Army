@@ -1,7 +1,9 @@
 package com.ld575.quanlycsm.service;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ld575.quanlycsm.dto.CountChienSiDto;
+import com.ld575.quanlycsm.dto.CountDanTocDto;
 import com.ld575.quanlycsm.repository.ExportChienSiRepository;
 
 @Component
@@ -37,74 +40,58 @@ public class ExportHelper {
 	
 	private int rowIdx = 0;
 
-	public void export() {
-		// workbook object
+	public ByteArrayInputStream export(String namNhapNgu) {
 		XSSFWorkbook workbook = new XSSFWorkbook();
-
-		// spreadsheet object
 		XSSFSheet sheet = workbook.createSheet("Thống kê");
 
-		createHeader(workbook, sheet);
-		createContent(workbook, sheet);
+		createHeader(workbook, sheet, namNhapNgu);
+		createContent(workbook, sheet, namNhapNgu);
 		
-		try (FileOutputStream out = new FileOutputStream(new File("D:/Project-Managent-CSM/TestExport.xlsx"))) {
-			workbook.write(out);
-		} catch (Exception e) {
+		try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+			workbook.write(outputStream);
+			return new ByteArrayInputStream(outputStream.toByteArray());
+		} catch (IOException e) {
 			e.printStackTrace();
+			return null;
 		}
 	}
 
-	private void createHeader(XSSFWorkbook workbook, XSSFSheet sheet) {
-		setTitle(workbook, sheet);
-		setNumberOfTrops(workbook, sheet);
+	private void createHeader(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
+		setTitle(workbook, sheet, namNhapNgu);
+		setNumberOfTrops(workbook, sheet, namNhapNgu);
 
 		sheet.addMergedRegion(CellRangeAddress.valueOf("B2:K2"));
 		sheet.addMergedRegion(CellRangeAddress.valueOf("I4:K4"));
 	}
 
-	private void createContent(XSSFWorkbook workbook, XSSFSheet sheet) {
-		createHomeTown(workbook, sheet);
-		createEthnic(workbook, sheet);
-		createReligion(workbook, sheet);
-		createLeagure(workbook, sheet);
-		createDegree(workbook, sheet);
-		createWedded(workbook, sheet);
-		createHealth(workbook, sheet);
-		createAge(workbook, sheet);
-		createDadPassed(workbook, sheet);
-		createMomPassed(workbook, sheet);
-		createDivorcedParents(workbook, sheet);
-		createNoFather(workbook, sheet);
+	private void createContent(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
+		createHomeTown(workbook, sheet, namNhapNgu);
+		createEthnic(workbook, sheet, namNhapNgu);
+		createReligion(workbook, sheet, namNhapNgu);
+		createLeagure(workbook, sheet, namNhapNgu);
+		createDegree(workbook, sheet, namNhapNgu);
+		createWedded(workbook, sheet, namNhapNgu);
+		createHealth(workbook, sheet, namNhapNgu);
+		createAge(workbook, sheet, namNhapNgu);
+		createDadPassed(workbook, sheet, namNhapNgu);
+		createMomPassed(workbook, sheet, namNhapNgu);
+		createDivorcedParents(workbook, sheet, namNhapNgu);
+		createNoFather(workbook, sheet, namNhapNgu);
+		createTatoo(workbook, sheet, namNhapNgu);
+		createKeepCharm(workbook, sheet, namNhapNgu);
+		createLover(workbook, sheet, namNhapNgu);
+		createSmoker(workbook, sheet, namNhapNgu);
+		createDifficultFamily(workbook, sheet, namNhapNgu);
+		createAcquaintanceInTheArmy(workbook, sheet, namNhapNgu);
+		createForte(workbook, sheet, namNhapNgu);
 	}
 
-//	private void createContent(XSSFWorkbook workbook, XSSFSheet sheet) {
-//		setLeagure(workbook, sheet);
-//		setDegree(workbook, sheet);
-//		setWedded(workbook, sheet);
-//		setHealth(workbook, sheet);
-//		setAge(workbook, sheet);
-//		setDadPassed(workbook, sheet);
-//		setMomPassed(workbook, sheet);
-//		setDivorcedParents(workbook, sheet);
-//		setNoFather(workbook, sheet);
-//		setTattoo(workbook, sheet);
-//		setKeepCharms(workbook, sheet);
-//		setLover(workbook, sheet);
-//		setSmoker(workbook, sheet);
-//		setGoToBar(workbook, sheet);
-//		setDifficultFamily(workbook, sheet);
-//		setAcquaintanceInTheArmy(workbook, sheet);
-//		setForte(workbook, sheet);
-//		
-//		mergeCell(sheet);
-//	}
-
-	private void setTitle(XSSFWorkbook workbook, XSSFSheet sheet) {
+	private void setTitle(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		rowIdx = 1;
 		XSSFRow row = getRow(sheet, rowIdx);
 
 		CellStyle cellStyleHeader = workbook.createCellStyle();
-		cellStyleHeader.setFont(getFont(workbook, (short) 10, (short) 18));
+		cellStyleHeader.setFont(getFont(workbook, (short) 10, (short) 16));
 		cellStyleHeader.setWrapText(true);
 		cellStyleHeader.setAlignment(HorizontalAlignment.CENTER);
 		cellStyleHeader.setFillForegroundColor((short) 13);
@@ -113,10 +100,10 @@ public class ExportHelper {
 		XSSFCell cell = row.createCell(1);
 		cell.setCellStyle(cellStyleHeader);
 
-		cell.setCellValue("BẢNG THỐNG KÊ CHIẾN SĨ MỚI NĂM 2020");
+		cell.setCellValue("BẢNG THỐNG KÊ CHIẾN SĨ MỚI NĂM " + namNhapNgu);
 	}
 
-	private void setNumberOfTrops(XSSFWorkbook workbook, XSSFSheet sheet) {
+	private void setNumberOfTrops(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		rowIdx = 3;
 		XSSFRow row = sheet.createRow(rowIdx);
 
@@ -131,70 +118,105 @@ public class ExportHelper {
 
 		cell.setCellStyle(cellStyleHeader);
 
-		long numberOfTrops = chienSiRepository.countSoldier().getAmount();
+		long numberOfTrops = chienSiRepository.countSoldier(namNhapNgu).getAmount();
 		cell.setCellValue("Tổng quân số: " + numberOfTrops + " đ/c");
 	}
 
-	private void createHomeTown(XSSFWorkbook workbook, XSSFSheet sheet) {
+	private void createHomeTown(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderHomeTown(workbook, sheet);
-		createContentHomeTown(workbook, sheet);
+		createContentHomeTown(workbook, sheet, namNhapNgu);
 	}
 
-	private void createEthnic(XSSFWorkbook workbook, XSSFSheet sheet) {
+	private void createEthnic(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderEthnic(workbook, sheet);
-		createContentEthnic(workbook, sheet);
+		createContentEthnic(workbook, sheet, namNhapNgu);
 	}
 
-	private void createReligion(XSSFWorkbook workbook, XSSFSheet sheet) {
+	private void createReligion(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderNormal(workbook, sheet, "Tôn giáo");
-		createContentReligion(workbook, sheet);
+		createContentNormal(workbook, sheet, chienSiRepository.countTonGiao(namNhapNgu));
 	}
 	
-	private void createLeagure(XSSFWorkbook workbook, XSSFSheet sheet) {
+	private void createLeagure(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderNormal(workbook, sheet, "Đảng viên");
-		createContentLeagure(workbook, sheet);
+		createContentNormal(workbook, sheet, chienSiRepository.countDangVien(namNhapNgu));
 	}
 	
-	private void createDegree(XSSFWorkbook workbook, XSSFSheet sheet) {
+	private void createDegree(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderNormal(workbook, sheet, "Trình độ");
-		createContentDegree(workbook, sheet);
+		createContentDegree(workbook, sheet, namNhapNgu);
 	}
 	
-	private void createWedded(XSSFWorkbook workbook, XSSFSheet sheet) {
+	private void createWedded(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderBelongArmy(workbook, sheet, "Có vợ, con");
-		createContentWedded(workbook, sheet);
+		createContentWedded(workbook, sheet, namNhapNgu);
 	}
 	
-	private void createHealth(XSSFWorkbook workbook, XSSFSheet sheet) {
+	private void createHealth(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderHealth(workbook, sheet);
-		createContentHealth(workbook, sheet);
+		createContentHealth(workbook, sheet, namNhapNgu);
 	}
 	
-	private void createAge(XSSFWorkbook workbook, XSSFSheet sheet) {
+	private void createAge(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderAge(workbook, sheet);
-		createContentAge(workbook, sheet);
+		createContentAge(workbook, sheet, namNhapNgu);
 	}
 	
-	private void createDadPassed(XSSFWorkbook workbook, XSSFSheet sheet) {
+	private void createDadPassed(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderBelongArmy(workbook, sheet, "Bố mất");
-		createContentBelongArmy(workbook, sheet, chienSiRepository.countBoMat());
+		createContentBelongArmy(workbook, sheet, chienSiRepository.countBoMat(namNhapNgu));
 	}
 	
-	private void createMomPassed(XSSFWorkbook workbook, XSSFSheet sheet) {
+	private void createMomPassed(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderBelongArmy(workbook, sheet, "Mẹ mất");
-		createContentBelongArmy(workbook, sheet, chienSiRepository.countMeMat());
+		createContentBelongArmy(workbook, sheet, chienSiRepository.countMeMat(namNhapNgu));
 	}
 	
-	private void createDivorcedParents(XSSFWorkbook workbook, XSSFSheet sheet) {
+	private void createDivorcedParents(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderBelongArmy(workbook, sheet, "Bố mẹ li dị");
-		createContentBelongArmy(workbook, sheet, chienSiRepository.countBoMeLiDi());
+		createContentBelongArmy(workbook, sheet, chienSiRepository.countBoMeLiDi(namNhapNgu));
 	}
 	
-	private void createNoFather(XSSFWorkbook workbook, XSSFSheet sheet) {
+	private void createNoFather(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderBelongArmy(workbook, sheet, "Không có bố");
-		createContentBelongArmy(workbook, sheet, chienSiRepository.countKhongCoBo());
+		createContentBelongArmy(workbook, sheet, chienSiRepository.countKhongCoBo(namNhapNgu));
+	}
+	
+	private void createTatoo(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
+		createHeaderBelongArmy(workbook, sheet, "Hình xăm");
+		createContentBelongArmy(workbook, sheet, chienSiRepository.countHinhXam(namNhapNgu));
 	}
 
+	private void createKeepCharm(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
+		createHeaderNormal(workbook, sheet, "Giữ bùa");
+		createContentNormal(workbook, sheet, chienSiRepository.countGiuBua(namNhapNgu));
+	}
+	
+	private void createLover(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
+		createHeaderBelongArmy(workbook, sheet, "Người yêu");
+		createContentBelongArmy(workbook, sheet, chienSiRepository.countNguoiYeu(namNhapNgu));
+	}
+	
+	private void createSmoker(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
+		createHeaderBelongArmy(workbook, sheet, "Hút thuốc");
+		createContentBelongArmy(workbook, sheet, chienSiRepository.countHutThuoc(namNhapNgu));
+	}
+	
+	private void createDifficultFamily(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
+		createHeaderBelongArmy(workbook, sheet, "Gia đình khó khăn");
+		createContentBelongArmy(workbook, sheet, chienSiRepository.countGiaDinhKhoKhan(namNhapNgu));
+	}
+	
+	private void createAcquaintanceInTheArmy(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
+		createHeaderNormal(workbook, sheet, "Người quen trong quân đội");
+		createContentNormal(workbook, sheet, chienSiRepository.countNguoiQuenTrongQuanDoi(namNhapNgu));
+	}
+	
+	private void createForte(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
+		createHeaderBelongArmy(workbook, sheet, "Sở trường");
+		createContentBelongArmy(workbook, sheet, chienSiRepository.countSoTruong(namNhapNgu));
+	}
+	
 	private void createHeaderHomeTown(XSSFWorkbook workbook, XSSFSheet sheet) {
 		rowIdx = 5;
 		XSSFRow row = getRow(sheet, rowIdx);
@@ -202,7 +224,7 @@ public class ExportHelper {
 		XSSFCell cell = row.createCell(1);
 		cell.setCellStyle(getStyleMiddle(workbook));
 
-		sheet.addMergedRegion(CellRangeAddress.valueOf("B" + (rowIdx + 1) + ":D" + (rowIdx + 2)));
+		sheet.addMergedRegion(CellRangeAddress.valueOf("B" + (rowIdx + 1) + ":E" + (rowIdx + 2)));
 		cell.setCellValue("Quê quán");
 		createHeaderDetailHomeTown(workbook, sheet);
 	}
@@ -224,70 +246,115 @@ public class ExportHelper {
 		XSSFCell cell3 = row.createCell(3);
 		cell3.setCellStyle(getStyleMiddle(workbook));
 		cell3.setCellValue("Phường/Xã");
+		
+		XSSFCell cell4 = row.createCell(4);
+		cell4.setCellStyle(getStyleMiddle(workbook));
+		cell4.setCellValue("Chi tiết");
 		rowIdx++;
 	}
 
-	private void createContentHomeTown(XSSFWorkbook workbook, XSSFSheet sheet) {
-		List<CountChienSiDto> listCountQqTinhThanh = chienSiRepository.countQqTinhThanh();
-		for (CountChienSiDto chienSiDto : listCountQqTinhThanh) {
-			createContentHomeTownCity(workbook, sheet, chienSiDto);
-			List<CountChienSiDto> listCountQqQuanHuyen = chienSiRepository.countQqQuanHuyen(chienSiDto.getTen());
-			for (CountChienSiDto chienSiQuanHuyen : listCountQqQuanHuyen) {
-				createContentHomeTownDistrict(workbook, sheet, chienSiQuanHuyen);
-				List<CountChienSiDto> listCountQqPhuongXa = chienSiRepository.countQqPhuongXa(chienSiDto.getTen(),
-						chienSiQuanHuyen.getTen());
-				listCountQqPhuongXa.stream().forEach(chienSiPhuongXa -> {
-					createContentHomeTownWards(workbook, sheet, chienSiPhuongXa);
-					rowIdx++;
-				});
+	private void createContentHomeTown(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
+		List<CountDanTocDto> listQueQuan = chienSiRepository.countQueQuan(namNhapNgu);
+		
+		Map<String, Integer> freq = getFreqDanToc(listQueQuan);
+		String prevCellTinhThanh = "";
+		String prevCellQuanHuyen = "";
+		String prevCellPhuongXa = "";
+		int prevIdxTinhThanh = rowIdx;
+		int prevIdxQuanHuyen = rowIdx;
+		int prevIdxPhuongXa = rowIdx;
+		
+		for (int i = 0; i < listQueQuan.size(); ++i) {
+			CountDanTocDto chienSiDto = listQueQuan.get(i);
+			XSSFRow row = getRow(sheet, rowIdx);
+			
+			String[] arrChienSi = listQueQuan.get(i).getDetail().split("\\*\\|\\*");
 
-				if (listCountQqPhuongXa.size() == 0) {
-					rowIdx++;
+			XSSFCell cellTinhThanh = row.createCell(1);
+			cellTinhThanh.setCellStyle(getStyleContent(workbook));
+			String cellTinhThanhVal = listQueQuan.get(i).getQqTinhThanh() + ": " + (freq.getOrDefault(chienSiDto.getQqTinhThanh(), 0));
+
+			if (!prevCellTinhThanh.equals(cellTinhThanhVal) && chienSiDto.getQqTinhThanh() != "null") {
+				cellTinhThanh.setCellValue(cellTinhThanhVal);
+				if (prevIdxTinhThanh != rowIdx && rowIdx - prevIdxTinhThanh > 1) {
+					sheet.addMergedRegion(CellRangeAddress.valueOf("B" + (prevIdxTinhThanh + 1) + ":B" + (rowIdx)));
 				}
-
+				prevIdxTinhThanh = rowIdx;
+			} else {
+				if (i == listQueQuan.size() - 1 && prevIdxTinhThanh != rowIdx) {
+					sheet.addMergedRegion(CellRangeAddress.valueOf("B" + (prevIdxTinhThanh + 1) + ":B" + (rowIdx + 1)));
+				}
 			}
-			if (listCountQqQuanHuyen.size() == 0) {
-				rowIdx++;
+			
+			XSSFCell cellQuanHuyen = row.createCell(2);
+			cellQuanHuyen.setCellStyle(getStyleContent(workbook));
+			String cellQuanHuyenVal = chienSiDto.getQqQuanHuyen() + ": " + (freq.getOrDefault(chienSiDto.getQqTinhThanh() + "-" + chienSiDto.getQqQuanHuyen(), 0));
+			
+			if (!prevCellQuanHuyen.equals(cellQuanHuyenVal) && chienSiDto.getQqQuanHuyen() != "null") {
+				cellQuanHuyen.setCellValue(cellQuanHuyenVal);
+				if (prevIdxQuanHuyen != rowIdx && rowIdx - prevIdxQuanHuyen > 1) {
+					sheet.addMergedRegion(CellRangeAddress.valueOf("C" + (prevIdxQuanHuyen + 1) + ":C" + (rowIdx)));
+				}
+				prevIdxQuanHuyen = rowIdx;
+			} else {
+				if (i == listQueQuan.size() - 1 && prevIdxQuanHuyen != rowIdx) {
+					sheet.addMergedRegion(CellRangeAddress.valueOf("C" + (prevIdxQuanHuyen + 1) + ":C" + (rowIdx + 1)));
+				}
 			}
+			
+			String cellPhuongXaVal = chienSiDto.getQqPhuongXa() + ": " + (freq.getOrDefault(chienSiDto.getQqTinhThanh() + "-" + chienSiDto.getQqQuanHuyen() + "-" + chienSiDto.getQqPhuongXa(), 0));
+			XSSFCell cellPhuongXa = row.createCell(3);
+			cellPhuongXa.setCellStyle(getStyleContent(workbook));
+			
+			if (!prevCellPhuongXa.equals(cellPhuongXaVal)  && chienSiDto.getQqPhuongXa() != "null") {
+				cellPhuongXa.setCellValue(cellPhuongXaVal);
+				if (prevIdxPhuongXa != rowIdx && prevIdxPhuongXa - rowIdx > 1) {
+					sheet.addMergedRegion(CellRangeAddress.valueOf("D" + (prevIdxPhuongXa + 1) + ":D" + (rowIdx)));
+				}
+				prevIdxPhuongXa = rowIdx;
+			} else {
+				if (i == listQueQuan.size() - 1 && prevIdxPhuongXa != rowIdx) {
+					sheet.addMergedRegion(CellRangeAddress.valueOf("D" + (prevIdxPhuongXa + 1) + ":D" + (rowIdx + 1)));
+				}
+			}
+			
+			prevCellTinhThanh = cellTinhThanhVal;
+			prevCellQuanHuyen = cellQuanHuyenVal;
+			prevCellPhuongXa = cellPhuongXaVal;
+			
+			
+			XSSFCell cell3 = row.createCell(4);
+			StringBuilder strDetail = new StringBuilder();
+			for (String str : arrChienSi) {
+				strDetail.append(str + "\r\n");
+			}
+			System.out.println(Arrays.toString(arrChienSi));
+			cell3.setCellValue(strDetail.toString());
+			rowIdx++;
 		}
 	}
 
-	private void createContentHomeTownCity(XSSFWorkbook workbook, XSSFSheet sheet, CountChienSiDto chienSiDto) {
-		XSSFRow row = getRow(sheet, rowIdx);
-		XSSFCell cell = row.createCell(1);
-		cell.setCellStyle(getStyleContent(workbook));
-		cell.setCellValue(chienSiDto.getTen() + ": " + chienSiDto.getAmount());
-	}
-
-	private void createContentHomeTownDistrict(XSSFWorkbook workbook, XSSFSheet sheet, CountChienSiDto chienSiDto) {
-		XSSFRow row = getRow(sheet, rowIdx);
-		XSSFCell cell = row.createCell(2);
-		cell.setCellStyle(getStyleContent(workbook));
-		cell.setCellValue(chienSiDto.getTen() + ": " + chienSiDto.getAmount());
-	}
-
-	private void createContentHomeTownWards(XSSFWorkbook workbook, XSSFSheet sheet, CountChienSiDto chienSiDto) {
-		XSSFRow row = getRow(sheet, rowIdx);
-		XSSFCell cell = row.createCell(3);
-		cell.setCellStyle(getStyleContent(workbook));
-		cell.setCellValue(chienSiDto.getTen() + ": " + chienSiDto.getAmount());
-	}
-
-	private void createContentEthnic(XSSFWorkbook workbook, XSSFSheet sheet) {
-		List<CountChienSiDto> listCountDanToc = chienSiRepository.countDanToc();
-		listCountDanToc.stream().forEach(chienSiDto -> {
+	private void createContentEthnic(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
+		List<CountChienSiDto> listCountDanToc = chienSiRepository.countDanToc(namNhapNgu);
+		for (CountChienSiDto chienSiDto : listCountDanToc) {
+			if (commonService.isEmpty(chienSiDto.getTen())) {
+				continue;
+			}
 			XSSFRow row = getRow(sheet, rowIdx);
 			XSSFCell cell = row.createCell(1);
 			cell.setCellStyle(getStyleContent(workbook));
 			cell.setCellValue(chienSiDto.getTen() + ": " + chienSiDto.getAmount());
 			rowIdx++;
-		});
+		};
 	}
 
-	private void createContentReligion(XSSFWorkbook workbook, XSSFSheet sheet) {
-		List<CountChienSiDto> listCountTonGiao = chienSiRepository.countTonGiao();
-		listCountTonGiao.stream().forEach(chienSiDto -> {
+	private void createContentReligion(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
+		List<CountChienSiDto> listCountTonGiao = chienSiRepository.countTonGiao(namNhapNgu);
+		for(CountChienSiDto chienSiDto : listCountTonGiao) {
 			XSSFRow row = getRow(sheet, rowIdx);
+			if (commonService.isEmpty(chienSiDto.getTen())) {
+				continue;
+			}
 			XSSFCell cell = row.createCell(1);
 			cell.setCellStyle(getStyleContent(workbook));
 			cell.setCellValue(chienSiDto.getTen() + ": " + chienSiDto.getAmount());
@@ -299,11 +366,11 @@ public class ExportHelper {
 			}
 			cell2.setCellValue(strDetail.toString());
 			rowIdx++;
-		});
+		};
 	}
 	
-	private void createContentLeagure(XSSFWorkbook workbook, XSSFSheet sheet) {
-		List<CountChienSiDto> listCountDangVien = chienSiRepository.countDangVien();
+	private void createContentLeagure(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
+		List<CountChienSiDto> listCountDangVien = chienSiRepository.countDangVien(namNhapNgu);
 		for (CountChienSiDto chienSiDto : listCountDangVien) {
 			XSSFRow row = getRow(sheet, rowIdx);
 			XSSFCell cell = row.createCell(1);
@@ -323,12 +390,15 @@ public class ExportHelper {
 		};
 	}
 	
-	private void createContentDegree(XSSFWorkbook workbook, XSSFSheet sheet) {
+	private void createContentDegree(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		Set<String> showDetails = showTrinhDoDetail();
-		List<CountChienSiDto> listCountTrinhDo = chienSiRepository.countTrinhDo();
-		listCountTrinhDo.stream().forEach(chienSiDto -> {
+		List<CountChienSiDto> listCountTrinhDo = chienSiRepository.countTrinhDo(namNhapNgu);
+		for (CountChienSiDto chienSiDto : listCountTrinhDo) {
 			XSSFRow row = getRow(sheet, rowIdx);
 			XSSFCell cell = row.createCell(1);
+			if (commonService.isEmpty(chienSiDto.getTen())) {
+				continue;
+			}
 			cell.setCellStyle(getStyleContent(workbook));
 			cell.setCellValue(chienSiDto.getTen() + ": " + chienSiDto.getAmount());
 			if (showDetails.contains(chienSiDto.getTen())) {
@@ -341,11 +411,11 @@ public class ExportHelper {
 				cell2.setCellValue(strDetail.toString());
 			}
 			rowIdx++;
-		});
+		};
 	}
 	
-	private void createContentWedded(XSSFWorkbook workbook, XSSFSheet sheet) {
-		List<CountChienSiDto> listCountCoVo = chienSiRepository.countCoVo();
+	private void createContentWedded(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
+		List<CountChienSiDto> listCountCoVo = chienSiRepository.countCoVo(namNhapNgu);
 		
 		Map<String, Integer> freq = getFreqChienSiDto(listCountCoVo);
 		String prevCellDaiDoi = "";
@@ -389,7 +459,7 @@ public class ExportHelper {
 				prevIdxTrungDoi = rowIdx;
 			} else {
 				if (i == listCountCoVo.size() - 1) {
-					sheet.addMergedRegion(CellRangeAddress.valueOf("C" + (prevIdxDaiDoi + 1) + ":C" + (rowIdx + 1)));
+					sheet.addMergedRegion(CellRangeAddress.valueOf("C" + (prevIdxTrungDoi + 1) + ":C" + (rowIdx + 1)));
 				}
 			}
 			
@@ -405,7 +475,7 @@ public class ExportHelper {
 				prevIdxTieuDoi = rowIdx;
 			} else {
 				if (i == listCountCoVo.size() - 1) {
-					sheet.addMergedRegion(CellRangeAddress.valueOf("D" + (prevIdxDaiDoi + 1) + ":D" + (rowIdx + 1)));
+					sheet.addMergedRegion(CellRangeAddress.valueOf("D" + (prevIdxTieuDoi + 1) + ":D" + (rowIdx + 1)));
 				}
 			}
 			
@@ -424,20 +494,19 @@ public class ExportHelper {
 		}
 	}
 	
-	
-	private void createContentHealth(XSSFWorkbook workbook, XSSFSheet sheet) {
-		List<CountChienSiDto> listCountSucKhoe = chienSiRepository.countSucKhoe();
-		listCountSucKhoe.stream().forEach(chienSiDto -> {
+	private void createContentHealth(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
+		List<CountChienSiDto> listCountSucKhoe = chienSiRepository.countSucKhoe(namNhapNgu);
+		for (CountChienSiDto chienSiDto : listCountSucKhoe) {
 			XSSFRow row = getRow(sheet, rowIdx);
 			XSSFCell cell = row.createCell(1);
 			cell.setCellStyle(getStyleContent(workbook));
 			cell.setCellValue(chienSiDto.getTen() + ": " + chienSiDto.getAmount());
 			rowIdx++;
-		});
+		};
 	}
 	
-	private void createContentAge(XSSFWorkbook workbook, XSSFSheet sheet) {
-		List<CountChienSiDto> listCountDoTuoi = chienSiRepository.countDoTuoi();
+	private void createContentAge(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
+		List<CountChienSiDto> listCountDoTuoi = chienSiRepository.countDoTuoi(namNhapNgu);
 		listCountDoTuoi.stream().forEach(chienSiDto -> {
 			XSSFRow row = getRow(sheet, rowIdx);
 			XSSFCell cell = row.createCell(1);
@@ -445,86 +514,6 @@ public class ExportHelper {
 			cell.setCellValue(chienSiDto.getTen() + ": " + chienSiDto.getAmount());
 			rowIdx++;
 		});
-	}
-	
-	private void createContentDadPassed(XSSFWorkbook workbook, XSSFSheet sheet) {
-		List<CountChienSiDto> listCountBoMat = chienSiRepository.countBoMat();
-		
-		Map<String, Integer> freq = getFreqChienSiDto(listCountBoMat);
-		String prevCellDaiDoi = "";
-		String prevCellTrungDoi = "";
-		String prevCellTieuDoi = "";
-		int prevIdxDaiDoi = rowIdx;
-		int prevIdxTrungDoi = rowIdx;
-		int prevIdxTieuDoi = rowIdx;
-		
-		for (int i = 0; i < listCountBoMat.size(); ++i) {
-			CountChienSiDto chienSiDto = listCountBoMat.get(i);
-			XSSFRow row = getRow(sheet, rowIdx);
-			
-			String[] arrChienSi = chienSiDto.getDetail().split("\\*\\|\\*");
-
-			XSSFCell cellDaiDoi = row.createCell(1);
-			cellDaiDoi.setCellStyle(getStyleContent(workbook));
-			String cellDaiDoiVal = chienSiDto.getDaiDoi() + ": " + (freq.getOrDefault(chienSiDto.getDaiDoi(), 0));
-
-			if (!prevCellDaiDoi.equals(cellDaiDoiVal)) {
-				cellDaiDoi.setCellValue(cellDaiDoiVal);
-				if (prevIdxDaiDoi != rowIdx) {
-					sheet.addMergedRegion(CellRangeAddress.valueOf("B" + (prevIdxDaiDoi + 1) + ":B" + (rowIdx)));
-				}
-				prevIdxDaiDoi = rowIdx;
-			} else {
-				if (i == listCountBoMat.size() - 1) {
-					sheet.addMergedRegion(CellRangeAddress.valueOf("B" + (prevIdxDaiDoi + 1) + ":B" + (rowIdx + 1)));
-				}
-			}
-			
-			XSSFCell cellTrungDoi = row.createCell(2);
-			cellTrungDoi.setCellStyle(getStyleContent(workbook));
-			String cellTrungDoiVal = chienSiDto.getTrungDoi() + ": " + (freq.getOrDefault(chienSiDto.getDaiDoi() + "-" + chienSiDto.getTrungDoi(), 0));
-			
-			if (!prevCellTrungDoi.equals(cellTrungDoiVal)) {
-				cellTrungDoi.setCellValue(cellTrungDoiVal);
-				if (prevIdxTrungDoi != rowIdx) {
-					sheet.addMergedRegion(CellRangeAddress.valueOf("C" + (prevIdxTrungDoi + 1) + ":C" + (rowIdx)));
-				}
-				prevIdxTrungDoi = rowIdx;
-			} else {
-				if (i == listCountBoMat.size() - 1) {
-					sheet.addMergedRegion(CellRangeAddress.valueOf("C" + (prevIdxDaiDoi + 1) + ":C" + (rowIdx + 1)));
-				}
-			}
-			
-			String cellTieuDoiVal = chienSiDto.getTieuDoi() + ": " + (freq.getOrDefault(chienSiDto.getDaiDoi() + "-" + chienSiDto.getTrungDoi() + "-" + chienSiDto.getTieuDoi(), 0));
-			XSSFCell cellTieuDoi = row.createCell(3);
-			cellTieuDoi.setCellStyle(getStyleContent(workbook));
-			
-			if (!prevCellTieuDoi.equals(cellTieuDoiVal)) {
-				cellTieuDoi.setCellValue(cellTieuDoiVal);
-				if (prevIdxTrungDoi != rowIdx) {
-					sheet.addMergedRegion(CellRangeAddress.valueOf("D" + (prevIdxTieuDoi + 1) + ":D" + (rowIdx)));
-				}
-				prevIdxTieuDoi = rowIdx;
-			} else {
-				if (i == listCountBoMat.size() - 1) {
-					sheet.addMergedRegion(CellRangeAddress.valueOf("D" + (prevIdxDaiDoi + 1) + ":D" + (rowIdx + 1)));
-				}
-			}
-			
-			prevCellTrungDoi = cellTrungDoiVal;
-			prevCellDaiDoi = cellDaiDoiVal;
-			prevCellTieuDoi = cellTieuDoiVal;
-			
-			
-			XSSFCell cell3 = row.createCell(4);
-			StringBuilder strDetail = new StringBuilder();
-			for (String str : arrChienSi) {
-				strDetail.append(str + ", " + chienSiDto.getTen() + "\r\n");
-			}
-			cell3.setCellValue(strDetail.toString());
-			rowIdx++;
-		}
 	}
 	
 	private void createContentBelongArmy(XSSFWorkbook workbook, XSSFSheet sheet, List<CountChienSiDto> listContent) {
@@ -549,9 +538,9 @@ public class ExportHelper {
 
 			if (!prevCellDaiDoi.equals(cellDaiDoiVal)) {
 				cellDaiDoi.setCellValue(cellDaiDoiVal);
-//				if (prevIdxDaiDoi != rowIdx) {
-//					sheet.addMergedRegion(CellRangeAddress.valueOf("B" + (prevIdxDaiDoi + 1) + ":B" + (rowIdx)));
-//				}
+				if (prevIdxDaiDoi != rowIdx) {
+					sheet.addMergedRegion(CellRangeAddress.valueOf("B" + (prevIdxDaiDoi + 1) + ":B" + (rowIdx)));
+				}
 				prevIdxDaiDoi = rowIdx;
 			} else {
 				if (i == listContent.size() - 1 && prevIdxDaiDoi != rowIdx) {
@@ -565,13 +554,13 @@ public class ExportHelper {
 			
 			if (!prevCellTrungDoi.equals(cellTrungDoiVal)) {
 				cellTrungDoi.setCellValue(cellTrungDoiVal);
-//				if (prevIdxTrungDoi != rowIdx) {
-//					sheet.addMergedRegion(CellRangeAddress.valueOf("C" + (prevIdxTrungDoi + 1) + ":C" + (rowIdx)));
-//				}
+				if (prevIdxTrungDoi != rowIdx) {
+					sheet.addMergedRegion(CellRangeAddress.valueOf("C" + (prevIdxTrungDoi + 1) + ":C" + (rowIdx)));
+				}
 				prevIdxTrungDoi = rowIdx;
 			} else {
-				if (i == listContent.size() - 1 && prevIdxDaiDoi != rowIdx) {
-					sheet.addMergedRegion(CellRangeAddress.valueOf("C" + (prevIdxDaiDoi + 1) + ":C" + (rowIdx + 1)));
+				if (i == listContent.size() - 1 && prevIdxTrungDoi != rowIdx) {
+					sheet.addMergedRegion(CellRangeAddress.valueOf("C" + (prevIdxTrungDoi + 1) + ":C" + (rowIdx + 1)));
 				}
 			}
 			
@@ -581,13 +570,13 @@ public class ExportHelper {
 			
 			if (!prevCellTieuDoi.equals(cellTieuDoiVal)) {
 				cellTieuDoi.setCellValue(cellTieuDoiVal);
-//				if (prevIdxTrungDoi != rowIdx) {
-//					sheet.addMergedRegion(CellRangeAddress.valueOf("D" + (prevIdxTieuDoi + 1) + ":D" + (rowIdx)));
-//				}
+				if (prevIdxTieuDoi != rowIdx && (prevIdxTieuDoi + 1 != rowIdx)) {
+					sheet.addMergedRegion(CellRangeAddress.valueOf("D" + (prevIdxTieuDoi + 1) + ":D" + (rowIdx)));
+				}
 				prevIdxTieuDoi = rowIdx;
 			} else {
-				if (i == listContent.size() - 1 && prevIdxDaiDoi != rowIdx) {
-					sheet.addMergedRegion(CellRangeAddress.valueOf("D" + (prevIdxDaiDoi + 1) + ":D" + (rowIdx + 1)));
+				if (i == listContent.size() - 1 && prevIdxTieuDoi != rowIdx) {
+					sheet.addMergedRegion(CellRangeAddress.valueOf("D" + (prevIdxTieuDoi + 1) + ":D" + (rowIdx + 1)));
 				}
 			}
 			
@@ -599,11 +588,47 @@ public class ExportHelper {
 			XSSFCell cell3 = row.createCell(4);
 			StringBuilder strDetail = new StringBuilder();
 			for (String str : arrChienSi) {
-				strDetail.append(str + ", " + chienSiDto.getTen() + "\r\n");
+				strDetail.append(str + "\r\n");
 			}
 			cell3.setCellValue(strDetail.toString());
 			rowIdx++;
 		}
+	}
+	
+	private void createContentKeepCharm(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
+		List<CountChienSiDto> listCountGiuBua = chienSiRepository.countGiuBua(namNhapNgu);
+		listCountGiuBua.stream().forEach(chienSiDto -> {
+			XSSFRow row = getRow(sheet, rowIdx);
+			XSSFCell cell = row.createCell(1);
+			cell.setCellStyle(getStyleContent(workbook));
+			cell.setCellValue(chienSiDto.getAmount());
+			String[] arrChienSi = chienSiDto.getDetail().split("\\*\\|\\*");
+			XSSFCell cell2 = row.createCell(2);
+			StringBuilder strDetail = new StringBuilder();
+			for (String str : arrChienSi) {
+				strDetail.append(str + "\r\n");
+			}
+			cell2.setCellValue(strDetail.toString());
+			rowIdx++;
+		});
+	}
+	
+	private void createContentAcquaintanceInTheArmy(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
+		List<CountChienSiDto> listCountGiuBua = chienSiRepository.countNguoiQuenTrongQuanDoi(namNhapNgu);
+		listCountGiuBua.stream().forEach(chienSiDto -> {
+			XSSFRow row = getRow(sheet, rowIdx);
+			XSSFCell cell = row.createCell(1);
+			cell.setCellStyle(getStyleContent(workbook));
+			cell.setCellValue(chienSiDto.getAmount());
+			String[] arrChienSi = chienSiDto.getDetail().split("\\*\\|\\*");
+			XSSFCell cell2 = row.createCell(2);
+			StringBuilder strDetail = new StringBuilder();
+			for (String str : arrChienSi) {
+				strDetail.append(str + "\r\n");
+			}
+			cell2.setCellValue(strDetail.toString());
+			rowIdx++;
+		});
 	}
 
 	private void createHeaderEthnic(XSSFWorkbook workbook, XSSFSheet sheet) {
@@ -651,322 +676,6 @@ public class ExportHelper {
 		rowIdx++;
 	}
 
-	private void setMomPassed(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(5);
-
-		XSSFCell cell = row.createCell(19);
-
-		cell.setCellStyle(getStyleMiddle(workbook));
-		cell.setCellValue("Mẹ mất");
-
-		setMomPassedDetail(workbook, sheet);
-	}
-
-	private void setMomPassedDetail(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(7);
-
-		XSSFCell cell = row.createCell(19);
-
-		cell.setCellStyle(getStyleMiddle(workbook));
-		cell.setCellValue("Số lượng");
-
-		XSSFCell cell2 = row.createCell(20);
-
-		cell2.setCellStyle(getStyleMiddle(workbook));
-		cell2.setCellValue("Chi tiết");
-	}
-
-	private void setDivorcedParents(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(5);
-
-		XSSFCell cell = row.createCell(21);
-
-		cell.setCellStyle(getStyleMiddle(workbook));
-		cell.setCellValue("Bố mẹ li dị");
-
-		setDivorcedDetail(workbook, sheet);
-	}
-
-	private void setDivorcedDetail(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(7);
-
-		XSSFCell cell = row.createCell(21);
-
-		cell.setCellStyle(getStyleMiddle(workbook));
-		cell.setCellValue("Số lượng");
-
-		XSSFCell cell2 = row.createCell(22);
-
-		cell2.setCellStyle(getStyleMiddle(workbook));
-		cell2.setCellValue("Chi tiết");
-	}
-
-	private void setNoFather(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(5);
-
-		XSSFCell cell = row.createCell(23);
-
-		cell.setCellStyle(getStyleMiddle(workbook));
-		cell.setCellValue("Không có bố");
-
-		setNoFatherDetail(workbook, sheet);
-	}
-
-	private void setNoFatherDetail(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(7);
-
-		XSSFCell cell = row.createCell(23);
-
-		cell.setCellStyle(getStyleMiddle(workbook));
-		cell.setCellValue("Số lượng");
-
-		XSSFCell cell2 = row.createCell(24);
-
-		cell2.setCellStyle(getStyleMiddle(workbook));
-		cell2.setCellValue("Chi tiết");
-	}
-
-	private void setTattoo(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(5);
-
-		XSSFCell cell = row.createCell(25);
-
-		cell.setCellStyle(getStyleMiddle(workbook));
-		cell.setCellValue("Hình xăm");
-
-		setTattooDetail(workbook, sheet);
-	}
-
-	private void setTattooDetail(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(6);
-
-		XSSFCell cell = row.createCell(25);
-
-		cell.setCellStyle(getStyleMiddle(workbook));
-		cell.setCellValue("Số lượng");
-
-		XSSFRow row2 = sheet.getRow(7);
-
-		XSSFCell cell2 = row2.createCell(25);
-		cell2.setCellStyle(getStyleMiddle(workbook));
-		cell2.setCellValue("Trung đội");
-
-		XSSFCell cell3 = row2.createCell(26);
-		cell3.setCellStyle(getStyleMiddle(workbook));
-		cell3.setCellValue("Tiểu đội");
-
-		XSSFCell cell4 = row2.createCell(27);
-		cell4.setCellStyle(getStyleMiddle(workbook));
-		cell4.setCellValue("Chi tiết");
-	}
-
-	private void setKeepCharms(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(5);
-
-		XSSFCell cell = row.createCell(28);
-
-		cell.setCellStyle(getStyleMiddle(workbook));
-		cell.setCellValue("Giữ bùa");
-
-		setKeepCharmsDetail(workbook, sheet);
-	}
-
-	private void setKeepCharmsDetail(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(7);
-
-		XSSFCell cell = row.createCell(28);
-
-		cell.setCellStyle(getStyleMiddle(workbook));
-		cell.setCellValue("Số lượng");
-
-		XSSFCell cell2 = row.createCell(29);
-		cell2.setCellStyle(getStyleMiddle(workbook));
-		cell2.setCellValue("Chi tiết");
-	}
-
-	private void setLover(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(5);
-
-		XSSFCell cell = row.createCell(30);
-
-		cell.setCellStyle(getStyleMiddle(workbook));
-		cell.setCellValue("Người yêu");
-
-		setLoverDetail(workbook, sheet);
-	}
-
-	private void setLoverDetail(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(6);
-
-		XSSFCell cell = row.createCell(30);
-
-		cell.setCellStyle(getStyleMiddle(workbook));
-		cell.setCellValue("Số lượng");
-
-		XSSFRow row2 = sheet.getRow(7);
-
-		XSSFCell cell2 = row2.createCell(30);
-		cell2.setCellStyle(getStyleMiddle(workbook));
-		cell2.setCellValue("Trung đội");
-
-		XSSFCell cell3 = row2.createCell(31);
-		cell3.setCellStyle(getStyleMiddle(workbook));
-		cell3.setCellValue("Tiểu đội");
-
-		XSSFCell cell4 = row2.createCell(32);
-		cell4.setCellStyle(getStyleMiddle(workbook));
-		cell4.setCellValue("Chi tiết");
-	}
-
-	private void setSmoker(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(5);
-
-		XSSFCell cell = row.createCell(33);
-
-		cell.setCellStyle(getStyleMiddle(workbook));
-		cell.setCellValue("Hút thuốc");
-
-		setSmokerDetail(workbook, sheet);
-	}
-
-	private void setSmokerDetail(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(6);
-
-		XSSFCell cell = row.createCell(33);
-
-		cell.setCellStyle(getStyleMiddle(workbook));
-		cell.setCellValue("Số lượng");
-
-		XSSFRow row2 = sheet.getRow(7);
-
-		XSSFCell cell2 = row2.createCell(33);
-		cell2.setCellStyle(getStyleMiddle(workbook));
-		cell2.setCellValue("Trung đội");
-
-		XSSFCell cell3 = row2.createCell(34);
-		cell3.setCellStyle(getStyleMiddle(workbook));
-		cell3.setCellValue("Tiểu đội");
-
-		XSSFCell cell4 = row2.createCell(35);
-		cell4.setCellStyle(getStyleMiddle(workbook));
-		cell4.setCellValue("Chi tiết");
-	}
-
-	private void setGoToBar(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(5);
-
-		XSSFCell cell = row.createCell(36);
-
-		cell.setCellStyle(getStyleMiddle(workbook));
-		cell.setCellValue("Đi bar");
-
-		setGoToBarDetail(workbook, sheet);
-	}
-
-	private void setGoToBarDetail(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(7);
-
-		XSSFCell cell = row.createCell(36);
-
-		cell.setCellStyle(getStyleMiddle(workbook));
-		cell.setCellValue("Số lượng");
-
-		XSSFCell cell2 = row.createCell(37);
-		cell2.setCellStyle(getStyleMiddle(workbook));
-		cell2.setCellValue("Chi tiết");
-	}
-
-	private void setDifficultFamily(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(5);
-
-		XSSFCell cell = row.createCell(38);
-
-		cell.setCellStyle(getStyleMiddle(workbook));
-		cell.setCellValue("Gia đình khó khăn");
-
-		setDifficultFamilyDetail(workbook, sheet);
-	}
-
-	private void setDifficultFamilyDetail(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(6);
-
-		XSSFCell cell = row.createCell(38);
-
-		cell.setCellStyle(getStyleMiddle(workbook));
-		cell.setCellValue("Số lượng");
-
-		XSSFRow row2 = sheet.getRow(7);
-
-		XSSFCell cell2 = row2.createCell(38);
-		cell2.setCellStyle(getStyleMiddle(workbook));
-		cell2.setCellValue("Trung đội");
-
-		XSSFCell cell3 = row2.createCell(39);
-		cell3.setCellStyle(getStyleMiddle(workbook));
-		cell3.setCellValue("Tiểu đội");
-
-		XSSFCell cell4 = row2.createCell(40);
-		cell4.setCellStyle(getStyleMiddle(workbook));
-		cell4.setCellValue("Chi tiết");
-	}
-
-	private void setAcquaintanceInTheArmy(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(5);
-
-		XSSFCell cell = row.createCell(41);
-
-		cell.setCellStyle(getStyleMiddle(workbook));
-		cell.setCellValue("Người quen trong quân đội");
-
-		setAcquaintanceInTheArmyDetail(workbook, sheet);
-	}
-
-	private void setAcquaintanceInTheArmyDetail(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(7);
-
-		XSSFCell cell = row.createCell(41);
-
-		cell.setCellStyle(getStyleMiddle(workbook));
-		cell.setCellValue("Số lượng");
-
-		XSSFCell cell2 = row.createCell(42);
-		cell2.setCellStyle(getStyleMiddle(workbook));
-		cell2.setCellValue("Chi tiết");
-	}
-
-	private void setForte(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(5);
-
-		XSSFCell cell = row.createCell(43);
-
-		cell.setCellStyle(getStyleMiddle(workbook));
-		cell.setCellValue("Sở trường");
-
-		setForteDetail(workbook, sheet);
-	}
-
-	private void setForteDetail(XSSFWorkbook workbook, XSSFSheet sheet) {
-		XSSFRow row = sheet.getRow(6);
-
-		XSSFCell cell = row.createCell(43);
-
-		cell.setCellStyle(getStyleMiddle(workbook));
-		cell.setCellValue("Số lượng");
-
-		XSSFRow row2 = sheet.getRow(7);
-
-		XSSFCell cell2 = row2.createCell(43);
-		cell2.setCellStyle(getStyleMiddle(workbook));
-		cell2.setCellValue("Trung đội");
-
-		XSSFCell cell3 = row2.createCell(44);
-		cell3.setCellStyle(getStyleMiddle(workbook));
-		cell3.setCellValue("Tiểu đội");
-
-		XSSFCell cell4 = row2.createCell(45);
-		cell4.setCellStyle(getStyleMiddle(workbook));
-		cell4.setCellValue("Chi tiết");
-	}
 
 	private XSSFFont getFont(XSSFWorkbook workbook, short color, short fontHeight) {
 		XSSFFont fontTitle = workbook.createFont();
@@ -1032,13 +741,30 @@ public class ExportHelper {
 			
 			if (e.getDetail() != null && e.getDetail().split("\\*\\|\\*").length > 1) {
 				count = e.getDetail().split("\\*\\|\\*").length - 1;
-				System.out.println(e.getDetail().split("\\*\\|\\*").length);
 			}
 			freq.put(e.getDaiDoi(), freq.getOrDefault(e.getDaiDoi(), 0) + 1 + count);
 			freq.put(e.getDaiDoi() + "-" + e.getTrungDoi(), freq.getOrDefault(e.getDaiDoi() + "-" + e.getTrungDoi(), 0) + 1 + count);
 			freq.put(e.getTrungDoi(), freq.getOrDefault(e.getTrungDoi(), 0) + 1 + count);
 			freq.put(e.getTrungDoi() + "-" + e.getTieuDoi(), freq.getOrDefault(e.getTrungDoi() + "-" + e.getTieuDoi(), 0) + 1 + count);
 			freq.put(e.getDaiDoi() + "-" + e.getTrungDoi() + "-" + e.getTieuDoi(), freq.getOrDefault(e.getDaiDoi() + "-" + e.getTrungDoi() + "-" + e.getTieuDoi(), 0) + 1 + count);
+		});
+		
+		return freq;
+	}
+	
+	private Map<String, Integer> getFreqDanToc(List<CountDanTocDto> input) {
+		Map<String, Integer> freq = new HashMap<>();
+		input.stream().forEach(e -> {
+			int count = 0;
+			
+			if (e.getDetail() != null && e.getDetail().split("\\*\\|\\*").length > 1) {
+				count = e.getDetail().split("\\*\\|\\*").length - 1;
+			}
+			freq.put(e.getQqTinhThanh(), freq.getOrDefault(e.getQqTinhThanh(), 0) + 1 + count);
+			freq.put(e.getQqTinhThanh() + "-" + e.getQqQuanHuyen(), freq.getOrDefault(e.getQqTinhThanh() + "-" + e.getQqQuanHuyen(), 0) + 1 + count);
+			freq.put(e.getQqQuanHuyen(), freq.getOrDefault(e.getQqQuanHuyen(), 0) + 1 + count);
+			freq.put(e.getQqQuanHuyen() + "-" + e.getQqPhuongXa(), freq.getOrDefault(e.getQqQuanHuyen() + "-" + e.getQqPhuongXa(), 0) + 1 + count);
+			freq.put(e.getQqTinhThanh() + "-" + e.getQqQuanHuyen() + "-" + e.getQqPhuongXa(), freq.getOrDefault(e.getQqTinhThanh() + "-" + e.getQqQuanHuyen() + "-" + e.getQqPhuongXa(), 0) + 1 + count);
 		});
 		
 		return freq;
@@ -1071,6 +797,26 @@ public class ExportHelper {
 
 		cell2.setCellStyle(getStyleMiddle(workbook));
 		cell2.setCellValue("Chi tiết");
+	}
+	
+	private void createContentNormal(XSSFWorkbook workbook, XSSFSheet sheet, List<CountChienSiDto> listCount) {
+		for(CountChienSiDto chienSiDto : listCount) {
+			XSSFRow row = getRow(sheet, rowIdx);
+			if (commonService.isEmpty(chienSiDto.getTen())) {
+				continue;
+			}
+			XSSFCell cell = row.createCell(1);
+			cell.setCellStyle(getStyleContent(workbook));
+			cell.setCellValue(chienSiDto.getTen() + ": " + chienSiDto.getAmount());
+			String[] arrChienSi = chienSiDto.getDetail().split("\\*\\|\\*");
+			XSSFCell cell2 = row.createCell(2);
+			StringBuilder strDetail = new StringBuilder();
+			for (String str : arrChienSi) {
+				strDetail.append(str + "\r\n");
+			}
+			cell2.setCellValue(strDetail.toString());
+			rowIdx++;
+		};
 	}
 	
 	private void createHeaderBelongArmy(XSSFWorkbook workbook, XSSFSheet sheet, String title) {

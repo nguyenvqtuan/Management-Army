@@ -241,6 +241,10 @@ public class ChienSiService {
 			chienSiEntity.setHutThuoc(chienSiDto.getHutThuoc());
 		}
 		
+		if (!commonService.isEmpty(chienSiDto.getHutThuoc())) {
+			chienSiEntity.setHutThuoc(chienSiDto.getHutThuoc());
+		}
+		
 		if (!commonService.isEmpty(chienSiDto.getSoTruong())) {
 			chienSiEntity.setSoTruong(chienSiDto.getSoTruong());
 		}
@@ -864,20 +868,5 @@ public class ChienSiService {
 			prevId = doanhTraiEntity.getId();
 		}
 		return true;
-	}
-	
-	private String formatDanToc(String input) {
-		StringBuilder res = new StringBuilder();
-		String[] arr = input.split("\\s");
-		for (String str : arr) {
-			if (res.length() != 0) {
-				res.append(" ");
-			}
-			String first = str.substring(0, 1).toUpperCase();
-			String last = str.substring(1);
-			res.append(first);
-			res.append(last);
-		}
-		return res.toString();
 	}
 }

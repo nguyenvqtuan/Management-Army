@@ -172,7 +172,7 @@ public class ChienSiEntity {
 	
 	@Column
 	private String hutThuoc;
-	
+
 	@Column
 	private String soTruong;
 	
