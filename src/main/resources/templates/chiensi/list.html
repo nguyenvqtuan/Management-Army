@@ -23,6 +23,7 @@
 <link rel="stylesheet" th:href="@{/css/vertical-layout-light/style.css}">
 <!-- endinject -->
 <link rel="shortcut icon" th:href="@{/images/favicon.png}" />
+<link th:href="@{/css/toastr.min.css}" rel="stylesheet"/>
 <style>
 .float-left {
 	float: left;
@@ -318,6 +319,7 @@
 											<thead>
 												<tr>
 													<th>Stt</th>
+													<th>Tác vụ</th>
 													<th>Trực thuộc</th>
 													<th>Họ tên</th>
 													<th>Ngày tháng năm sinh</th>
@@ -361,13 +363,19 @@
 													<th>Hút thuốc</th>
 													<th>Sở trường</th>
 													<th>Ghi chú</th>
-													<th>Tác vụ</th>
 												</tr>
 											</thead>
 											<tbody>
 												<tr th:each="chiensi, iter : ${listChienSi}">
 													<td>
 													<a th:href="@{/chien-si/form/{id}(id=${chiensi.id})}" th:text="${iter.index + 1}">
+													</a></td>
+													<td><a
+														th:href="@{/chien-si/form/{id}(id=${chiensi.id})}"> <i
+															class="mdi mdi-table-edit"></i>
+													</a> <a th:href="@{/chien-si/delete/{id}(id=${chiensi.id})}"
+														onclick="return confirm('Bạn có chắc muốn xóa không?')">
+															<i class="mdi mdi-delete"></i>
 													</a></td>
 													<td><span th:text="${chiensi.doanhTrai.tenDayDu}"></span>
 														- <span th:text="${chiensi.doanhTrai.tenDayDuTrucThuoc}"></span>
@@ -433,13 +441,6 @@
 													<td th:text="${chiensi.hutThuoc}"></td>
 													<td th:text="${chiensi.soTruong}"></td>
 													<td th:text="${chiensi.ghiChu}"></td>
-													<td><a
-														th:href="@{/chien-si/form/{id}(id=${chiensi.id})}"> <i
-															class="mdi mdi-table-edit"></i>
-													</a> <a th:href="@{/chien-si/delete/{id}(id=${chiensi.id})}"
-														onclick="return confirm('Bạn có chắc muốn xóa không?')">
-															<i class="mdi mdi-delete"></i>
-													</a></td>
 												</tr>
 											</tbody>
 										</table>
@@ -474,6 +475,8 @@
 	<script th:src="@{/js/hoverable-collapse.js}"></script>
 	<script th:src="@{/js/settings.js}"></script>
 	<script th:src="@{/js/todolist.js}"></script>
+	
+	<script th:src="@{/js/toastr.min.js}"></script>
 	<!-- endinject -->
 	<!-- Custom js for this page-->
 	<script th:src="@{/js/file-upload.js}"></script>
@@ -482,7 +485,18 @@
 	<!-- End custom js for this page-->
 
 	<script type="text/javascript" th:inline="javascript">
+		
 		/*<![CDATA[*/
+		$(document).ready(function() {
+			let message = /*[[${message}]]*/'';
+			let messageType = /*[[${messageType}]]*/'';
+			if (messageType == 'error') {
+				toastr.error(message);
+			} else if (messageType == 'success') {
+				toastr.info(message);	
+			}
+		})
+
 		$("#dangVien").on("click", function() {
 			if ($("#dangVien:checked").length > 0) {
 				$(".dang-vien").show();

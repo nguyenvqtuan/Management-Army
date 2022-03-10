@@ -17,6 +17,7 @@
   <!-- End plugin css for this page -->
   <!-- inject:css -->
   <link rel="stylesheet" th:href="@{/css/vertical-layout-light/style.css}">
+  <link th:href="@{/css/toastr.min.css}" rel="stylesheet"/>
   <!-- endinject -->
   <link rel="shortcut icon" th:href="@{/images/favicon.png}" />
 </head>
@@ -79,7 +80,22 @@
   <script th:src="@{/js/file-upload.js}"></script>
   <script th:src="@{/js/typeahead.js}"></script>
   <script th:src="@{/js/select2.js}"></script>
+
+	<script th:src="@{/js/toastr.min.js}"></script>
   <!-- End custom js for this page-->
+  <script type="text/javascript" th:inline="javascript">
+  /*<![CDATA[*/
+  $(document).ready(function() {
+		let message = /*[[${message}]]*/'';
+		let messageType = /*[[${messageType}]]*/'';
+		if (messageType == 'error') {
+			toastr.error(message);
+		} else if (messageType == 'success') {
+			toastr.info(message);	
+		}
+	})
+	/*]]>*/
+  </script>
  </body>
  </html>
   

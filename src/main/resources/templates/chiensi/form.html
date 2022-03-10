@@ -71,6 +71,7 @@
 				          <label for="hoTen" class="col-3">Họ tên <span class="color-red">(*)</span></label>
 				          <div class="col-9">
 				          	<input type="text" th:field="*{hoTen}" class="form-control" placeholder="Họ tên">
+						    <p th:if="${#fields.hasErrors('hoTen')}" th:errors="*{hoTen}" class="color-red" />
 				          </div>
 				          
 				        </div>
@@ -79,7 +80,7 @@
 				          <div class="col-9">
 				          	<input type="text" th:field="*{ngaySinh}" class="form-control" placeholder="yyyy-MM-dd">
 				          </div>
-				          
+						  <p th:if="${#fields.hasErrors('ngaySinh')}" th:text="*{ngaySinh}" class="color-red" />
 				        </div>
 				        <div class="form-group row">
 				          <label for="capBac" class="col-3">Cấp bậc <span class="color-red">(*)</span></label>
@@ -87,21 +88,21 @@
 				          	<input type="text" th:field="*{capBac}" class="form-control" placeholder="Cấp bậc">
 				          	<input type="text" th:field="*{thoiGianNhanCapBac}" class="form-control" placeholder="Thời gian nhận cấp bậc (yyyy-MM-dd)">
 				          </div>
-				          
+						  <p th:if="${#fields.hasErrors('capBac')}" th:text="*{capBac}" class="color-red" />
 				        </div>
 				        <div class="form-group row">
 				          <label for="chucVu" class="col-3">Chức vụ <span class="color-red">(*)</span></label>
 				          <div class="col-9">
 				          	<input type="text" th:field="*{chucVu}" class="form-control" placeholder="Chức vụ">
 				          </div>
-				          
+						  <p th:if="${#fields.hasErrors('chucVu')}" th:text="*{chucVu}"class="color-red" />
 				        </div>
 				        <div class="form-group row">
 				          <label for="ten" class="col-3">Ngày nhập ngũ</label>
 				          <div class="col-9">
 				          	<input type="text" th:field="*{ngayNhapNgu}" class="form-control" placeholder="yyyy-MM-dd">
 				          </div>
-				          
+						  <p th:if="${#fields.hasErrors('ngayNhapNgu')}" th:text="*{ngayNhapNgu}" class="color-red" />
 				        </div>
 				         <div class="form-group row">
 				          <label for="ten" class="col-3">Sức khỏe</label>
@@ -128,7 +129,7 @@
 				          <div class="col-9">
 				         	 <input type="text" th:field="*{ngayVaoDoan}" class="form-control" placeholder="Ngày vào Đoàn (yyyy-MM-dd)">
 				          </div>
-				          
+						  <p th:if="${#fields.hasErrors('ngayVaoDoan')}" th:text="*{ngayVaoDoan}" class="error" />
 				        </div>
 				        <div class="form-group row">
 				          <label class="col-3">Gia đình</label>
@@ -210,6 +211,7 @@
 							  <option th:each="i : ${listTrinhDo}" th:value="${i.id}" th:text="${i.ten}" th:selected="${i.id} == ${chiensi.trinhDo}"></option>
 						     </select>
 				          	<input type="text" th:field="*{daQuaTruong}" class="form-control" placeholder="Đã qua trường"> 
+						        <p th:each="err : ${#fields.errors('trinhDo')}" th:text="*{trinhDo}" class="color-red" />
 				          </div>
 				        </div>
 				        <div class="form-group row">
@@ -219,7 +221,7 @@
 								<option th:each="i : ${listDanToc}" th:value="${i.id}" th:text="${i.ten}" th:selected="${i.id == chiensi.IdDanToc}"></option>
 							</select>
 				          </div>
-				          
+						  <p th:each="err : ${#fields.errors('trinhDo')}" th:text="*{idDanToc}" class="color-red" />
 				        </div>
 				        <div class="form-group row">
 				          <label class="col-3">Tôn giáo</label>
@@ -234,6 +236,9 @@
 				          	<input type="text" th:field="*{qqQuanHuyen}" class="form-control" placeholder="Quận/Huyện">
 				        	<input type="text" th:field="*{qqPhuongXa}" class="form-control" placeholder="Phường/Xã">
 				          </div>
+						  <p th:if="${#fields.hasErrors('qqTinhThanh')}" th:text="*{qqTinhThanh}" class="color-red" />
+				          <p th:if="${#fields.hasErrors('qqQuanHuyen')}" th:text="*{qqQuanHuyen}" class="color-red" />
+				          <p th:if="${#fields.hasErrors('qqPhuongXa')}" th:text="*{qqPhuongXa}" class="color-red" />
 				        </div>
 				        <div class="form-group row">
 				          <label class="col-3">Nơi ở hiện tại</label>
@@ -242,6 +247,10 @@
 				          	<input type="text" th:field="*{nohnQuanHuyen}" class="form-control" placeholder="Quận/Huyện">
 				        	<input type="text" th:field="*{nohnPhuongXa}" class="form-control" placeholder="Phường/Xã">
 				          </div>
+				          <p th:if="${#fields.hasErrors('nohnTinhThanh')}" th:text="*{nohnTinhThanh}" class="color-red" />
+				          <p th:if="${#fields.hasErrors('nohnQuanHuyen')}" th:text="*{nohnQuanHuyen}" class="color-red" />
+				          <p th:if="${#fields.hasErrors('nohnPhuongXa')}" th:text="*{nohnPhuongXa}" class="color-red" />
+				        
 				        </div>
 				        <div class="form-group row">
 				          <label class="col-3">Hình xăm</label>

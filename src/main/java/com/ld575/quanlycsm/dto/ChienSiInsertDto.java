@@ -2,6 +2,9 @@ package com.ld575.quanlycsm.dto;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.AllArgsConstructor;
@@ -18,19 +21,25 @@ import lombok.Setter;
 public class ChienSiInsertDto {
 	private long id;
 	private String trucThuoc;
+	
+	@NotEmpty(message = "Họ tên không được rỗng")
 	private String hoTen;
 	
 	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@NotNull(message = "Ngày sinh không được rỗng")
 	private Date ngaySinh;
 	
+	@NotEmpty(message = "Cấp bậc không được rỗng")
 	private String capBac;
 	
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date thoiGianNhanCapBac;
 	
+	@NotEmpty(message = "Cấp bậc không được rỗng")
 	private String chucVu;
 	
 	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@NotNull(message = "Ngày sinh không được rỗng")
 	private Date ngayNhapNgu;
 
 	@DateTimeFormat(pattern="yyyy-MM-dd")
@@ -41,6 +50,7 @@ public class ChienSiInsertDto {
 	private String soTheDang;
 	
 	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@NotNull(message = "Ngày vào đoàn không được rỗng")
 	private Date ngayVaoDoan;
 	
 	private String ngheNghiepGiaDinh;
@@ -67,9 +77,11 @@ public class ChienSiInsertDto {
 	private String boMeLaLietSiHoacQuanNhan;
 	private String ngheNghiepBanThan;
 	
+	@NotNull(message = "Trình độ không được rỗng")
 	private String trinhDo;
 	private String daQuaTruong;
 	
+	@NotNull(message = "Dân tộc không được rỗng")
 	private long idDanToc;
 	private String tonGiao;
 	
@@ -78,12 +90,22 @@ public class ChienSiInsertDto {
 	private String coVo;
 	private String ghiChuCoVo;
 	
+	@NotNull(message = "Quê quán phường/xã không được rỗng")
 	private String qqPhuongXa;
+	
+	@NotNull(message = "Quê quán quận/huyện không được rỗng")
 	private String qqQuanHuyen;
+	
+	@NotNull(message = "Quê quán tỉnh/thành không được rỗng")
 	private String qqTinhThanh;
 	
+	@NotNull(message = "Nơi ở hiện tại phường/xã không được rỗng")
 	private String nohnPhuongXa;
+	
+	@NotNull(message = "Nơi ở hiện tại quận/huyện không được rỗng")
 	private String nohnQuanHuyen;
+	
+	@NotNull(message = "Nơi ở hiện tại tỉnh/thành không được rỗng")
 	private String nohnTinhThanh;
 	
 	private String hinhXam;

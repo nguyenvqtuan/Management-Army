@@ -26,10 +26,10 @@ public class DanTocController {
 	public String list(Model model) {
 		Iterable<DanTocEntity> listDanToc = danTocService.findAll();
 		model.addAttribute("listDanToc", listDanToc);
-		return "/dantoc/list.html";
+		return "dantoc/list";
 	}
 	
-	@GetMapping(value = "/insert-dan-toc")
+	@GetMapping(value = "/insert-default")
 	public String insertDanToc() {
 		String str = "Kinh,Tày,Thái,Mường,Khmer,Hoa,Nùng,H'Mông,Dao,Gia Rai,Ê Đê,Ba Na,Sán Chay,Chăm,Cơ Ho,Xơ Đăng,Sán Dìu,Hrê,Ra Glai,Mnông,Thổ,Xtiêng,Khơ mú,Bru - Vân Kiều,Cơ Tu,Giáy,Tà Ôi,Mạ,Giẻ-Triêng,Co,Chơ Ro,Xinh Mun,Hà Nhì,Chu Ru,Lào,La Chí,Kháng,Phù Lá,La Hủ,La Ha,Pà Thẻn,Lự,Ngái,Chứt,Lô Lô,Mảng,Cơ Lao,Bố Y,Cống,Si La,Pu Péo,Rơ Măm,Brâu,Ơ Đu";
 		String[] arr = str.split(",");
@@ -37,14 +37,14 @@ public class DanTocController {
 			DanTocDto danTocDto = DanTocDto.builder().ten(s).build();
 			danTocService.save(danTocDto);
 		}
-		return "/dantoc/list.html";
+		return "redirect:/dantoc/list";
 	}
 	
 	@GetMapping("/form")
 	public String showInsert(Model model) {
 		model.addAttribute("title", "Thêm dân tộc");
 		model.addAttribute("dantoc", new DanTocEntity());
-		return "/dantoc/form.html";
+		return "dantoc/form.html";
 	}
 	
 	@PostMapping("/form")
@@ -58,7 +58,7 @@ public class DanTocController {
 		model.addAttribute("title", "Cập nhật dân tộc");
 		Optional<DanTocEntity> danTocEntity = danTocService.findById(id);
 		model.addAttribute("dantoc", danTocEntity.get());
-		return "/dantoc/form.html";
+		return "dantoc/form.html";
 	}
 	
 	@GetMapping("/delete/{id}")

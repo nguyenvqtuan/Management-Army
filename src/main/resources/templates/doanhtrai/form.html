@@ -41,10 +41,14 @@
 				        <div class="form-group">
 				          <label for="ten">Tên</label>
 				          <input type="text" th:field="*{ten}" class="form-control" placeholder="Tên đơn vị">
+				          <p th:if="${#fields.hasErrors('ten')}" th:text="*{ten}" class="color-red" />
+				        
 				        </div>
 				        <div class="form-group">
 				          <label for="tenDayDu">Tên đầy đủ</label>
 				          <input type="text" th:field="*{tenDayDu}" name="tenDayDu" value="${tenDayDu}" class="form-control" id="tenDayDu" placeholder="Tên đầy đủ">
+				        	<p th:if="${#fields.hasErrors('tenDayDu')}" th:text="*{tenDayDu}" class="color-red" />
+				        
 				        </div>
 				        <div class="form-group">
 				          <label for="moTa">Mô tả</label>
@@ -55,6 +59,8 @@
 				          <select class="form-control" id="capDo" name="capDo">
 				          	<option th:each="i : ${listCapDo}" th:value="${i.id}" th:text="${i.strCapDo}" th:selected="${i.id} == ${doanhTrai.capDo}"></option>
                           </select>
+                          	<p th:if="${#fields.hasErrors('capDo')}" th:text="*{capDo}" class="color-red" />
+				        
 				        </div>
 				        <div class="form-group">
 				          <label for="trucThuoc">Trực thuộc</label>

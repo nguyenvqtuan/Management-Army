@@ -10,11 +10,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.apache.poi.util.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ld575.quanlycsm.dto.ChienSiDto;
 import com.ld575.quanlycsm.dto.ChienSiInsertDto;
@@ -75,21 +78,24 @@ public class ChienSiController {
 		}
 		model.addAttribute("listTieuDoi", listTieuDoi);
 		model.addAttribute("chiensi", chienSiDto == null ? new ChienSiDto() : chienSiDto);
-		return "/chiensi/list.html";
+		return "chiensi/list";
 	}
 
 	@GetMapping("/upload")
 	public String showImport() {
-		return "/chiensi/import.html";
+		return "chiensi/import";
 	}
 
 	@PostMapping("/upload")
-	public String uploadFile(@RequestParam("file") MultipartFile file) {
+	public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes ra) {
 		try {
 			chienSiService.readExcel(file);
+			ra.addFlashAttribute("message", "Import thành công!");
+			ra.addFlashAttribute("message_type", "success");
 			return "redirect:/chien-si/list";
 		} catch (Exception e) {
-			e.printStackTrace();
+			ra.addFlashAttribute("message", "Import thất bại!");
+			ra.addFlashAttribute("message_type", "error");
 			return "redirect:/chien-si/list";
 		}
 	}
@@ -101,12 +107,19 @@ public class ChienSiController {
 		model.addAttribute("listTrinhDo", getListTrinhDo());
 		model.addAttribute("listDanToc", getListDanToc());
 		model.addAttribute("listDaiDoi", getListDoanhTraiDaiDoi());
-		return "/chiensi/form";
+		return "chiensi/form";
 	}
 
 	@PostMapping("/form")
-	public String insert(Model model, @ModelAttribute("chiensi") ChienSiInsertDto chienSiDto) {
+	public String insert(Model model, @Valid @ModelAttribute("chiensi") ChienSiInsertDto chienSiDto, BindingResult result, 
+			RedirectAttributes ra) {
+		if (result.hasErrors()) {
+			getInfoUpdate(model, chienSiDto);
+			return "chiensi/form";
+		}
 		chienSiService.save(chienSiDto);
+		ra.addFlashAttribute("message", "Import thành công!");
+		ra.addFlashAttribute("message_type", "success");
 		return "redirect:/chien-si/list";
 	}
 
@@ -115,42 +128,25 @@ public class ChienSiController {
 		model.addAttribute("title", "Cập nhật chiến sĩ");
 		Optional<ChienSiEntity> chienSiEntity = chienSiService.findById(id);
 		ChienSiInsertDto chienSiDto = getChienSiDto(chienSiEntity.get());
-		model.addAttribute("chiensi", chienSiDto);
-		model.addAttribute("listTrinhDo", getListTrinhDo());
-		model.addAttribute("listDanToc", getListDanToc());
-		model.addAttribute("listDaiDoi", getListDoanhTraiDaiDoi());
-
-		List<DoanhTraiDto> listTrungDoi;
-		if (chienSiDto.getIdDaiDoi() != 0L) {
-			listTrungDoi = getListDoanhTraiTrungDoi(chienSiDto.getIdDaiDoi());
-		} else {
-			listTrungDoi = new ArrayList<>();
-		}
-		model.addAttribute("listTrungDoi", listTrungDoi);
-
-		List<DoanhTraiDto> listTieuDoi;
-		if (chienSiDto.getIdTrungDoi() != 0L) {
-			listTieuDoi = getListDoanhTraiTieuDoi(chienSiDto.getIdTrungDoi());
-		} else {
-			listTieuDoi = new ArrayList<>();
-		}
-		model.addAttribute("listTieuDoi", listTieuDoi);
+		getInfoUpdate(model, chienSiDto);
 		return "/chiensi/form";
 	}
 
 	@GetMapping("/delete/{id}")
-	public String delete(@PathVariable("id") Long id) {
+	public String delete(@PathVariable("id") Long id, RedirectAttributes ra) {
 		Optional<ChienSiEntity> danTocEntity = chienSiService.findById(id);
 		if (!danTocEntity.isPresent()) {
 			throw new RuntimeException("Id chien si not found!");
 		}
 		chienSiService.deleteById(id);
+		ra.addFlashAttribute("message", "Import thành công!");
+		ra.addFlashAttribute("message_type", "success");
 		return "redirect:/chien-si/list";
 	}
 
 	@GetMapping("/download")
 	public String showExport() {
-		return "/chiensi/download";
+		return "chiensi/download";
 	}
 
 	@PostMapping("/download")
@@ -257,5 +253,28 @@ public class ChienSiController {
 				.idDaiDoi(doanhTraiService.findById(Long.parseLong(arrIdDoanhTrai[1])).get().getId())
 				.idTrungDoi(doanhTraiService.findById(Long.parseLong(arrIdDoanhTrai[0])).get().getId())
 				.idTieuDoi(chienSiEntity.getDoanhTrai().getId()).build();
+	}
+	
+	private void getInfoUpdate(Model model, ChienSiInsertDto chienSiDto) {
+		model.addAttribute("chiensi", chienSiDto);
+		model.addAttribute("listTrinhDo", getListTrinhDo());
+		model.addAttribute("listDanToc", getListDanToc());
+		model.addAttribute("listDaiDoi", getListDoanhTraiDaiDoi());
+
+		List<DoanhTraiDto> listTrungDoi;
+		if (chienSiDto.getIdDaiDoi() != 0L) {
+			listTrungDoi = getListDoanhTraiTrungDoi(chienSiDto.getIdDaiDoi());
+		} else {
+			listTrungDoi = new ArrayList<>();
+		}
+		model.addAttribute("listTrungDoi", listTrungDoi);
+
+		List<DoanhTraiDto> listTieuDoi;
+		if (chienSiDto.getIdTrungDoi() != 0L) {
+			listTieuDoi = getListDoanhTraiTieuDoi(chienSiDto.getIdTrungDoi());
+		} else {
+			listTieuDoi = new ArrayList<>();
+		}
+		model.addAttribute("listTieuDoi", listTieuDoi);
 	}
 }

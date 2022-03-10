@@ -1,0 +1,10 @@
+app
+    image nvquoctuan98quanly_csm
+    build .
+    restart on-failure
+    depends_on
+      - db
+    ports
+      - 80808080
+    environment
+        SPRING_DATASOURCE_URL jdbcmysqldb3306quanly_csmautoReconnect=true&useSSL=false

@@ -4,7 +4,7 @@ services:
   db:
     image: mysql
     volumes:
-      - D:\Project-Managent-CSM\Database:/var/lib/mysql
+      - D:\Project-Management-CSM\Database:/var/lib/mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: abc123#A

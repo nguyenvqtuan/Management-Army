@@ -114,6 +114,21 @@
   <script th:src="@{/js/typeahead.js}"></script>
   <script th:src="@{/js/select2.js}"></script>
   <!-- End custom js for this page-->
+  	<script th:src="@{/js/toastr.min.js}"></script>
+  <!-- End custom js for this page-->
+  <script type="text/javascript" th:inline="javascript">
+  /*<![CDATA[*/
+  $(document).ready(function() {
+		let message = /*[[${message}]]*/'';
+		let messageType = /*[[${messageType}]]*/'';
+		if (messageType == 'error') {
+			toastr.error(message);
+		} else if (messageType == 'success') {
+			toastr.info(message);	
+		}
+	})
+	/*]]>*/
+  </script>
  </body>
  </html>
   

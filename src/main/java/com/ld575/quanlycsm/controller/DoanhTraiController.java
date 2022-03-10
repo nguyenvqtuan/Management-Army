@@ -38,7 +38,7 @@ public class DoanhTraiController {
 	@GetMapping(value = {"/", "/list"})
 	public String list(Model model) {
 		model.addAttribute("listDoanhTrai", getListDoanhTraiDto());
-		return "/doanhtrai/list.html";
+		return "doanhtrai/list.html";
 	}
 	
 	@GetMapping("/truc-thuoc/{id}")
@@ -62,7 +62,7 @@ public class DoanhTraiController {
 		model.addAttribute("title", "Thêm doanh trại");
 		model.addAttribute("doanhTrai", new DoanhTraiEntity());
 		model.addAttribute("listCapDo", getCapDo());
-		return "/doanhtrai/form.html";
+		return "doanhtrai/form.html";
 	}
 	
 	@PostMapping("/form")
@@ -78,7 +78,7 @@ public class DoanhTraiController {
 		model.addAttribute("doanhTrai", doanhTraiEntity.get());
 		model.addAttribute("listCapDo", getCapDo());
 		model.addAttribute("tenDayDuTrucThuoc", tenDayDuTrucThuoc);
-		return "/doanhtrai/form.html";
+		return "doanhtrai/form.html";
 	}
 	
 	@GetMapping("/delete/{id}")
