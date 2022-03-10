@@ -476,13 +476,15 @@
 	<script th:src="@{/js/settings.js}"></script>
 	<script th:src="@{/js/todolist.js}"></script>
 	
-	<script th:src="@{/js/toastr.min.js}"></script>
+	
 	<!-- endinject -->
 	<!-- Custom js for this page-->
 	<script th:src="@{/js/file-upload.js}"></script>
 	<script th:src="@{/js/typeahead.js}"></script>
 	<script th:src="@{/js/select2.js}"></script>
 	<!-- End custom js for this page-->
+	
+	<script th:src="@{/js/toastr.min.js}"></script>
 
 	<script type="text/javascript" th:inline="javascript">
 		
@@ -490,6 +492,7 @@
 		$(document).ready(function() {
 			let message = /*[[${message}]]*/'';
 			let messageType = /*[[${messageType}]]*/'';
+			console.log(messageType);
 			if (messageType == 'error') {
 				toastr.error(message);
 			} else if (messageType == 'success') {

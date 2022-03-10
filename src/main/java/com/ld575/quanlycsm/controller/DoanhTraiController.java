@@ -8,16 +8,20 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ld575.quanlycsm.dto.CapDoDto;
 import com.ld575.quanlycsm.dto.DoanhTraiDto;
@@ -62,12 +66,21 @@ public class DoanhTraiController {
 		model.addAttribute("title", "Thêm doanh trại");
 		model.addAttribute("doanhTrai", new DoanhTraiEntity());
 		model.addAttribute("listCapDo", getCapDo());
-		return "doanhtrai/form.html";
+		return "doanhtrai/form";
 	}
 	
 	@PostMapping("/form")
-	public String insert(@ModelAttribute("doanhtrai") DoanhTraiDto doanhtraiDto) {
-		doanhTraiService.save(doanhtraiDto);
+	public String insert(@Valid @ModelAttribute("doanhtrai") DoanhTraiDto doanhTraiDto, RedirectAttributes ra, 
+			BindingResult result) {
+		if (result.hasErrors()) {
+			ra.addFlashAttribute("message", "Thêm thất bại!");
+			ra.addFlashAttribute("messageType", "error");
+			return "doanhtrai/form";
+		}
+		doanhTraiService.save(doanhTraiDto);
+		String message = doanhTraiDto.getId() != null ? "Cập nhật " : "Thêm ";
+		ra.addFlashAttribute("message", message + "thành công !");
+		ra.addFlashAttribute("messageType", "success");
 		return "redirect:/doanh-trai/list";
 	}
 	
@@ -82,12 +95,16 @@ public class DoanhTraiController {
 	}
 	
 	@GetMapping("/delete/{id}")
-	public String delete(@PathVariable("id") Long id) {
+	public String delete(@PathVariable("id") Long id, RedirectAttributes ra) {
 		Optional<DoanhTraiEntity> DoanhTraiEntity = doanhTraiService.findById(id);
 		if (!DoanhTraiEntity.isPresent()) {
+			ra.addFlashAttribute("message", "Xóa thất bại!");
+			ra.addFlashAttribute("messageType", "error");
 			throw new RuntimeException("Id doanh trai not found!");
 		}
 		doanhTraiService.deleteById(id);
+		ra.addFlashAttribute("message", "Xóa thành công!");
+		ra.addFlashAttribute("messageType", "success");
 		return "redirect:/doanh-trai/list";
 	}
 	

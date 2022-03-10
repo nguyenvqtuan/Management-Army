@@ -98,7 +98,7 @@
 						  <p th:if="${#fields.hasErrors('chucVu')}" th:text="*{chucVu}"class="color-red" />
 				        </div>
 				        <div class="form-group row">
-				          <label for="ten" class="col-3">Ngày nhập ngũ</label>
+				          <label for="ten" class="col-3">Ngày nhập ngũ <span class="color-red">(*)</span></label>
 				          <div class="col-9">
 				          	<input type="text" th:field="*{ngayNhapNgu}" class="form-control" placeholder="yyyy-MM-dd">
 				          </div>
@@ -125,7 +125,7 @@
 				          </div>
 				        </div>
 				        <div class="form-group row">
-				          <label for="ngayVaoDoan" class="col-3">Đoàn viên</label>
+				          <label for="ngayVaoDoan" class="col-3">Đoàn viên <span class="color-red">(*)</span></label>
 				          <div class="col-9">
 				         	 <input type="text" th:field="*{ngayVaoDoan}" class="form-control" placeholder="Ngày vào Đoàn (yyyy-MM-dd)">
 				          </div>
@@ -205,13 +205,13 @@
 				          </div>
 				        </div>
 				        <div class="form-group row">
-				          <label class="col-3">Trình độ</label>
+				          <label class="col-3">Trình độ <span class="color-red">(*)</span></label>
 				          <div class="col-9">
 				            <select class="form-control w-20 float-left" id="trinhDo"name="trinhDo">
 							  <option th:each="i : ${listTrinhDo}" th:value="${i.id}" th:text="${i.ten}" th:selected="${i.id} == ${chiensi.trinhDo}"></option>
 						     </select>
 				          	<input type="text" th:field="*{daQuaTruong}" class="form-control" placeholder="Đã qua trường"> 
-						        <p th:each="err : ${#fields.errors('trinhDo')}" th:text="*{trinhDo}" class="color-red" />
+						        <p th:if="${#fields.errors('trinhDo')}" th:text="*{trinhDo}" class="color-red" />
 				          </div>
 				        </div>
 				        <div class="form-group row">
@@ -230,7 +230,7 @@
 				          </div>
 				        </div>
 				        <div class="form-group row">
-				          <label class="col-3">Quê quán</label>
+				          <label class="col-3">Quê quán <span class="color-red">(*)</span></label>
 				          <div class="col-9">
 				          	<input type="text" th:field="*{qqTinhThanh}" class="form-control" placeholder="Tỉnh/Thành">
 				          	<input type="text" th:field="*{qqQuanHuyen}" class="form-control" placeholder="Quận/Huyện">
@@ -241,7 +241,7 @@
 				          <p th:if="${#fields.hasErrors('qqPhuongXa')}" th:text="*{qqPhuongXa}" class="color-red" />
 				        </div>
 				        <div class="form-group row">
-				          <label class="col-3">Nơi ở hiện tại</label>
+				          <label class="col-3">Nơi ở hiện tại <span class="color-red">(*)</span></label>
 				          <div class="col-9">
 				          	<input type="text" th:field="*{nohnTinhThanh}" class="form-control" placeholder="Tỉnh/Thành">
 				          	<input type="text" th:field="*{nohnQuanHuyen}" class="form-control" placeholder="Quận/Huyện">

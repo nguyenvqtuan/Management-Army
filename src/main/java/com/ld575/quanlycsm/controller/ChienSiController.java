@@ -91,11 +91,11 @@ public class ChienSiController {
 		try {
 			chienSiService.readExcel(file);
 			ra.addFlashAttribute("message", "Import thành công!");
-			ra.addFlashAttribute("message_type", "success");
+			ra.addFlashAttribute("messageType", "success");
 			return "redirect:/chien-si/list";
 		} catch (Exception e) {
 			ra.addFlashAttribute("message", "Import thất bại!");
-			ra.addFlashAttribute("message_type", "error");
+			ra.addFlashAttribute("messageType", "error");
 			return "redirect:/chien-si/list";
 		}
 	}
@@ -114,12 +114,15 @@ public class ChienSiController {
 	public String insert(Model model, @Valid @ModelAttribute("chiensi") ChienSiInsertDto chienSiDto, BindingResult result, 
 			RedirectAttributes ra) {
 		if (result.hasErrors()) {
+			ra.addFlashAttribute("message", "Thêm thất bại!");
+			ra.addFlashAttribute("messageType", "error");
 			getInfoUpdate(model, chienSiDto);
 			return "chiensi/form";
 		}
 		chienSiService.save(chienSiDto);
-		ra.addFlashAttribute("message", "Import thành công!");
-		ra.addFlashAttribute("message_type", "success");
+		String message = chienSiDto.getId() != 0L ? "Cập nhật " : "Thêm ";
+		ra.addFlashAttribute("message", message + " thành công!");
+		ra.addFlashAttribute("messageType", "success");
 		return "redirect:/chien-si/list";
 	}
 
@@ -136,11 +139,13 @@ public class ChienSiController {
 	public String delete(@PathVariable("id") Long id, RedirectAttributes ra) {
 		Optional<ChienSiEntity> danTocEntity = chienSiService.findById(id);
 		if (!danTocEntity.isPresent()) {
+			ra.addFlashAttribute("message", "Xóa thất bại!");
+			ra.addFlashAttribute("messageType", "error");
 			throw new RuntimeException("Id chien si not found!");
 		}
 		chienSiService.deleteById(id);
-		ra.addFlashAttribute("message", "Import thành công!");
-		ra.addFlashAttribute("message_type", "success");
+		ra.addFlashAttribute("message", "Xóa thành công!");
+		ra.addFlashAttribute("messageType", "success");
 		return "redirect:/chien-si/list";
 	}
 
@@ -150,7 +155,7 @@ public class ChienSiController {
 	}
 
 	@PostMapping("/download")
-	public void export(HttpServletResponse response, @RequestParam("namNhapNgu") String namNhapNgu)
+	public void export(HttpServletResponse response, @RequestParam("namNhapNgu") String namNhapNgu, RedirectAttributes ra)
 			throws IOException {
 		ByteArrayInputStream byteArrayInputStream = exportHelper.export(namNhapNgu);
 		response.setContentType("application/octet-stream");
@@ -159,6 +164,8 @@ public class ChienSiController {
         String formatDateTime = now.format(format);  
 		response.setHeader("Content-Disposition", "attachment; filename=thong-ke-csm-" + namNhapNgu + " _" + formatDateTime + ".xlsx");
 		IOUtils.copy(byteArrayInputStream, response.getOutputStream());
+		ra.addFlashAttribute("message", "Download thành công!");
+		ra.addFlashAttribute("messageType", "success");
 	}
 
 	private List<TrinhDoDto> getListTrinhDo() {

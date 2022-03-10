@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ld575.quanlycsm.dto.DanTocDto;
 import com.ld575.quanlycsm.entity.DanTocEntity;
+import com.ld575.quanlycsm.service.CommonService;
 import com.ld575.quanlycsm.service.DanTocService;
 
 @Controller
@@ -21,6 +23,9 @@ public class DanTocController {
 	
 	@Autowired
 	public DanTocService danTocService;
+	
+	@Autowired
+	public CommonService commonService;
 	
 	@GetMapping(value = {"/", "/list"})
 	public String list(Model model) {
@@ -48,8 +53,11 @@ public class DanTocController {
 	}
 	
 	@PostMapping("/form")
-	public String insert(@ModelAttribute("dantoc") DanTocDto danTocDto) {
+	public String insert(@ModelAttribute("dantoc") DanTocDto danTocDto, RedirectAttributes ra) {
 		danTocService.save(danTocDto);
+		String message = danTocDto.getId() != null ? "Thêm " : "Cập nhật ";
+		ra.addFlashAttribute("message", message + " thành công!");
+		ra.addFlashAttribute("messageType", "success");
 		return "redirect:/dan-toc/list";
 	}
 	
@@ -62,12 +70,16 @@ public class DanTocController {
 	}
 	
 	@GetMapping("/delete/{id}")
-	public String delete(@PathVariable("id") Long id) {
+	public String delete(@PathVariable("id") Long id, RedirectAttributes ra) {
 		Optional<DanTocEntity> danTocEntity = danTocService.findById(id);
 		if (!danTocEntity.isPresent()) {
+			ra.addFlashAttribute("message", "Xóa thất bại");
+			ra.addFlashAttribute("messageType", "error");
 			throw new RuntimeException("Id dan toc not found!");
 		}
 		danTocService.deleteById(id);
+		ra.addFlashAttribute("message", "Xóa thành công!");
+		ra.addFlashAttribute("messageType", "success");
 		return "redirect:/dan-toc/list";
 	}
 }
