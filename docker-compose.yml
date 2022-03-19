@@ -4,12 +4,12 @@ services:
   db:
     image: mysql
     volumes:
-      - D:\Project-Management-CSM\Database:/var/lib/mysql
+      - D:\Projects/Management-CSM\Database:/var/lib/mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: abc123#A
       MYSQL_DATABASE: QUANLY_CSM
-      MYSQL_USER: root
+      MYSQL_USER: admin
       MYSQL_PASSWORD: abc123#A
     ports:
       - "3306:3306"
