@@ -57,7 +57,7 @@
 				        <div class="form-group">
 				          <label for="capDo" >Cấp độ </label>
 				          <select class="form-control" id="capDo" name="capDo">
-				          	<option th:each="i : ${listCapDo}" th:value="${i.id}" th:text="${i.strCapDo}" th:selected="${i.id} == ${doanhTrai.capDo}"></option>
+				          	<option th:each="i : ${listCapDo}" th:value="${i.id}" th:text="${i.name}" th:selected="${i.id} == ${doanhTrai.capDo}"></option>
                           </select>
                           	<p th:if="${#fields.hasErrors('capDo')}" th:text="*{capDo}" class="color-red" />
 				        

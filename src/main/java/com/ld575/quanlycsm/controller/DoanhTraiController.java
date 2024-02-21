@@ -1,6 +1,7 @@
 package com.ld575.quanlycsm.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ld575.quanlycsm.dto.CapDoDto;
+import com.ld575.quanlycsm.dto.CapDoEnum;
 import com.ld575.quanlycsm.dto.DoanhTraiDto;
 import com.ld575.quanlycsm.entity.DoanhTraiEntity;
 import com.ld575.quanlycsm.service.CommonService;
@@ -65,7 +67,7 @@ public class DoanhTraiController {
 	public String showInsert(Model model) {
 		model.addAttribute("title", "Thêm doanh trại");
 		model.addAttribute("doanhTrai", new DoanhTraiEntity());
-		model.addAttribute("listCapDo", getCapDo());
+		model.addAttribute("listCapDo", getLevel());
 		return "doanhtrai/form";
 	}
 	
@@ -89,7 +91,7 @@ public class DoanhTraiController {
 		model.addAttribute("title", "Cập nhật doanh trại");
 		Optional<DoanhTraiEntity> doanhTraiEntity = doanhTraiService.findById(id);
 		model.addAttribute("doanhTrai", doanhTraiEntity.get());
-		model.addAttribute("listCapDo", getCapDo());
+		model.addAttribute("listCapDo", getLevel());
 		model.addAttribute("tenDayDuTrucThuoc", tenDayDuTrucThuoc);
 		return "doanhtrai/form.html";
 	}
@@ -202,13 +204,10 @@ public class DoanhTraiController {
 		return listDoanhTraiDto;
 	}
 	
-	private List<CapDoDto> getCapDo() {
-		List<CapDoDto> res = new ArrayList<>();
-		res.add(new CapDoDto(5, "-"));
-		res.add(new CapDoDto(4, "Tiểu đoàn"));
-		res.add(new CapDoDto(3, "Đại đội"));
-		res.add(new CapDoDto(2, "Trung đội"));
-		res.add(new CapDoDto(1, "Tiểu đội"));
+	private List<CapDoDto> getLevel() {
+		List<CapDoDto> res = Arrays.stream(CapDoEnum.values())
+		.map(e -> new CapDoDto(e + " - " + CapDoDto.MAPPING))
+		.collect(Collectors.toList());
 		return res;
 	}
 }
