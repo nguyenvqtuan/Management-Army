@@ -4,11 +4,11 @@ services:
   db:
     image: mysql
     volumes:
-      - D:\Projects/Management-CSM\Database:/var/lib/mysql
+      - /home/quoctuan/Projects/Management-CSM/Database:/home/quoctuan/test-db/
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: abc123#A
-      MYSQL_DATABASE: QUANLY_CSM
+      MYSQL_DATABASE: quanly_csm
       MYSQL_USER: admin
       MYSQL_PASSWORD: abc123#A
     ports:

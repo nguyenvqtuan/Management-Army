@@ -94,6 +94,7 @@ public class ChienSiController {
 			ra.addFlashAttribute("messageType", "success");
 			return "redirect:/chien-si/list";
 		} catch (Exception e) {
+			e.printStackTrace();
 			ra.addFlashAttribute("message", "Import thất bại!");
 			ra.addFlashAttribute("messageType", "error");
 			return "redirect:/chien-si/list";
