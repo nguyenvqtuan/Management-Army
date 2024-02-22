@@ -67,6 +67,10 @@ public class DoanhTraiService {
 		doanhTraiRepository.deleteById(id);
 	}
 	
+	public List<DoanhTraiEntity> findByLevelGreaterThan(Integer level) {
+		return doanhTraiRepository.findByCapDoGreaterThan(level);
+	}
+	
 	public List<DoanhTraiEntity> findByLevel(Integer level) {
 		return doanhTraiRepository.findByCapDo(level);
 	}

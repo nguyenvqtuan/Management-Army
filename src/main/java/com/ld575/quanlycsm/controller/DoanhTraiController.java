@@ -1,7 +1,6 @@
 package com.ld575.quanlycsm.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -110,9 +109,22 @@ public class DoanhTraiController {
 		return "redirect:/doanh-trai/list";
 	}
 	
-	@GetMapping("getTrucThuoc/{level}")
+	@GetMapping("get-truc-thuoc-greater/{level}")
+	public ResponseEntity<?> getTrucThuocGreater(@PathVariable("level") Integer level) {
+		int i = 1;
+		List<CapDoDto> res = new ArrayList<>();
+		for (CapDoEnum e : CapDoEnum.values()) {
+			if (i > level) {
+				res.add(new CapDoDto(i, e + " - " + CapDoDto.MAPPING));
+			}
+			i++;
+		}
+		return ResponseEntity.ok(res);
+	}
+	
+	@GetMapping("get-truc-thuoc/{level}")
 	public ResponseEntity<?> getTrucThuoc(@PathVariable("level") Integer level) {
-		List<DoanhTraiEntity> listDoanhTraiByLevel = doanhTraiService.findByLevel(level + 1);
+		List<DoanhTraiEntity> listDoanhTraiByLevel = doanhTraiService.findByLevel(level);
 		List<DoanhTraiDto> listDoanhTraiEntity = getListDoanhTraiDto();
 		List<DoanhTraiDto> res = new ArrayList<>();
 		for (DoanhTraiEntity doanhTrai : listDoanhTraiByLevel) {
@@ -205,9 +217,12 @@ public class DoanhTraiController {
 	}
 	
 	private List<CapDoDto> getLevel() {
-		List<CapDoDto> res = Arrays.stream(CapDoEnum.values())
-		.map(e -> new CapDoDto(e + " - " + CapDoDto.MAPPING))
-		.collect(Collectors.toList());
+		int i = 0;
+		List<CapDoDto> res = new ArrayList<>();
+		res.add(new CapDoDto(i, "-"));
+		for (CapDoEnum e : CapDoEnum.values()) {
+			res.add(new CapDoDto(++i, e + " - " + CapDoDto.MAPPING));
+		}
 		return res;
 	}
 }
