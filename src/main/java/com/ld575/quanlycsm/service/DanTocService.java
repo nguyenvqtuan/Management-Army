@@ -3,6 +3,8 @@ package com.ld575.quanlycsm.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ import com.ld575.quanlycsm.repository.DanTocRepository;
 @Service
 public class DanTocService {
 
+	private static final String DAN_TOC_DEFAULT = "Kinh,Tày,Thái,Mường,Khmer,Hoa,Nùng,H'Mông,Dao,Gia Rai,Ê Đê,Ba Na,Sán Chay,Chăm,Cơ Ho,Xơ Đăng,Sán Dìu,Hrê,Ra Glai,Mnông,Thổ,Xtiêng,Khơ mú,Bru - Vân Kiều,Cơ Tu,Giáy,Tà Ôi,Mạ,Giẻ-Triêng,Co,Chơ Ro,Xinh Mun,Hà Nhì,Chu Ru,Lào,La Chí,Kháng,Phù Lá,La Hủ,La Ha,Pà Thẻn,Lự,Ngái,Chứt,Lô Lô,Mảng,Cơ Lao,Bố Y,Cống,Si La,Pu Péo,Rơ Măm,Brâu,Ơ Đu";
+	
 	@Autowired
 	public DanTocRepository danTocRepository;
 	
@@ -52,5 +56,18 @@ public class DanTocService {
 	
 	public List<DanTocEntity> findByTenContaining(String name) {
 		return danTocRepository.findByTenContaining(name);
+	}
+	
+	@PostConstruct
+	public void saveDefault() {
+		String str = DAN_TOC_DEFAULT;
+		if (findAll().size() != 0) {
+			return;
+		}
+		String[] arr = str.split(",");
+		for (String s : arr) {
+			DanTocDto danTocDto = DanTocDto.builder().ten(s).build();
+			save(danTocDto);
+		}
 	}
 }
