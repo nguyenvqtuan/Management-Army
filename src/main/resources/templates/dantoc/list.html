@@ -38,6 +38,21 @@
 					  <div class="card">
 					    <div class="card-body">
 					      <h4 class="card-title">Danh sách dân tộc</h4>
+					       <form method="GET" th:action="@{/dan-toc/}">
+					      	<div class="row">
+					      	 
+					      		<div class="col-4 form-group">
+					      			<input class="form-control" type="text" th:value="${name}" name="name" placeholder="Dân tộc" />
+					      		</div>
+					      		<div class="col-4 form-group">
+					      			<button type="submit" class="btn btn-sm btn-primary">Tìm kiếm</button>
+					      		</div>
+					      		<a th:href="@{/dan-toc/form}" class="col-4 text-align-right float-right">
+				              		<i class="mdi mdi-table-insert">Thêm dân tộc</i>	
+				              	</a>
+					      	</div>
+					      	
+					      </form>
 					      <div class="table-responsive">
 					        <table class="table table-striped">
 					          <thead>

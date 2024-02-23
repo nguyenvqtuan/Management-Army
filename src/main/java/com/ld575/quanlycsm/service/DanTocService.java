@@ -1,5 +1,6 @@
 package com.ld575.quanlycsm.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ public class DanTocService {
 	@Autowired
 	public DanTocRepository danTocRepository;
 	
-	public Iterable<DanTocEntity> findAll() {
+	public List<DanTocEntity> findAll() {
 		return danTocRepository.findAll();
 	}
 	
@@ -37,8 +38,12 @@ public class DanTocService {
 	public void deleteById(Long id) {
 		danTocRepository.deleteById(id);
 	}
+
+	public Optional<DanTocEntity> findByTen(String name) {
+		return danTocRepository.findByTen(name);
+	}
 	
-	public Optional<DanTocEntity> findByTenLike(String ten) {
-		return danTocRepository.findByTenLike(ten);
+	public List<DanTocEntity> findByTenContaining(String name) {
+		return danTocRepository.findByTenContaining(name);
 	}
 }

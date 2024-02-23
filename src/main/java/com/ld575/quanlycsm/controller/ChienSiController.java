@@ -191,7 +191,7 @@ public class ChienSiController {
 	}
 
 	private List<DanTocEntity> getListDanToc() {
-		Iterable<DanTocEntity> listDanToc = danTocService.findAll();
+		List<DanTocEntity> listDanToc = danTocService.findAll();
 		List<DanTocEntity> res = new ArrayList<>();
 		res.add(DanTocEntity.builder().id(0L).ten("Dân tộc").build());
 		for (DanTocEntity danTocEntity : listDanToc) {

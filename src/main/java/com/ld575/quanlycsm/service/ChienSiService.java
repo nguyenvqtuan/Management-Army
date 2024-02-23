@@ -653,7 +653,7 @@ public class ChienSiService {
 	    		case STRING:
 	    			String val = cell.getStringCellValue();
 	    			System.out.println(val);
-	    			res.setDanToc(danTocService.findByTenLike(val).get());
+	    			res.setDanToc(danTocService.findByTen(val).get());
 	    			break;
 	    		default:
 	    			res.setDanToc(danTocService.findById(DEFAULT_DAN_TOC).get());
