@@ -109,7 +109,7 @@ public class ChienSiController {
 		model.addAttribute("chiensi", new ChienSiInsertDto());
 		model.addAttribute("listTrinhDo", getListTrinhDo());
 		model.addAttribute("listDanToc", getListDanToc());
-		model.addAttribute("listDaiDoi", getListDoanhTraiDaiDoi());
+		model.addAttribute("listCapDo", doanhTraiService.getLevel());
 		return "chiensi/form";
 	}
 
@@ -274,22 +274,7 @@ public class ChienSiController {
 		model.addAttribute("chiensi", chienSiDto);
 		model.addAttribute("listTrinhDo", getListTrinhDo());
 		model.addAttribute("listDanToc", getListDanToc());
-		model.addAttribute("listDaiDoi", getListDoanhTraiDaiDoi());
-
-		List<DoanhTraiDto> listTrungDoi;
-		if (chienSiDto.getIdDaiDoi() != 0L) {
-			listTrungDoi = getListDoanhTraiTrungDoi(chienSiDto.getIdDaiDoi());
-		} else {
-			listTrungDoi = new ArrayList<>();
-		}
-		model.addAttribute("listTrungDoi", listTrungDoi);
-
-		List<DoanhTraiDto> listTieuDoi;
-		if (chienSiDto.getIdTrungDoi() != 0L) {
-			listTieuDoi = getListDoanhTraiTieuDoi(chienSiDto.getIdTrungDoi());
-		} else {
-			listTieuDoi = new ArrayList<>();
-		}
-		model.addAttribute("listTieuDoi", listTieuDoi);
+		model.addAttribute("listCapDo", doanhTraiService.getLevel());
+		System.out.println(doanhTraiService.getLevel());
 	}
 }

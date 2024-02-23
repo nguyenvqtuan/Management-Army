@@ -283,26 +283,7 @@
 											<div class="col-12">
 												<div class="form-group">
 													<label style="float: left">Trực thuộc</label> 
-													<select
-														class="form-control w-20 float-left" id="idDaiDoi"
-														name="idDaiDoi">
-														<option th:each="i : ${listDaiDoi}" th:value="${i.id}"
-															th:text="${i.tenDayDu}"
-															th:selected="${i.id == chiensi.idDaiDoi}"></option>
-													</select>
-														
-														 <select class="form-control w-20 float-left" id="idTrungDoi"
-														name="idTrungDoi">
-															<option th:each="i : ${listTrungDoi}" th:value="${i.id}"
-															th:text="${i.tenDayDu}"
-															th:selected="${i.id == chiensi.idTrungDoi}"></option>
-														</select> 
-														<select  class="form-control w-20 float-left" id="idTieuDoi"
-														name="idTieuDoi">
-															<option th:each="i : ${listTieuDoi}" th:value="${i.id}"
-															th:text="${i.tenDayDu}"
-															th:selected="${i.id == chiensi.idTieuDoi}"></option>
-														</select>
+													
 												</div>
 											</div>
 										</div>
@@ -508,54 +489,6 @@
 			}
 		})
 
-		$("#idDaiDoi").on(
-				"change",
-				function() {
-					$("#idTieuDoi").empty();
-					console.log($(this).val());
-					let id = $(this).val();
-					let link = /*[[@{/doanh-trai/truc-thuoc/}]]*/'';
-					$.ajax({
-						url : link + id,
-						success : function(result) {
-							$('#idTrungDoi').empty();
-							let i = 0;
-							if (result == "") {
-								return;
-							}
-							result.forEach(function(item) {
-								$('#idTrungDoi').append(
-										'<option value=' + item.id +'>'
-												+ item.tenDayDu + '</option>');
-								i++;
-							});
-						}
-					});
-				});
-
-		$("#idTrungDoi").on(
-				"change",
-				function() {
-					let id = $(this).val();
-					let link = /*[[@{/doanh-trai/truc-thuoc/}]]*/'';
-					$.ajax({
-						url : link + id,
-						success : function(result) {
-							$('#idTieuDoi').empty();
-							let i = 0;
-							console.log(result);
-							if (result == "") {
-								return;
-							}
-							result.forEach(function(item) {
-								$('#idTieuDoi').append(
-										'<option value=' + item.id +'>'
-												+ item.tenDayDu + '</option>');
-								i++;
-							});
-						}
-					});
-				});
 		/*]]>*/
 	</script>
 </body>
