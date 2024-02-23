@@ -41,8 +41,14 @@ public class DoanhTraiController {
 	public CommonService commonService;
 	
 	@GetMapping(value = {"/", "/list"})
-	public String list(Model model) {
-		model.addAttribute("listDoanhTrai", getListDoanhTraiDto());
+	public String list(Model model, 
+			@RequestParam(value = "name", required = false, defaultValue = "") String name,
+			@RequestParam(value = "capDo", required = false, defaultValue = "0") String level) {
+		List<DoanhTraiEntity> list = doanhTraiService.search(name, Integer.valueOf(level));
+		model.addAttribute("listDoanhTrai", convertDoanhTraiEntity(list));
+		model.addAttribute("listCapDo", getLevel());
+		model.addAttribute("capDo", level);
+		model.addAttribute("name", name);
 		return "doanhtrai/list.html";
 	}
 	
@@ -110,7 +116,12 @@ public class DoanhTraiController {
 	}
 	
 	@GetMapping("get-truc-thuoc-greater/{level}")
-	public ResponseEntity<?> getTrucThuocGreater(@PathVariable("level") Integer level) {
+	public ResponseEntity<?> getTrucThuocGreater(@PathVariable("level") String level) {
+		List<CapDoDto> res = getTrucThuocGreater(Integer.valueOf(level));
+		return ResponseEntity.ok(res);
+	}
+	
+	public List<CapDoDto> getTrucThuocGreater(Integer level) {
 		int i = 1;
 		List<CapDoDto> res = new ArrayList<>();
 		for (CapDoEnum e : CapDoEnum.values()) {
@@ -119,13 +130,13 @@ public class DoanhTraiController {
 			}
 			i++;
 		}
-		return ResponseEntity.ok(res);
+		return res;
 	}
 	
 	@GetMapping("get-truc-thuoc/{level}")
 	public ResponseEntity<?> getTrucThuoc(@PathVariable("level") Integer level) {
-		List<DoanhTraiEntity> listDoanhTraiByLevel = doanhTraiService.findByLevel(level);
-		List<DoanhTraiDto> listDoanhTraiEntity = getListDoanhTraiDto();
+		List<DoanhTraiEntity> listDoanhTraiByLevel = doanhTraiService.findByCapDo(level);
+		List<DoanhTraiDto> listDoanhTraiEntity = convertDoanhTraiEntity(doanhTraiService.findAll());
 		List<DoanhTraiDto> res = new ArrayList<>();
 		for (DoanhTraiEntity doanhTrai : listDoanhTraiByLevel) {
 			String tenDayDuTrucThuoc = "";
@@ -160,10 +171,9 @@ public class DoanhTraiController {
 		return ResponseEntity.ok(res);
 	}
 	
-	private List<DoanhTraiDto> getListDoanhTraiDto() {
+	private List<DoanhTraiDto> convertDoanhTraiEntity(List<DoanhTraiEntity> listDoanhTraiEntity) {
 		List<DoanhTraiDto> listDoanhTraiDto = new ArrayList<>();
-		Iterable<DoanhTraiEntity> listDoanhTrai = doanhTraiService.findAll();
-		Iterator<DoanhTraiEntity> iterator = listDoanhTrai.iterator();
+		Iterator<DoanhTraiEntity> iterator = listDoanhTraiEntity.iterator();
 		Map<Long, Long> mapTrucThuoc = new HashMap<>();
 		Map<Long, String> mapTrucThuocStr = new HashMap<>();
 		
@@ -173,7 +183,7 @@ public class DoanhTraiController {
 			mapTrucThuocStr.put(doanhTraiEntity.getId(), doanhTraiEntity.getId() + "-" + doanhTraiEntity.getTen() + "-" + doanhTraiEntity.getTenDayDu());
 		}
 		
-		iterator = listDoanhTrai.iterator();
+		iterator = listDoanhTraiEntity.iterator();
 		while (iterator.hasNext()) {
 			DoanhTraiEntity doanhTraiEntity = iterator.next();
 			

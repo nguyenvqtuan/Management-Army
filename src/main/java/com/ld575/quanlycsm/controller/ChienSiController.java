@@ -201,7 +201,7 @@ public class ChienSiController {
 	}
 
 	private List<DoanhTraiDto> getListDoanhTraiDaiDoi() {
-		List<DoanhTraiEntity> listDoanhTraiEntity = doanhTraiService.findByLevel(3);
+		List<DoanhTraiEntity> listDoanhTraiEntity = doanhTraiService.findByCapDo(3);
 		List<DoanhTraiDto> listDoanhTrai = listDoanhTraiEntity.stream().map(e -> {
 			return DoanhTraiDto.builder().id(e.getId()).tenDayDu(e.getTenDayDu()).build();
 		}).collect(Collectors.toList());

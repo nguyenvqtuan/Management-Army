@@ -16,7 +16,7 @@ public class DoanhTraiService {
 	@Autowired
 	public DoanhTraiRepository doanhTraiRepository;
 	
-	public Iterable<DoanhTraiEntity> findAll() {
+	public List<DoanhTraiEntity> findAll() {
 		return doanhTraiRepository.findAll();
 	}
 	
@@ -71,7 +71,29 @@ public class DoanhTraiService {
 		return doanhTraiRepository.findByCapDoGreaterThan(level);
 	}
 	
-	public List<DoanhTraiEntity> findByLevel(Integer level) {
+	public List<DoanhTraiEntity> findByCapDo(Integer level) {
 		return doanhTraiRepository.findByCapDo(level);
+	}
+
+	public List<DoanhTraiEntity> findByNameOrCapDo(String name, Integer level) {
+		return doanhTraiRepository.findByNameOrCapDo(name, level);
+	}
+
+	public List<DoanhTraiEntity> search(String name, Integer level) {
+		List<DoanhTraiEntity> res;
+		if (!name.isEmpty() && level != 0) {
+			res = doanhTraiRepository.findByNameOrCapDo(name, level);
+		}
+		else if (!name.isEmpty()) {
+			res = doanhTraiRepository.findByName(name);
+		}
+		else if (level != 0) {
+			res = doanhTraiRepository.findByCapDo(level);
+		}
+		else {
+			res = doanhTraiRepository.findAll();
+		}
+		
+		return res;
 	}
 }

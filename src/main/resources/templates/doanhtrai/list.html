@@ -38,6 +38,30 @@
 					  <div class="card">
 					    <div class="card-body">
 					      <h4 class="card-title">Danh sách dân tộc</h4>
+					     <form method="GET" th:action="@{/doanh-trai/}">
+					      	<div class="row">
+					      	 
+					      		<div class="col-3 form-group">
+					      			<input class="form-control" type="text" th:value="${name}" name="name" placeholder="Tên doanh trại" />
+					      		</div>
+					      		<div class="col-3 form-group">
+					      			<select name="capDo" class="form-control">
+					      				<option th:each="cd : ${listCapDo}" th:value="${cd.id}" th:text="${cd.name}"
+					      				th:selected="${cd.id} == ${capDo}">
+					      				</option>
+					      			</select>
+					      		</div>
+					      		<div class="col-3 form-group">
+					      			<button type="submit" class="btn btn-sm btn-primary">Tìm kiếm</button>
+					      		</div>
+					      		
+					      		<a th:href="@{/doanh-trai/form}" class="col-3 text-align-right float-right">
+				              		<i class="mdi mdi-table-insert">Thêm doanh trại</i>	
+				              	</a>
+					      	</div>
+					      	
+					      </form>
+					      	
 					      <div class="table-responsive">
 					        <table class="table table-striped">
 					          <thead>
