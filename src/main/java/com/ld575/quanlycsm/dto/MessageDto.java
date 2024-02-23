@@ -11,8 +11,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class DanTocMessageDto {
+public class MessageDto {
 
-	private String name;
+	private String message;
 	private Flag type;
 }

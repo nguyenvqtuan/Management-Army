@@ -28,7 +28,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ld575.quanlycsm.dto.ChienSiDto;
 import com.ld575.quanlycsm.dto.ChienSiInsertDto;
+import com.ld575.quanlycsm.dto.MessageDto;
 import com.ld575.quanlycsm.dto.DoanhTraiDto;
+import com.ld575.quanlycsm.dto.Flag;
 import com.ld575.quanlycsm.dto.TrinhDoDto;
 import com.ld575.quanlycsm.entity.ChienSiEntity;
 import com.ld575.quanlycsm.entity.DanTocEntity;
@@ -120,10 +122,15 @@ public class ChienSiController {
 			getInfoUpdate(model, chienSiDto);
 			return "chiensi/form";
 		}
-		chienSiService.save(chienSiDto);
-		String message = chienSiDto.getId() != 0L ? "Cập nhật " : "Thêm ";
-		ra.addFlashAttribute("message", message + " thành công!");
-		ra.addFlashAttribute("messageType", "success");
+		MessageDto messageDto = chienSiService.save(chienSiDto);
+		
+		String message = chienSiDto.getId() != 0L ? "Cập nhật " : "Thêm " + messageDto.getMessage();
+		ra.addFlashAttribute("message", message);
+		if (messageDto.getType() == Flag.FAILED) {
+			ra.addFlashAttribute("messageType", "error");
+		} else {
+			ra.addFlashAttribute("messageType", "success");
+		}
 		return "redirect:/chien-si/list";
 	}
 

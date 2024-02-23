@@ -46,7 +46,7 @@ public class DoanhTraiController {
 			@RequestParam(value = "capDo", required = false, defaultValue = "0") String level) {
 		List<DoanhTraiEntity> list = doanhTraiService.search(name, Integer.valueOf(level));
 		model.addAttribute("listDoanhTrai", convertDoanhTraiEntity(list));
-		model.addAttribute("listCapDo", getLevel());
+		model.addAttribute("listCapDo", doanhTraiService.getLevel());
 		model.addAttribute("capDo", level);
 		model.addAttribute("name", name);
 		return "doanhtrai/list.html";
@@ -72,7 +72,7 @@ public class DoanhTraiController {
 	public String showInsert(Model model) {
 		model.addAttribute("title", "Thêm doanh trại");
 		model.addAttribute("doanhTrai", new DoanhTraiEntity());
-		model.addAttribute("listCapDo", getLevel());
+		model.addAttribute("listCapDo", doanhTraiService.getLevel());
 		return "doanhtrai/form";
 	}
 	
@@ -96,7 +96,7 @@ public class DoanhTraiController {
 		model.addAttribute("title", "Cập nhật doanh trại");
 		Optional<DoanhTraiEntity> doanhTraiEntity = doanhTraiService.findById(id);
 		model.addAttribute("doanhTrai", doanhTraiEntity.get());
-		model.addAttribute("listCapDo", getLevel());
+		model.addAttribute("listCapDo", doanhTraiService.getLevel());
 		model.addAttribute("tenDayDuTrucThuoc", tenDayDuTrucThuoc);
 		return "doanhtrai/form.html";
 	}
@@ -224,15 +224,5 @@ public class DoanhTraiController {
 			listDoanhTraiDto.add(doanhTraiDto);
 		}
 		return listDoanhTraiDto;
-	}
-	
-	private List<CapDoDto> getLevel() {
-		int i = 0;
-		List<CapDoDto> res = new ArrayList<>();
-		res.add(new CapDoDto(i, "-"));
-		for (CapDoEnum e : CapDoEnum.values()) {
-			res.add(new CapDoDto(++i, e + " - " + CapDoDto.MAPPING));
-		}
-		return res;
 	}
 }

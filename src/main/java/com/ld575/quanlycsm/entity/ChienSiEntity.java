@@ -2,7 +2,6 @@ package com.ld575.quanlycsm.entity;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,6 +38,9 @@ public class ChienSiEntity {
 	
 	@Column
 	private String hoTen;
+	
+	@Column
+	private String nickName;
 	
 	@Temporal(TemporalType.DATE)
 	private Date ngaySinh;

@@ -24,6 +24,7 @@ public class ChienSiInsertDto {
 	
 	@NotEmpty(message = "Họ tên không được rỗng")
 	private String hoTen;
+	private String nickName;
 	
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@NotNull(message = "Ngày sinh không được rỗng")

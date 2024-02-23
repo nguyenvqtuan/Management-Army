@@ -1,11 +1,14 @@
 package com.ld575.quanlycsm.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ld575.quanlycsm.dto.CapDoDto;
+import com.ld575.quanlycsm.dto.CapDoEnum;
 import com.ld575.quanlycsm.dto.DoanhTraiDto;
 import com.ld575.quanlycsm.entity.DoanhTraiEntity;
 import com.ld575.quanlycsm.repository.DoanhTraiRepository;
@@ -94,6 +97,16 @@ public class DoanhTraiService {
 			res = doanhTraiRepository.findAll();
 		}
 		
+		return res;
+	}
+	
+	public List<CapDoDto> getLevel() {
+		int i = 0;
+		List<CapDoDto> res = new ArrayList<>();
+		res.add(new CapDoDto(i, "-"));
+		for (CapDoEnum e : CapDoEnum.values()) {
+			res.add(new CapDoDto(++i, e + " - " + CapDoDto.MAPPING));
+		}
 		return res;
 	}
 }

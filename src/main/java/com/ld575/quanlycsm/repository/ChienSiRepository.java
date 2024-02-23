@@ -10,4 +10,6 @@ import com.ld575.quanlycsm.entity.ChienSiEntity;
 @Repository
 public interface ChienSiRepository extends JpaRepository<ChienSiEntity, Long> {
 	Optional<ChienSiEntity> findById(Long id);
+	
+	Optional<ChienSiEntity> findByHoTenAndNickNameContaining(String name, String nickName);
 }

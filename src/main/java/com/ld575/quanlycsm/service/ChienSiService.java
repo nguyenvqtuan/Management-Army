@@ -20,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ld575.quanlycsm.dto.ChienSiDto;
 import com.ld575.quanlycsm.dto.ChienSiInsertDto;
+import com.ld575.quanlycsm.dto.Flag;
+import com.ld575.quanlycsm.dto.MessageDto;
 import com.ld575.quanlycsm.entity.ChienSiEntity;
 import com.ld575.quanlycsm.entity.DoanhTraiEntity;
 import com.ld575.quanlycsm.repository.ChienSiRepository;
@@ -45,8 +47,13 @@ public class ChienSiService {
 	@Autowired
 	private CustomChienSiRepository customChienSiRepository;
 
-	public ChienSiEntity save(ChienSiInsertDto chienSiDto) {
+	public MessageDto save(ChienSiInsertDto chienSiDto) {
 		ChienSiEntity chienSiEntity = new ChienSiEntity();
+		
+		// Check duplicate HoTen and NickName
+		if (chienSiRepository.findByHoTenAndNickNameContaining(chienSiDto.getHoTen(), chienSiDto.getNickName()).isPresent()) {
+			return MessageDto.builder().message(Flag.FAILED.name + ". Tên bị trùng").type(Flag.FAILED).build();
+		}
 		
 		if (chienSiDto.getId() != 0L) {
 			chienSiEntity.setId(chienSiDto.getId());
@@ -260,7 +267,9 @@ public class ChienSiService {
 		if (chienSiEntity.getId() != null) {
 			chienSiEntity.setId(chienSiDto.getId());
 		}
-		return chienSiRepository.save(chienSiEntity);
+		
+		chienSiRepository.save(chienSiEntity);
+		return MessageDto.builder().message(Flag.SUCCESS.name).type(Flag.SUCCESS).build();
 	}
 	
 	public void save(ChienSiEntity chienSiEntity) {
