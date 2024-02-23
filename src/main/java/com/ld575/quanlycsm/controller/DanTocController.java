@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ld575.quanlycsm.dto.DanTocDto;
+import com.ld575.quanlycsm.dto.DanTocMessageDto;
+import com.ld575.quanlycsm.dto.Flag;
 import com.ld575.quanlycsm.entity.DanTocEntity;
 import com.ld575.quanlycsm.service.CommonService;
 import com.ld575.quanlycsm.service.DanTocService;
@@ -47,10 +49,15 @@ public class DanTocController {
 	
 	@PostMapping("/form")
 	public String insert(@ModelAttribute("dantoc") DanTocDto danTocDto, RedirectAttributes ra) {
-		danTocService.save(danTocDto);
-		String message = danTocDto.getId() != null ? "Thêm " : "Cập nhật ";
-		ra.addFlashAttribute("message", message + " thành công!");
-		ra.addFlashAttribute("messageType", "success");
+		DanTocMessageDto danTocMessage = danTocService.save(danTocDto);
+		String message = danTocDto.getId() != null ? "Thêm " : "Cập nhật " + danTocMessage.getName();
+		ra.addFlashAttribute("message", message);
+		System.out.println(message);
+		if (danTocMessage.getType() == Flag.FAILED) {
+			ra.addFlashAttribute("messageType", "error");
+		} else {
+			ra.addFlashAttribute("messageType", "success");
+		}
 		return "redirect:/dan-toc/list";
 	}
 	

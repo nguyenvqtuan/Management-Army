@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ld575.quanlycsm.dto.DanTocDto;
+import com.ld575.quanlycsm.dto.DanTocMessageDto;
+import com.ld575.quanlycsm.dto.Flag;
 import com.ld575.quanlycsm.entity.DanTocEntity;
 import com.ld575.quanlycsm.repository.DanTocRepository;
 
@@ -20,7 +22,11 @@ public class DanTocService {
 		return danTocRepository.findAll();
 	}
 	
-	public void save(DanTocDto danTocDto) {
+	public DanTocMessageDto save(DanTocDto danTocDto) {
+		// Check duplicate ten
+		if (findByTen(danTocDto.getTen()).isPresent()) {
+			return DanTocMessageDto.builder().name(Flag.FAILED.name + ". Tên bị trùng").type(Flag.FAILED).build();
+		}
 		DanTocEntity danToc = DanTocEntity.builder()
 			.ten(danTocDto.getTen())
 			.moTa(danTocDto.getMoTa())
@@ -29,6 +35,7 @@ public class DanTocService {
 			danToc.setId(danTocDto.getId());
 		}
 		danTocRepository.save(danToc);
+		return DanTocMessageDto.builder().name(Flag.SUCCESS.name()).type(Flag.SUCCESS).build();
 	}
 	
 	public Optional<DanTocEntity> findById(Long id) {

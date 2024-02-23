@@ -36,7 +36,7 @@ public class DanTocEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column
+	@Column(unique=true)
 	private String ten;
 	
 	@Column
