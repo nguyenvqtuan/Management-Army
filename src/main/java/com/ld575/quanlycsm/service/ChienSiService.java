@@ -4,16 +4,13 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ld575.quanlycsm.dto.ChienSiDto;
 import com.ld575.quanlycsm.dto.ChienSiInsertDto;
-import com.ld575.quanlycsm.dto.DanTocDto;
 import com.ld575.quanlycsm.dto.Flag;
 import com.ld575.quanlycsm.dto.MessageDto;
 import com.ld575.quanlycsm.entity.ChienSiEntity;
-import com.ld575.quanlycsm.entity.DoanhTraiEntity;
 import com.ld575.quanlycsm.repository.ChienSiRepository;
 import com.ld575.quanlycsm.repository.CustomChienSiRepository;
 
@@ -297,14 +292,12 @@ public class ChienSiService {
 	
 	public void readExcel(MultipartFile file) {
 		try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
-			Sheet sheet = workbook.getSheetAt(0);
-			int i = 0;
-			for (Row row : sheet) {
-				if (i != 0) {
-					ChienSiEntity chienSiEntity = getChienSiEntityInsert(row);
-					save(chienSiEntity);
-				}
-				i++;
+			Iterator<Row> iter = workbook.getSheetAt(0).iterator();
+			Row row = iter.next();
+			while (iter.hasNext()) {
+				row = iter.next();
+				ChienSiEntity chienSiEntity = getChienSiEntityInsert(row);
+				save(chienSiEntity);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -321,13 +314,15 @@ public class ChienSiService {
 	    	case 1: // Trực thuộc
 	    		switch (cell.getCellType()) {
 	    		case STRING:
-	    			String[] arr = cell.getStringCellValue().split("-");
-	    			System.out.println(Arrays.toString(arr));
-//	    			if (isValidDoanhTrai(arr)) {
-//	    				res.setDoanhTrai(doanhTraiService.findByTen(arr[arr.length - 1]).get());
-//	    			} else {
-//	    				throw new RuntimeException("Doanh trại trực thuộc không hợp lệ");
-//	    			}
+	    			String str = cell.getStringCellValue();
+	    			
+	    			String ten = str.substring(0, str.indexOf("-"));
+	    			String tenTrucThuoc = str.substring(str.indexOf("-") + 1);
+	    			if (isValidDoanhTrai(ten, tenTrucThuoc)) {
+	    				res.setDoanhTrai(doanhTraiService.findByTenAndTenTrucThuoc(ten, tenTrucThuoc).get());
+	    			} else {
+	    				throw new RuntimeException("Doanh trại trực thuộc không hợp lệ");
+	    			}
 	    			
 	    			break;
 	    		default:
@@ -664,7 +659,6 @@ public class ChienSiService {
 	    		switch (cell.getCellType()) {
 	    		case STRING:
 	    			String val = cell.getStringCellValue();
-	    			System.out.println(val);
 	    			res.setDanToc(danTocService.findByTen(val).get());
 	    			break;
 	    		default:
@@ -867,18 +861,7 @@ public class ChienSiService {
 		return true;
 	}
 	
-	private boolean isValidDoanhTrai(String[] arr) {
-		// previous.id == current.TrucThuoc
-//		long prevId = 0;
-//		for (int i = 0; i < arr.length; ++i) {
-//			List<DoanhTraiEntity> doanhTraiEntity = doanhTraiService.findByTen(arr[i].toLowerCase()));
-//			if (i != 0) {
-//				if (prevId != doanhTraiEntity.getTrucThuoc()) {
-//					return false;
-//				}
-//			}
-//			prevId = doanhTraiEntity.getId();
-//		}
-		return true;
+	private boolean isValidDoanhTrai(String ten, String tenTrucThuoc) {
+		return doanhTraiService.findByTenAndTenTrucThuoc(ten, tenTrucThuoc).isPresent();
 	}
 }

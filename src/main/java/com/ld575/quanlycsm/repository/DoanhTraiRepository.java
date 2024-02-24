@@ -1,6 +1,7 @@
 package com.ld575.quanlycsm.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -32,4 +33,6 @@ public interface DoanhTraiRepository extends CrudRepository<DoanhTraiEntity, Lon
 	public List<DoanhTraiEntity> findByTen(String name);
 
 	public List<DoanhTraiEntity> findByTenTrucThuoc(String tenTrucThuoc);
+
+	public Optional<DoanhTraiEntity> findByTenAndTenTrucThuoc(String ten, String tenTrucThuoc);
 }

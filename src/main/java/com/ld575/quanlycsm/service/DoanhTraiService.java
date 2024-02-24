@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.ld575.quanlycsm.dto.CapDoDto;
 import com.ld575.quanlycsm.dto.CapDoEnum;
-import com.ld575.quanlycsm.dto.DanTocDto;
 import com.ld575.quanlycsm.dto.DoanhTraiDto;
 import com.ld575.quanlycsm.dto.Flag;
 import com.ld575.quanlycsm.dto.MessageDto;
@@ -148,7 +147,9 @@ public class DoanhTraiService {
 				.tenDayDu(CapDoEnum.BQP.name)
 				.capDo(8)
 				.build();
-		doanhTraiRepository.save(doanhTrai);
+		if (findByTen(CapDoEnum.BQP.name()).size() == 0) {
+			doanhTraiRepository.save(doanhTrai);	
+		}
 	}
 	
 	private boolean existsRecord(DoanhTraiDto doanhTraiById, List<DoanhTraiEntity> listDoanhTraiByTen, 
@@ -170,5 +171,9 @@ public class DoanhTraiService {
 		}
 		
 		return existsByTen && existsByTenTrucThuoc;
+	}
+
+	public Optional<DoanhTraiEntity> findByTenAndTenTrucThuoc(String ten, String tenTrucThuoc) {
+		return doanhTraiRepository.findByTenAndTenTrucThuoc(ten, tenTrucThuoc);
 	}
 }
