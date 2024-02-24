@@ -24,14 +24,19 @@ public class DoanhTraiService {
 	}
 	
 	public void save(DoanhTraiDto doanhTraiDto) {
+		
+		String strIdTrucThuoc = doanhTraiDto.getStrIdTrucThuoc().isEmpty() ? "1" : doanhTraiDto.getStrIdTrucThuoc();
+		String tenTrucThuoc = doanhTraiDto.getTenTrucThuoc().isEmpty() ? CapDoEnum.BQP.name() : doanhTraiDto.getStrIdTrucThuoc();
+		String tenDayDuTrucThuoc = doanhTraiDto.getTenDayDuTrucThuoc().isEmpty() ? CapDoEnum.BQP.name : doanhTraiDto.getStrIdTrucThuoc();
+		
 		DoanhTraiEntity doanhTrai = DoanhTraiEntity.builder()
 			.ten(doanhTraiDto.getTen())
 			.tenDayDu(doanhTraiDto.getTenDayDu())
 			.trucThuoc(doanhTraiDto.getTrucThuoc())
 			.capDo(doanhTraiDto.getCapDo())
-			.strIdTrucThuoc(doanhTraiDto.getStrIdTrucThuoc())
-			.tenTrucThuoc(doanhTraiDto.getTenTrucThuoc())
-			.tenDayDuTrucThuoc(doanhTraiDto.getTenDayDuTrucThuoc())
+			.strIdTrucThuoc(strIdTrucThuoc)
+			.tenTrucThuoc(tenTrucThuoc)
+			.tenDayDuTrucThuoc(tenDayDuTrucThuoc)
 			.build();
 		if (doanhTraiDto.getId() != null) {
 			doanhTrai.setId(doanhTraiDto.getId());

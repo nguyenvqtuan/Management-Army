@@ -151,7 +151,12 @@
 									
 									$('input[type=radio][name=selectTrucThuoc]').change(function() {
 										let capDoRadio = $(this).val();
-										console.log(capDoRadio);
+										
+										// When level = BQP 
+										if (capDoRadio == 8) {
+											return;
+										}
+										
 										let linkTrucThuoc = /*[[@{/doanh-trai/get-truc-thuoc/}]]*/'';
 										$("#trucThuoc").attr("class", "form-control visible");
 										$.ajax({

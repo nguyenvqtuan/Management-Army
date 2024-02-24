@@ -86,6 +86,7 @@ public class DoanhTraiController {
 			return "doanhtrai/form";
 		}
 		doanhTraiService.save(doanhTraiDto);
+		
 		String message = doanhTraiDto.getId() != null ? "Cập nhật " : "Thêm ";
 		ra.addFlashAttribute("message", message + "thành công !");
 		ra.addFlashAttribute("messageType", "success");
