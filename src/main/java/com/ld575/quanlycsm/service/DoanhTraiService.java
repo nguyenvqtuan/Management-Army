@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ld575.quanlycsm.dto.CapDoDto;
 import com.ld575.quanlycsm.dto.CapDoEnum;
+import com.ld575.quanlycsm.dto.DanTocDto;
 import com.ld575.quanlycsm.dto.DoanhTraiDto;
 import com.ld575.quanlycsm.dto.Flag;
 import com.ld575.quanlycsm.dto.MessageDto;
@@ -136,6 +139,16 @@ public class DoanhTraiService {
 		// Remove BQP (Default value can't exchange)
 		res.remove(res.size() - 1);
 		return res;
+	}
+	
+	@PostConstruct
+	public void saveDefault() {
+		DoanhTraiEntity doanhTrai = DoanhTraiEntity.builder()
+				.ten(CapDoEnum.BQP.name())
+				.tenDayDu(CapDoEnum.BQP.name)
+				.capDo(8)
+				.build();
+		doanhTraiRepository.save(doanhTrai);
 	}
 	
 	private boolean existsRecord(DoanhTraiDto doanhTraiById, List<DoanhTraiEntity> listDoanhTraiByTen, 

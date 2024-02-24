@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -20,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ld575.quanlycsm.dto.ChienSiDto;
 import com.ld575.quanlycsm.dto.ChienSiInsertDto;
+import com.ld575.quanlycsm.dto.DanTocDto;
 import com.ld575.quanlycsm.dto.Flag;
 import com.ld575.quanlycsm.dto.MessageDto;
 import com.ld575.quanlycsm.entity.ChienSiEntity;
@@ -864,11 +867,11 @@ public class ChienSiService {
 		return true;
 	}
 	
-//	private boolean isValidDoanhTrai(String[] arr) {
-//		// previous.id == current.TrucThuoc
+	private boolean isValidDoanhTrai(String[] arr) {
+		// previous.id == current.TrucThuoc
 //		long prevId = 0;
 //		for (int i = 0; i < arr.length; ++i) {
-//			DoanhTraiEntity doanhTraiEntity = doanhTraiService.findByTen(arr[i].toLowerCase()).get();
+//			List<DoanhTraiEntity> doanhTraiEntity = doanhTraiService.findByTen(arr[i].toLowerCase()));
 //			if (i != 0) {
 //				if (prevId != doanhTraiEntity.getTrucThuoc()) {
 //					return false;
@@ -876,6 +879,6 @@ public class ChienSiService {
 //			}
 //			prevId = doanhTraiEntity.getId();
 //		}
-//		return true;
-//	}
+		return true;
+	}
 }
