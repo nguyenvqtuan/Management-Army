@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import com.ld575.quanlycsm.dto.CapDoDto;
 import com.ld575.quanlycsm.dto.CapDoEnum;
 import com.ld575.quanlycsm.dto.DoanhTraiDto;
+import com.ld575.quanlycsm.dto.Flag;
+import com.ld575.quanlycsm.dto.MessageDto;
 import com.ld575.quanlycsm.entity.DoanhTraiEntity;
 import com.ld575.quanlycsm.repository.DoanhTraiRepository;
 
@@ -23,8 +25,14 @@ public class DoanhTraiService {
 		return doanhTraiRepository.findAll();
 	}
 	
-	public void save(DoanhTraiDto doanhTraiDto) {
+	public MessageDto save(DoanhTraiDto doanhTraiDto) {
 		
+		// Check duplicate by ten && ten-truc-thuoc
+		if (findByTen(doanhTraiDto.getTen()).isPresent() 
+				&& findByTenTrucThuoc(doanhTraiDto.getTenTrucThuoc()).isPresent()) {
+			return MessageDto.builder().message(Flag.FAILED.name + ". Tên bị trùng").type(Flag.FAILED).build();
+		}
+				
 		String strIdTrucThuoc = doanhTraiDto.getStrIdTrucThuoc().isEmpty() ? "1" : doanhTraiDto.getStrIdTrucThuoc();
 		String tenTrucThuoc = doanhTraiDto.getTenTrucThuoc().isEmpty() ? CapDoEnum.BQP.name() : doanhTraiDto.getStrIdTrucThuoc();
 		String tenDayDuTrucThuoc = doanhTraiDto.getTenDayDuTrucThuoc().isEmpty() ? CapDoEnum.BQP.name : doanhTraiDto.getStrIdTrucThuoc();
@@ -42,14 +50,11 @@ public class DoanhTraiService {
 			doanhTrai.setId(doanhTraiDto.getId());
 		}
 		doanhTraiRepository.save(doanhTrai);
+		return MessageDto.builder().message(Flag.SUCCESS.name).type(Flag.SUCCESS).build();
 	}
 	
 	public Optional<DoanhTraiEntity> findById(Long id) {
 		return doanhTraiRepository.findById(id);
-	}
-	
-	public Optional<DoanhTraiEntity> findByTen(String ten) {
-		return doanhTraiRepository.findByTen(ten);
 	}
 	
 	public List<DoanhTraiEntity> findByTrucThuoc(Long id) {
@@ -58,6 +63,14 @@ public class DoanhTraiService {
 	
 	public List<DoanhTraiEntity> findByCapDoAndTrucThuoc(Integer capDo, Long trucThuoc) {
 		return doanhTraiRepository.findByCapDoAndTrucThuoc(capDo, trucThuoc);
+	}
+	
+	public Optional<DoanhTraiEntity> findByTen(String ten) {
+		return doanhTraiRepository.findByTen(ten);
+	}
+	
+	public Optional<DoanhTraiEntity> findByTenTrucThuoc(String tenTrucThuoc) {
+		return doanhTraiRepository.findByTenTrucThuoc(tenTrucThuoc);
 	}
 	
 	public void deleteById(Long id) {

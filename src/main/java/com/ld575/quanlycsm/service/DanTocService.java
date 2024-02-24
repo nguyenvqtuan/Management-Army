@@ -27,7 +27,7 @@ public class DanTocService {
 	}
 	
 	public MessageDto save(DanTocDto danTocDto) {
-		// Check duplicate ten
+		// Check duplicate by name
 		if (findByTen(danTocDto.getTen()).isPresent()) {
 			return MessageDto.builder().message(Flag.FAILED.name + ". Tên bị trùng").type(Flag.FAILED).build();
 		}

@@ -24,6 +24,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.ld575.quanlycsm.dto.CapDoDto;
 import com.ld575.quanlycsm.dto.CapDoEnum;
 import com.ld575.quanlycsm.dto.DoanhTraiDto;
+import com.ld575.quanlycsm.dto.Flag;
+import com.ld575.quanlycsm.dto.MessageDto;
 import com.ld575.quanlycsm.entity.DoanhTraiEntity;
 import com.ld575.quanlycsm.service.CommonService;
 import com.ld575.quanlycsm.service.DoanhTraiService;
@@ -85,11 +87,17 @@ public class DoanhTraiController {
 			ra.addFlashAttribute("messageType", "error");
 			return "doanhtrai/form";
 		}
-		doanhTraiService.save(doanhTraiDto);
 		
-		String message = doanhTraiDto.getId() != null ? "Cập nhật " : "Thêm ";
-		ra.addFlashAttribute("message", message + "thành công !");
-		ra.addFlashAttribute("messageType", "success");
+		MessageDto messageDto = doanhTraiService.save(doanhTraiDto);
+		String message = doanhTraiDto.getId() == null ? "Thêm " : "Cập nhật " + messageDto.getMessage();
+		ra.addFlashAttribute("message", message);
+		if (messageDto.getType() == Flag.FAILED) {
+			ra.addFlashAttribute("messageType", "error");
+		} else {
+			ra.addFlashAttribute("messageType", "success");
+		}
+		ra.addFlashAttribute("message", message);
+		
 		return "redirect:/doanh-trai/list";
 	}
 	
