@@ -320,11 +320,11 @@ public class ChienSiService {
 	    		case STRING:
 	    			String[] arr = cell.getStringCellValue().split("-");
 	    			System.out.println(Arrays.toString(arr));
-	    			if (isValidDoanhTrai(arr)) {
-	    				res.setDoanhTrai(doanhTraiService.findByTen(arr[arr.length - 1]).get());
-	    			} else {
-	    				throw new RuntimeException("Bộ phận trực thuộc không hợp lệ");
-	    			}
+//	    			if (isValidDoanhTrai(arr)) {
+//	    				res.setDoanhTrai(doanhTraiService.findByTen(arr[arr.length - 1]).get());
+//	    			} else {
+//	    				throw new RuntimeException("Doanh trại trực thuộc không hợp lệ");
+//	    			}
 	    			
 	    			break;
 	    		default:
@@ -864,18 +864,18 @@ public class ChienSiService {
 		return true;
 	}
 	
-	private boolean isValidDoanhTrai(String[] arr) {
-		// previous.id == current.TrucThuoc
-		long prevId = 0;
-		for (int i = 0; i < arr.length; ++i) {
-			DoanhTraiEntity doanhTraiEntity = doanhTraiService.findByTen(arr[i].toLowerCase()).get();
-			if (i != 0) {
-				if (prevId != doanhTraiEntity.getTrucThuoc()) {
-					return false;
-				}
-			}
-			prevId = doanhTraiEntity.getId();
-		}
-		return true;
-	}
+//	private boolean isValidDoanhTrai(String[] arr) {
+//		// previous.id == current.TrucThuoc
+//		long prevId = 0;
+//		for (int i = 0; i < arr.length; ++i) {
+//			DoanhTraiEntity doanhTraiEntity = doanhTraiService.findByTen(arr[i].toLowerCase()).get();
+//			if (i != 0) {
+//				if (prevId != doanhTraiEntity.getTrucThuoc()) {
+//					return false;
+//				}
+//			}
+//			prevId = doanhTraiEntity.getId();
+//		}
+//		return true;
+//	}
 }

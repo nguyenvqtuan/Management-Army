@@ -28,10 +28,19 @@ public class DoanhTraiService {
 	public MessageDto save(DoanhTraiDto doanhTraiDto) {
 		
 		// Check duplicate by ten && ten-truc-thuoc
-		if (findByTen(doanhTraiDto.getTen()).isPresent() 
-				&& findByTenTrucThuoc(doanhTraiDto.getTenTrucThuoc()).isPresent()) {
-			return MessageDto.builder().message(Flag.FAILED.name + ". Tên bị trùng").type(Flag.FAILED).build();
+		List<DoanhTraiEntity> doanhTraiByTen = findByTen(doanhTraiDto.getTen());
+		List<DoanhTraiEntity> doanhTraiByTenTrucThuoc = findByTenTrucThuoc(doanhTraiDto.getTenTrucThuoc());
+		if (doanhTraiDto.getId() != null) {
+			Optional<DoanhTraiEntity> doanhTraiById = findById(doanhTraiDto.getId());
+			if (doanhTraiById.isPresent() & existsRecord(doanhTraiDto, doanhTraiByTen, doanhTraiByTenTrucThuoc)) {
+				return MessageDto.builder().message(Flag.FAILED.name + ". Tên bị trùng").type(Flag.FAILED).build();
+			}
 		}
+		
+		if (doanhTraiDto.getId()  == null && doanhTraiByTen.size() > 0 
+				&& doanhTraiByTenTrucThuoc.size() > 0) {
+			return MessageDto.builder().message(Flag.FAILED.name + ". Tên bị trùng").type(Flag.FAILED).build();
+		}	
 				
 		String strIdTrucThuoc = doanhTraiDto.getStrIdTrucThuoc().isEmpty() ? "1" : doanhTraiDto.getStrIdTrucThuoc();
 		String tenTrucThuoc = doanhTraiDto.getTenTrucThuoc().isEmpty() ? CapDoEnum.BQP.name() : doanhTraiDto.getTenTrucThuoc();
@@ -65,11 +74,11 @@ public class DoanhTraiService {
 		return doanhTraiRepository.findByCapDoAndTrucThuoc(capDo, trucThuoc);
 	}
 	
-	public Optional<DoanhTraiEntity> findByTen(String ten) {
+	public List<DoanhTraiEntity> findByTen(String ten) {
 		return doanhTraiRepository.findByTen(ten);
 	}
 	
-	public Optional<DoanhTraiEntity> findByTenTrucThuoc(String tenTrucThuoc) {
+	public List<DoanhTraiEntity> findByTenTrucThuoc(String tenTrucThuoc) {
 		return doanhTraiRepository.findByTenTrucThuoc(tenTrucThuoc);
 	}
 	
@@ -127,5 +136,26 @@ public class DoanhTraiService {
 		// Remove BQP (Default value can't exchange)
 		res.remove(res.size() - 1);
 		return res;
+	}
+	
+	private boolean existsRecord(DoanhTraiDto doanhTraiById, List<DoanhTraiEntity> listDoanhTraiByTen, 
+			List<DoanhTraiEntity> listDoanhTraiByTenTrucThuoc) {
+		boolean existsByTen = false;
+		boolean existsByTenTrucThuoc = false;
+		for (DoanhTraiEntity doanhTrai : listDoanhTraiByTen) {
+			if (doanhTrai.getTen().equals(doanhTraiById.getTen()) && doanhTrai.getId() != doanhTraiById.getId()) {
+				existsByTen = true;
+				break;
+			}
+		}
+		
+		for (DoanhTraiEntity doanhTrai : listDoanhTraiByTenTrucThuoc) {
+			if (doanhTrai.getTenTrucThuoc().equals(doanhTraiById.getTenTrucThuoc()) && doanhTrai.getId() != doanhTraiById.getId()) {
+				existsByTenTrucThuoc = true;
+				break;
+			}
+		}
+		
+		return existsByTen && existsByTenTrucThuoc;
 	}
 }

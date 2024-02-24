@@ -90,8 +90,8 @@ public class DoanhTraiController {
 		
 		MessageDto messageDto = doanhTraiService.save(doanhTraiDto);
 		
-		String message = doanhTraiDto.getId() == null ? "Thêm " : "Cập nhật " + messageDto.getMessage();
-		ra.addFlashAttribute("message", message);
+		String message = doanhTraiDto.getId() == null ? "Thêm " : "Cập nhật ";
+		ra.addFlashAttribute("message", message + messageDto.getMessage());
 		if (messageDto.getType() == Flag.FAILED) {
 			ra.addFlashAttribute("messageType", "error");
 		} else {
@@ -108,11 +108,11 @@ public class DoanhTraiController {
 		model.addAttribute("listCapDo", doanhTraiService.getLevel());
 		model.addAttribute("id", id);
 		
-		List<CapDoDto> listTrucThuoc = getTrucThuocGreater(doanhTraiEntity.get().getCapDo(), false);
+		Optional<DoanhTraiEntity> doanhTraiMapping = doanhTraiService.findById(doanhTraiEntity.get().getTrucThuoc());
+		List<CapDoDto> listTrucThuoc = getTrucThuocGreater(doanhTraiEntity.get().getCapDo(), doanhTraiMapping.get().getCapDo());
 		model.addAttribute("listTrucThuoc", listTrucThuoc);
 		
-		List<DoanhTraiDto> listTrucThuocTrucTiep = convertDoanhTraiEntityWith(listTrucThuoc.get(0).getId(), true);
-		System.out.println(listTrucThuoc.get(0).getId());
+		List<DoanhTraiDto> listTrucThuocTrucTiep = convertDoanhTraiEntityWith(doanhTraiMapping.get().getCapDo(), true);
 		model.addAttribute("listTructhuocTrucTiep", listTrucThuocTrucTiep);
 		return "doanhtrai/form.html";
 	}
@@ -139,11 +139,11 @@ public class DoanhTraiController {
 	
 	@GetMapping("get-truc-thuoc-greater/{level}")
 	public ResponseEntity<?> getTrucThuocGreater(@PathVariable("level") String level) {
-		List<CapDoDto> res = getTrucThuocGreater(Integer.valueOf(level), false);
+		List<CapDoDto> res = getTrucThuocGreater(Integer.valueOf(level), 0);
 		return ResponseEntity.ok(res);
 	}
 	
-	public List<CapDoDto> getTrucThuocGreater(Integer level, boolean isUpdating) {
+	public List<CapDoDto> getTrucThuocGreater(Integer level, Integer levelMapping) {
 		int i = 1;
 		List<CapDoDto> res = new ArrayList<>();
 		for (CapDoEnum e : CapDoEnum.values()) {
@@ -151,7 +151,7 @@ public class DoanhTraiController {
 			if (i > level) {
 				capDoDto.setId(i);
 				capDoDto.setName(e + " - " + CapDoDto.MAPPING);
-				if (i - level == 1) {
+				if (i == levelMapping) {
 					capDoDto.setChecked("checked");
 				}
 				res.add(capDoDto);
