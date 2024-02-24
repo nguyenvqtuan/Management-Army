@@ -14,7 +14,7 @@ public interface DoanhTraiRepository extends CrudRepository<DoanhTraiEntity, Lon
 	
 	public List<DoanhTraiEntity> findAll();
 	
-	public List<DoanhTraiEntity> findByCapDoGreaterThan(Integer level);
+	public List<DoanhTraiEntity> findByCapDoGreaterThan(Long level);
 	
 	@Query("SELECT dt from DoanhTraiEntity dt WHERE (ten LIKE %?1% or tenDayDu LIKE %?1%) AND (capDo = ?2)")
 	public List<DoanhTraiEntity> findByNameAndCapDo(String name, Integer level);
@@ -24,7 +24,7 @@ public interface DoanhTraiRepository extends CrudRepository<DoanhTraiEntity, Lon
 	@Query("SELECT dt from DoanhTraiEntity dt WHERE ten LIKE %?1% or tenDayDu LIKE %?1%")
 	public List<DoanhTraiEntity> findByName(String name);
 	
-	public List<DoanhTraiEntity> findByTrucThuoc(Long trucThuoc);
+	public List<DoanhTraiEntity> findByTrucThuoc(Integer trucThuoc);
 	
 	public List<DoanhTraiEntity> findByCapDoAndTrucThuoc(Integer capDo, Long trucThuoc);
 

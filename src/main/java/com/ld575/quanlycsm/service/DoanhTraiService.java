@@ -54,10 +54,10 @@ public class DoanhTraiService {
 	}
 	
 	public Optional<DoanhTraiEntity> findById(Long id) {
-		return doanhTraiRepository.findById(id);
+		return doanhTraiRepository.findById((long) id);
 	}
 	
-	public List<DoanhTraiEntity> findByTrucThuoc(Long id) {
+	public List<DoanhTraiEntity> findByTrucThuoc(Integer id) {
 		return doanhTraiRepository.findByTrucThuoc(id);
 	}
 	
@@ -86,7 +86,7 @@ public class DoanhTraiService {
 		return MessageDto.builder().message(Flag.SUCCESS.name).type(Flag.SUCCESS).build();
 	}
 	
-	public List<DoanhTraiEntity> findByLevelGreaterThan(Integer level) {
+	public List<DoanhTraiEntity> findByLevelGreaterThan(Long level) {
 		return doanhTraiRepository.findByCapDoGreaterThan(level);
 	}
 	
@@ -119,9 +119,9 @@ public class DoanhTraiService {
 	public List<CapDoDto> getLevel() {
 		int i = 0;
 		List<CapDoDto> res = new ArrayList<>();
-		res.add(new CapDoDto(i, "-"));
+		res.add(new CapDoDto(i, "-", ""));
 		for (CapDoEnum e : CapDoEnum.values()) {
-			res.add(new CapDoDto(++i, e + " - " + CapDoDto.MAPPING));
+			res.add(new CapDoDto(++i, e + " - " + CapDoDto.MAPPING, ""));
 		}
 		
 		// Remove BQP (Default value can't exchange)

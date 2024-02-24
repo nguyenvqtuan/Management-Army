@@ -31,6 +31,8 @@ public class DoanhTraiDto {
 	private String strIdTrucThuoc;
 	private String tenTrucThuoc;
 	
+	private String checkedTrucThuoc;
+	
 	@NotNull(message = "Cấp độ không được rỗng")
 	private Integer capDo;
 }

@@ -18,4 +18,8 @@ public class CapDoDto {
 	private int id;
 	private String name;
 	
+	
+	// For update
+	private String checked;
+	
 }

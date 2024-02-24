@@ -80,11 +80,6 @@
 										<div id="selectType-TrucThuoc" class="col-9 invisible">
 											
 										</div>
-										<div th:if="${id != null}" id="contain-trucThuoc">
-											<input type="hidden" name="trucThuoc"
-												th:value="${doanhTrai.trucThuoc}" /> <input type="text"
-												th:value="${tenDayDuTrucThuoc}" disabled>
-										</div>
 										<select class="form-control invisible" id="trucThuoc"
 											th:field="*{trucThuoc}">
 										</select>
@@ -129,15 +124,43 @@
 
 	<script type="text/javascript" th:inline="javascript">
 		/*<![CDATA[*/
+		$( document ).ready(function() {
+			let id = /*[[${id}]]*/'';
+			if (id == null) {
+				return;
+			}
+			
+			$("#selectType-TrucThuoc").attr('class', 'visible col-9');
+			
+			let listTrucThuoc = /*[[${listTrucThuoc}]]*/'';
+			listTrucThuoc.forEach(function(item) {
+				$("#selectType-TrucThuoc").append('<div class="d-float-left">');
+				$("#selectType-TrucThuoc").append('<input type="radio" class="d-float-left form-check-input mr-1" name="selectTrucThuoc" ' + item.checked + ' value="' + item.id +'">');
+				$("#selectType-TrucThuoc").append('<label class="float-left">' + item.name + '</label> ')
+				$("#selectType-TrucThuoc").append('</div>');	
+			});
+			
+			let listTrucThuocTrucTiep = /*[[${listTructhuocTrucTiep}]]*/'';
+			
+			$("#trucThuoc").attr("class", "form-control visible");
+			$('#trucThuoc').empty();
+			listTrucThuocTrucTiep.forEach(function(item) {
+				$('#trucThuoc')
+				.append('<option strIdTrucThuoc="' + item.strIdTrucThuoc + '" tenTrucThuoc="' + item.tenTrucThuoc + '" value="' + item.id +'" ' + item.checkedTrucThuoc + ' ">'
+								+ item.tenDayDuTrucThuoc
+								+ '</option>');
+			});
+		});
 		$("#capDo")
 				.on(
 						"change",
 						function() {
 							let capDo = $(this).val();
+							
 							let link = /*[[@{/doanh-trai/get-truc-thuoc-greater/}]]*/'';
 							$("#selectType-TrucThuoc").attr('class', 'visible col-9');
 							$("#selectType-TrucThuoc").empty();
-							$('#contain-trucThuoc').remove();
+							
 							$.ajax({
 								url: link + capDo,
 								success: function(result) {
@@ -164,7 +187,6 @@
 											success : function(resultRadio) {
 												$('#trucThuoc').empty();
 												let i = 0;
-												console.log(resultRadio);
 												resultRadio.forEach(function(itemRadio) {
 													if (i == 0) {
 														$(

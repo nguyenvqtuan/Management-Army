@@ -56,7 +56,7 @@ public class DoanhTraiController {
 	}
 	
 	@GetMapping("/truc-thuoc/{id}")
-	public ResponseEntity<?> trucThuoc(@PathVariable("id") Long id) {
+	public ResponseEntity<?> trucThuoc(@PathVariable("id") Integer id) {
 		List<DoanhTraiEntity> listDoanhTraiEntity = doanhTraiService.findByTrucThuoc(id);
 		String tenDayDu = "";
 		if (!listDoanhTraiEntity.isEmpty()) {
@@ -101,18 +101,25 @@ public class DoanhTraiController {
 	}
 	
 	@GetMapping("/form/{id}")
-	public String showUpdate(Model model, @PathVariable("id") Long id, @RequestParam("tenDayDuTrucThuoc") String tenDayDuTrucThuoc) {
+	public String showUpdate(Model model, @PathVariable("id") Integer id) {
 		model.addAttribute("title", "Cập nhật doanh trại");
-		Optional<DoanhTraiEntity> doanhTraiEntity = doanhTraiService.findById(id);
+		Optional<DoanhTraiEntity> doanhTraiEntity = doanhTraiService.findById(Long.valueOf(id));
 		model.addAttribute("doanhTrai", doanhTraiEntity.get());
 		model.addAttribute("listCapDo", doanhTraiService.getLevel());
-		model.addAttribute("tenDayDuTrucThuoc", tenDayDuTrucThuoc);
+		model.addAttribute("id", id);
+		
+		List<CapDoDto> listTrucThuoc = getTrucThuocGreater(doanhTraiEntity.get().getCapDo(), false);
+		model.addAttribute("listTrucThuoc", listTrucThuoc);
+		
+		List<DoanhTraiDto> listTrucThuocTrucTiep = convertDoanhTraiEntityWith(listTrucThuoc.get(0).getId(), true);
+		System.out.println(listTrucThuoc.get(0).getId());
+		model.addAttribute("listTructhuocTrucTiep", listTrucThuocTrucTiep);
 		return "doanhtrai/form.html";
 	}
 	
 	@GetMapping("/delete/{id}")
-	public String delete(@PathVariable("id") Long id, RedirectAttributes ra) {
-		Optional<DoanhTraiEntity> doanhTraiEntity = doanhTraiService.findById(id);
+	public String delete(@PathVariable("id") Integer id, RedirectAttributes ra) {
+		Optional<DoanhTraiEntity> doanhTraiEntity = doanhTraiService.findById(Long.valueOf(id));
 		if (!doanhTraiEntity.isPresent()) {
 			ra.addFlashAttribute("message", "Xóa thất bại!");
 			ra.addFlashAttribute("messageType", "error");
@@ -132,16 +139,22 @@ public class DoanhTraiController {
 	
 	@GetMapping("get-truc-thuoc-greater/{level}")
 	public ResponseEntity<?> getTrucThuocGreater(@PathVariable("level") String level) {
-		List<CapDoDto> res = getTrucThuocGreater(Integer.valueOf(level));
+		List<CapDoDto> res = getTrucThuocGreater(Integer.valueOf(level), false);
 		return ResponseEntity.ok(res);
 	}
 	
-	public List<CapDoDto> getTrucThuocGreater(Integer level) {
+	public List<CapDoDto> getTrucThuocGreater(Integer level, boolean isUpdating) {
 		int i = 1;
 		List<CapDoDto> res = new ArrayList<>();
 		for (CapDoEnum e : CapDoEnum.values()) {
+			CapDoDto capDoDto = new CapDoDto();
 			if (i > level) {
-				res.add(new CapDoDto(i, e + " - " + CapDoDto.MAPPING));
+				capDoDto.setId(i);
+				capDoDto.setName(e + " - " + CapDoDto.MAPPING);
+				if (i - level == 1) {
+					capDoDto.setChecked("checked");
+				}
+				res.add(capDoDto);
 			}
 			i++;
 		}
@@ -150,6 +163,10 @@ public class DoanhTraiController {
 	
 	@GetMapping("get-truc-thuoc/{level}")
 	public ResponseEntity<?> getTrucThuoc(@PathVariable("level") Integer level) {
+		return ResponseEntity.ok(convertDoanhTraiEntityWith(level, false));
+	}
+	
+	public List<DoanhTraiDto> convertDoanhTraiEntityWith(Integer level, boolean isUpdated) {
 		List<DoanhTraiEntity> listDoanhTraiByLevel = doanhTraiService.findByCapDo(level);
 		List<DoanhTraiDto> listDoanhTraiEntity = convertDoanhTraiEntity(doanhTraiService.findAll());
 		List<DoanhTraiDto> res = new ArrayList<>();
@@ -157,6 +174,7 @@ public class DoanhTraiController {
 			String tenDayDuTrucThuoc = "";
 			String strIdTrucThuoc = "";
 			String tenTrucThuoc = "";
+			String checkedTrucThuoc = isUpdated ? "checked" : "";
 			for (DoanhTraiDto doanhTraiEntity : listDoanhTraiEntity) {
 				if (doanhTraiEntity.getId().equals(doanhTrai.getId())) {
 					tenDayDuTrucThuoc = doanhTraiEntity.getTenDayDuTrucThuoc();
@@ -181,9 +199,11 @@ public class DoanhTraiController {
 					.strIdTrucThuoc(fullStrIdTrucThuoc)
 					.tenDayDuTrucThuoc(fullTenDayDuTrucThuoc)
 					.tenTrucThuoc(fullTenTrucThuoc)
+					.checkedTrucThuoc(checkedTrucThuoc)
 					.build());
+			isUpdated = false;
 		}
-		return ResponseEntity.ok(res);
+		return res;
 	}
 	
 	private List<DoanhTraiDto> convertDoanhTraiEntity(List<DoanhTraiEntity> listDoanhTraiEntity) {
