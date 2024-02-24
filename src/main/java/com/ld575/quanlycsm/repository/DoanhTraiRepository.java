@@ -28,6 +28,8 @@ public interface DoanhTraiRepository extends CrudRepository<DoanhTraiEntity, Lon
 	
 	public List<DoanhTraiEntity> findByCapDoAndTrucThuoc(Integer capDo, Long trucThuoc);
 
+	public List<DoanhTraiEntity> findByStrIdTrucThuocContaining(Long id);
+	
 	public Optional<DoanhTraiEntity> findByTen(String name);
 
 	public Optional<DoanhTraiEntity> findByTenTrucThuoc(String tenTrucThuoc);

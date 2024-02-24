@@ -34,8 +34,8 @@ public class DoanhTraiService {
 		}
 				
 		String strIdTrucThuoc = doanhTraiDto.getStrIdTrucThuoc().isEmpty() ? "1" : doanhTraiDto.getStrIdTrucThuoc();
-		String tenTrucThuoc = doanhTraiDto.getTenTrucThuoc().isEmpty() ? CapDoEnum.BQP.name() : doanhTraiDto.getStrIdTrucThuoc();
-		String tenDayDuTrucThuoc = doanhTraiDto.getTenDayDuTrucThuoc().isEmpty() ? CapDoEnum.BQP.name : doanhTraiDto.getStrIdTrucThuoc();
+		String tenTrucThuoc = doanhTraiDto.getTenTrucThuoc().isEmpty() ? CapDoEnum.BQP.name() : doanhTraiDto.getTenTrucThuoc();
+		String tenDayDuTrucThuoc = doanhTraiDto.getTenDayDuTrucThuoc().isEmpty() ? CapDoEnum.BQP.name : doanhTraiDto.getTenDayDuTrucThuoc();
 		
 		DoanhTraiEntity doanhTrai = DoanhTraiEntity.builder()
 			.ten(doanhTraiDto.getTen())
@@ -73,8 +73,17 @@ public class DoanhTraiService {
 		return doanhTraiRepository.findByTenTrucThuoc(tenTrucThuoc);
 	}
 	
-	public void deleteById(Long id) {
+	public MessageDto deleteById(DoanhTraiEntity doanhTraiEntity) {
+		
+		Long id = doanhTraiEntity.getId();
+		//  Check relationship (ensure not children)
+		List<DoanhTraiEntity> strIdTrucThuoc = findByStrIdTrucThuocContaining(id);
+		if (strIdTrucThuoc.size() > 0) {
+			return MessageDto.builder().message(Flag.FAILED.name + ". Cần phải xóa hết tất cả quan hệ trong doanh trại.").type(Flag.FAILED).build();
+		}
+		
 		doanhTraiRepository.deleteById(id);
+		return MessageDto.builder().message(Flag.SUCCESS.name).type(Flag.SUCCESS).build();
 	}
 	
 	public List<DoanhTraiEntity> findByLevelGreaterThan(Integer level) {
@@ -83,6 +92,10 @@ public class DoanhTraiService {
 	
 	public List<DoanhTraiEntity> findByCapDo(Integer level) {
 		return doanhTraiRepository.findByCapDo(level);
+	}
+	
+	public List<DoanhTraiEntity> findByStrIdTrucThuocContaining(Long id) {
+		return doanhTraiRepository.findByStrIdTrucThuocContaining(id);
 	}
 
 	public List<DoanhTraiEntity> search(String name, Integer level) {

@@ -89,6 +89,7 @@ public class DoanhTraiController {
 		}
 		
 		MessageDto messageDto = doanhTraiService.save(doanhTraiDto);
+		
 		String message = doanhTraiDto.getId() == null ? "Thêm " : "Cập nhật " + messageDto.getMessage();
 		ra.addFlashAttribute("message", message);
 		if (messageDto.getType() == Flag.FAILED) {
@@ -96,8 +97,6 @@ public class DoanhTraiController {
 		} else {
 			ra.addFlashAttribute("messageType", "success");
 		}
-		ra.addFlashAttribute("message", message);
-		
 		return "redirect:/doanh-trai/list";
 	}
 	
@@ -113,15 +112,21 @@ public class DoanhTraiController {
 	
 	@GetMapping("/delete/{id}")
 	public String delete(@PathVariable("id") Long id, RedirectAttributes ra) {
-		Optional<DoanhTraiEntity> DoanhTraiEntity = doanhTraiService.findById(id);
-		if (!DoanhTraiEntity.isPresent()) {
+		Optional<DoanhTraiEntity> doanhTraiEntity = doanhTraiService.findById(id);
+		if (!doanhTraiEntity.isPresent()) {
 			ra.addFlashAttribute("message", "Xóa thất bại!");
 			ra.addFlashAttribute("messageType", "error");
 			throw new RuntimeException("Id doanh trai not found!");
 		}
-		doanhTraiService.deleteById(id);
-		ra.addFlashAttribute("message", "Xóa thành công!");
-		ra.addFlashAttribute("messageType", "success");
+		MessageDto messageDto = doanhTraiService.deleteById(doanhTraiEntity.get());
+		
+		ra.addFlashAttribute("message", "Xóa " + messageDto.getMessage());
+		if (messageDto.getType() == Flag.FAILED) {
+			ra.addFlashAttribute("messageType", "error");
+		} else {
+			ra.addFlashAttribute("messageType", "success");
+		}
+		
 		return "redirect:/doanh-trai/list";
 	}
 	
