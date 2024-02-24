@@ -1,10 +1,8 @@
 package com.ld575.quanlycsm.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -44,11 +42,14 @@ public class DoanhTraiController {
 	public String list(Model model, 
 			@RequestParam(value = "name", required = false, defaultValue = "") String name,
 			@RequestParam(value = "capDo", required = false, defaultValue = "0") String level) {
+		
 		List<DoanhTraiEntity> list = doanhTraiService.search(name, Integer.valueOf(level));
+		
 		model.addAttribute("listDoanhTrai", convertDoanhTraiEntity(list));
 		model.addAttribute("listCapDo", doanhTraiService.getLevel());
 		model.addAttribute("capDo", level);
 		model.addAttribute("name", name);
+		
 		return "doanhtrai/list.html";
 	}
 	
@@ -174,52 +175,18 @@ public class DoanhTraiController {
 	private List<DoanhTraiDto> convertDoanhTraiEntity(List<DoanhTraiEntity> listDoanhTraiEntity) {
 		List<DoanhTraiDto> listDoanhTraiDto = new ArrayList<>();
 		Iterator<DoanhTraiEntity> iterator = listDoanhTraiEntity.iterator();
-		Map<Long, Long> mapTrucThuoc = new HashMap<>();
-		Map<Long, String> mapTrucThuocStr = new HashMap<>();
-		
-		while (iterator.hasNext()) {
-			DoanhTraiEntity doanhTraiEntity = iterator.next();
-			mapTrucThuoc.put(doanhTraiEntity.getId(), doanhTraiEntity.getTrucThuoc());
-			mapTrucThuocStr.put(doanhTraiEntity.getId(), doanhTraiEntity.getId() + "-" + doanhTraiEntity.getTen() + "-" + doanhTraiEntity.getTenDayDu());
-		}
 		
 		iterator = listDoanhTraiEntity.iterator();
 		while (iterator.hasNext()) {
 			DoanhTraiEntity doanhTraiEntity = iterator.next();
-			
-			StringBuilder tenDayDuTrucThuoc = new StringBuilder();
-			StringBuilder tenTrucThuoc = new StringBuilder();
-			StringBuilder strIdTrucThuoc = new StringBuilder();
-			Long current = doanhTraiEntity.getId();
-			while (true) {
-				if (current == 0 || current == null || mapTrucThuoc.get(current) == null 
-						|| mapTrucThuoc.get(current) == 0) {
-					break;
-				}
-				if (strIdTrucThuoc.length() != 0) {
-					strIdTrucThuoc.append("-");
-				}
-				if (tenTrucThuoc.length() != 0) {
-					tenTrucThuoc.append("-");
-				}
-				if (tenDayDuTrucThuoc.length() != 0) {
-					tenDayDuTrucThuoc.append("-");
-				}
-				current = mapTrucThuoc.get(current);
-				String[] arr = mapTrucThuocStr.get(current).split("-");
-				strIdTrucThuoc.append(arr[0]);
-				tenTrucThuoc.append(arr[1]);
-				tenDayDuTrucThuoc.append(arr[2]);
-			}
 			
 			DoanhTraiDto doanhTraiDto = DoanhTraiDto.builder()
 					.id(doanhTraiEntity.getId())
 					.ten(doanhTraiEntity.getTen())
 					.tenDayDu(doanhTraiEntity.getTenDayDu())
 					.trucThuoc(doanhTraiEntity.getTrucThuoc())
-					.strIdTrucThuoc(commonService.removefirstLastCharInString('-', strIdTrucThuoc.toString()))
-					.tenTrucThuoc(commonService.removefirstLastCharInString('-', tenTrucThuoc.toString()))
-					.tenDayDuTrucThuoc(commonService.removefirstLastCharInString('-', tenDayDuTrucThuoc.toString()))
+					.tenTrucThuoc(doanhTraiEntity.getTenTrucThuoc())
+					.tenDayDuTrucThuoc(doanhTraiEntity.getTenDayDuTrucThuoc())
 					.build();
 			listDoanhTraiDto.add(doanhTraiDto);
 		}

@@ -24,15 +24,6 @@ public class DoanhTraiService {
 	}
 	
 	public void save(DoanhTraiDto doanhTraiDto) {
-		String[] arr = doanhTraiDto.getTenTrucThuoc().split("-");
-		String daiDoi = "";
-		String trungDoi = "";
-		if (arr.length == 2) {
-			daiDoi = arr[0];
-		} else if (arr.length == 3) {
-			daiDoi = arr[1];
-			trungDoi = arr[0];
-		}
 		DoanhTraiEntity doanhTrai = DoanhTraiEntity.builder()
 			.ten(doanhTraiDto.getTen())
 			.tenDayDu(doanhTraiDto.getTenDayDu())
@@ -40,8 +31,6 @@ public class DoanhTraiService {
 			.capDo(doanhTraiDto.getCapDo())
 			.strIdTrucThuoc(doanhTraiDto.getStrIdTrucThuoc())
 			.tenTrucThuoc(doanhTraiDto.getTenTrucThuoc())
-			.trucThuocTrungDoi(trungDoi)
-			.trucThuocDaiDoi(daiDoi)
 			.tenDayDuTrucThuoc(doanhTraiDto.getTenDayDuTrucThuoc())
 			.build();
 		if (doanhTraiDto.getId() != null) {
@@ -78,14 +67,10 @@ public class DoanhTraiService {
 		return doanhTraiRepository.findByCapDo(level);
 	}
 
-	public List<DoanhTraiEntity> findByNameOrCapDo(String name, Integer level) {
-		return doanhTraiRepository.findByNameOrCapDo(name, level);
-	}
-
 	public List<DoanhTraiEntity> search(String name, Integer level) {
 		List<DoanhTraiEntity> res;
 		if (!name.isEmpty() && level != 0) {
-			res = doanhTraiRepository.findByNameOrCapDo(name, level);
+			res = doanhTraiRepository.findByNameAndCapDo(name, level);
 		}
 		else if (!name.isEmpty()) {
 			res = doanhTraiRepository.findByName(name);
@@ -107,6 +92,9 @@ public class DoanhTraiService {
 		for (CapDoEnum e : CapDoEnum.values()) {
 			res.add(new CapDoDto(++i, e + " - " + CapDoDto.MAPPING));
 		}
+		
+		// Remove BQP (Default value can't exchange)
+		res.remove(res.size() - 1);
 		return res;
 	}
 }

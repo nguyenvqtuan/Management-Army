@@ -16,8 +16,8 @@ public interface DoanhTraiRepository extends CrudRepository<DoanhTraiEntity, Lon
 	
 	public List<DoanhTraiEntity> findByCapDoGreaterThan(Integer level);
 	
-	@Query("SELECT dt from DoanhTraiEntity dt WHERE ten LIKE %?1% or tenDayDu LIKE %?1% or capDo = ?2")
-	public List<DoanhTraiEntity> findByNameOrCapDo(String name, Integer level);
+	@Query("SELECT dt from DoanhTraiEntity dt WHERE (ten LIKE %?1% or tenDayDu LIKE %?1%) AND (capDo = ?2)")
+	public List<DoanhTraiEntity> findByNameAndCapDo(String name, Integer level);
 	
 	public List<DoanhTraiEntity> findByCapDo(Integer level);
 	
