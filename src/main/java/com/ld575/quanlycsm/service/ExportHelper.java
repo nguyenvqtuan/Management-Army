@@ -338,13 +338,16 @@ public class ExportHelper {
 	private void createContentEthnic(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		List<CountChienSiDto> listCountDanToc = chienSiRepository.countDanToc(namNhapNgu);
 		for (CountChienSiDto chienSiDto : listCountDanToc) {
-			if (commonService.isEmpty(chienSiDto.getTen())) {
-				continue;
-			}
+			
+			if (commonService.isEmpty(chienSiDto.getTen())) continue;
 			XSSFRow row = getRow(sheet, rowIdx);
 			XSSFCell cell = row.createCell(1);
 			cell.setCellStyle(getStyleContent(workbook));
-			cell.setCellValue(chienSiDto.getTen() + ": " + chienSiDto.getAmount());
+			cell.setCellValue(chienSiDto.getTen());
+			
+			cell = row.createCell(2);
+			cell.setCellStyle(getStyleContent(workbook));
+			cell.setCellValue(chienSiDto.getAmount());
 			rowIdx++;
 		};
 	}
@@ -399,23 +402,30 @@ public class ExportHelper {
 		List<CountChienSiDto> listCountTrinhDo = chienSiRepository.countTrinhDo(namNhapNgu);
 		for (CountChienSiDto chienSiDto : listCountTrinhDo) {
 			XSSFRow row = getRow(sheet, rowIdx);
-			XSSFCell cell = row.createCell(1);
+			
 			
 			if (commonService.isEmpty(chienSiDto.getTen()))	continue;
 
+			XSSFCell cell = row.createCell(1);
 			cell.setCellStyle(getStyleContent(workbook));
-			cell.setCellValue(chienSiDto.getTen() + ": " + chienSiDto.getAmount());
+			cell.setCellValue(chienSiDto.getTen());
+			
+			cell = row.createCell(2);
+			cell.setCellStyle(getStyleContent(workbook));
+			cell.setCellValue(chienSiDto.getAmount());
+
 			if (showDetails.contains(chienSiDto.getTen())) {
 				
 				if (commonService.isEmpty(chienSiDto.getDetail())) continue;
-				
+				System.out.println(chienSiDto.getDetail() + " ----- ");
 				String[] arrChienSi = chienSiDto.getDetail().split("\\*\\|\\*");
-				XSSFCell cell2 = row.createCell(2);
+				System.out.println(arrChienSi);
+				cell = row.createCell(3);
 				StringBuilder strDetail = new StringBuilder();
 				for (String str : arrChienSi) {
 					strDetail.append(str + "\r\n");
 				}
-				cell2.setCellValue(strDetail.toString());
+				cell.setCellValue(strDetail.toString());
 			}
 			rowIdx++;
 		};
@@ -509,7 +519,11 @@ public class ExportHelper {
 			XSSFRow row = getRow(sheet, rowIdx);
 			XSSFCell cell = row.createCell(1);
 			cell.setCellStyle(getStyleContent(workbook));
-			cell.setCellValue(chienSiDto.getTen() + ": " + chienSiDto.getAmount());
+			cell.setCellValue(chienSiDto.getTen());
+			
+			cell = row.createCell(2);
+			cell.setCellStyle(getStyleContent(workbook));
+			cell.setCellValue(chienSiDto.getAmount());
 			rowIdx++;
 		};
 	}
@@ -520,7 +534,12 @@ public class ExportHelper {
 			XSSFRow row = getRow(sheet, rowIdx);
 			XSSFCell cell = row.createCell(1);
 			cell.setCellStyle(getStyleContent(workbook));
-			cell.setCellValue(chienSiDto.getTen() + ": " + chienSiDto.getAmount());
+			cell.setCellValue(chienSiDto.getTen());
+			
+			cell = row.createCell(2);
+			cell.setCellStyle(getStyleContent(workbook));
+			cell.setCellValue(chienSiDto.getAmount());
+			
 			rowIdx++;
 		});
 	}
@@ -661,10 +680,9 @@ public class ExportHelper {
 	}
 
 	private void createHeaderEthnicDetail(XSSFWorkbook workbook, XSSFSheet sheet) {
-		rowIdx++;
 		XSSFRow row = getRow(sheet, rowIdx);
 
-		XSSFCell cell = row.createCell(1);
+		XSSFCell cell = row.createCell(2);
 
 		cell.setCellStyle(getStyleMiddle(workbook));
 		cell.setCellValue("Số lượng");
@@ -678,6 +696,11 @@ public class ExportHelper {
 
 		cell.setCellStyle(getStyleMiddle(workbook));
 		cell.setCellValue("Sức khỏe");
+		
+		cell = row.createCell(2);
+		cell.setCellStyle(getStyleMiddle(workbook));
+		cell.setCellValue("Số lượng");
+		
 		rowIdx++;
 	}
 
@@ -686,9 +709,12 @@ public class ExportHelper {
 		XSSFRow row = getRow(sheet, rowIdx);
 
 		XSSFCell cell = row.createCell(1);
-
 		cell.setCellStyle(getStyleMiddle(workbook));
-		cell.setCellValue("Độ tuổi");
+		cell.setCellValue("Năm sinh");
+		
+		cell = row.createCell(2);
+		cell.setCellStyle(getStyleMiddle(workbook));
+		cell.setCellValue("Số lượng");
 		rowIdx++;
 	}
 
@@ -795,21 +821,19 @@ public class ExportHelper {
 		cell.setCellStyle(getStyleMiddle(workbook));
 		cell.setCellValue(title);
 		
-		sheet.addMergedRegion(CellRangeAddress.valueOf("B" + (rowIdx + 1) + ":c" + (rowIdx + 1)));
 		createHeaderNormalDetail(workbook, sheet);
 		rowIdx++;
 	}
 	
 	private void createHeaderNormalDetail(XSSFWorkbook workbook, XSSFSheet sheet) {
-		rowIdx++;
 		XSSFRow row = getRow(sheet, rowIdx);
 
-		XSSFCell cell = row.createCell(1);
+		XSSFCell cell = row.createCell(2);
 
 		cell.setCellStyle(getStyleMiddle(workbook));
 		cell.setCellValue("Số lượng");
 
-		XSSFCell cell2 = row.createCell(2);
+		XSSFCell cell2 = row.createCell(3);
 
 		cell2.setCellStyle(getStyleMiddle(workbook));
 		cell2.setCellValue("Chi tiết");
@@ -818,22 +842,25 @@ public class ExportHelper {
 	private void createContentNormal(XSSFWorkbook workbook, XSSFSheet sheet, List<CountChienSiDto> listCount) {
 		for(CountChienSiDto chienSiDto : listCount) {
 			XSSFRow row = getRow(sheet, rowIdx);
-			if (commonService.isEmpty(chienSiDto.getTen())) {
-				continue;
-			}
+
+			if (commonService.isEmpty(chienSiDto.getTen()))	continue;
 			XSSFCell cell = row.createCell(1);
 			cell.setCellStyle(getStyleContent(workbook));
-			cell.setCellValue(chienSiDto.getTen() + ": " + chienSiDto.getAmount());
+			cell.setCellValue(chienSiDto.getTen());
 			
-			if (chienSiDto.getDetail() == null)	continue;
+			cell = row.createCell(2);
+			cell.setCellStyle(getStyleContent(workbook));
+			cell.setCellValue(chienSiDto.getAmount());
+			
+			if (commonService.isEmpty(chienSiDto.getDetail()))	continue;
 			String[] arrChienSi = chienSiDto.getDetail().split("\\*\\|\\*");
 			
-			XSSFCell cell2 = row.createCell(2);
+			cell = row.createCell(3);
 			StringBuilder strDetail = new StringBuilder();
 			for (String str : arrChienSi) {
 				strDetail.append(str + "\r\n");
 			}
-			cell2.setCellValue(strDetail.toString());
+			cell.setCellValue(strDetail.toString());
 			rowIdx++;
 		};
 	}

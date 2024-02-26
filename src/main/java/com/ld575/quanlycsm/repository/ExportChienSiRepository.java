@@ -212,14 +212,14 @@ public class ExportChienSiRepository {
 	
 	private String queryCountDangVien() {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT 'Đảng Viên', count(cs.ton_giao) as countTonGiao, ")
+		sql.append("SELECT 'Đảng Viên', ")
+		.append("count(cs.ngay_vao_dang) as countDangVien, ")
 		.append(getQueryChienSiDetail())
 		.append("FROM chien_si_entity cs ")
 		.append("INNER JOIN doanh_trai_entity dtrai ")
 		.append("ON dtrai.id = cs.doanh_trai_id ")
 		.append("WHERE ")
-		.append("cs.ngay_vao_dang IS NOT NULL ")
-		.append("AND ")
+		.append("ngay_vao_dang IS NOT NULL AND ")
 		.append("YEAR(cs.ngay_nhap_ngu) = :nam_nhap_ngu ");
 		return sql.toString();
 	}
@@ -233,7 +233,8 @@ public class ExportChienSiRepository {
 		.append("ON dtrai.id = cs.doanh_trai_id ")
 		.append("WHERE ")
 		.append("YEAR(cs.ngay_nhap_ngu) = :nam_nhap_ngu ")
-		.append("GROUP BY cs.trinh_do");
+		.append("GROUP BY cs.trinh_do ")
+		.append("ORDER BY cs.trinh_do");
 		return sql.toString();
 	}
 	
@@ -248,14 +249,13 @@ public class ExportChienSiRepository {
 		.append("WHERE cs.co_vo != 'n' ")
 		.append("AND ")
 		.append("YEAR(cs.ngay_nhap_ngu) = :nam_nhap_ngu ")
-		.append("GROUP BY dtrai.ten, cs.co_vo ")
-		.append("ORDER BY dtrai.ten, cs.co_vo");
+		.append("GROUP BY dtrai.ten, dtrai.ten_truc_thuoc, cs.co_vo ");
 		return sql.toString();
 	}
 	
 	private String queryCountSucKhoe() {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT cs.suc_khoe, count(cs.suc_khoe) as countSucKhoe ")
+		sql.append("SELECT CONCAT('Loại ', cs.suc_khoe), count(cs.suc_khoe) as countSucKhoe ")
 		.append("FROM chien_si_entity cs ")
 		.append("WHERE ")
 		.append("YEAR(cs.ngay_nhap_ngu) = :nam_nhap_ngu ")
@@ -269,8 +269,7 @@ public class ExportChienSiRepository {
 		.append("FROM chien_si_entity cs ")
 		.append("WHERE ")
 		.append("YEAR(cs.ngay_nhap_ngu) = :nam_nhap_ngu ")
-		.append("GROUP BY nam_sinh ")
-		.append("ORDER BY nam_sinh");
+		.append("GROUP BY nam_sinh ");
 		return sql.toString();
 	}
 	
@@ -286,8 +285,7 @@ public class ExportChienSiRepository {
 		.append("cs.bo_mat IS NOT NULL ")
 		.append("AND ")
 		.append("YEAR(cs.ngay_nhap_ngu) = :nam_nhap_ngu ")
-		.append("GROUP BY dtrai.ten, cs.bo_mat ")
-		.append("ORDER BY dtrai.ten, cs.bo_mat");
+		.append("GROUP BY dtrai.ten,dtrai.ten_truc_thuoc, cs.bo_mat ");
 		return sql.toString();
 	}
 	
@@ -303,8 +301,7 @@ public class ExportChienSiRepository {
 		.append("cs.me_mat IS NOT NULL ")
 		.append("AND ")
 		.append("YEAR(cs.ngay_nhap_ngu) = :nam_nhap_ngu ")
-		.append("GROUP BY dtrai.ten, cs.me_mat ")
-		.append("ORDER BY dtrai.ten, cs.me_mat");
+		.append("GROUP BY dtrai.ten,dtrai.ten_truc_thuoc, cs.me_mat ");
 		return sql.toString();
 	}
 	
@@ -319,8 +316,7 @@ public class ExportChienSiRepository {
 		.append("WHERE cs.bo_me_li_di IS NOT NULL ")
 		.append("AND ")
 		.append("YEAR(cs.ngay_nhap_ngu) = :nam_nhap_ngu ")
-		.append("GROUP BY dtrai.ten, cs.bo_me_li_di ")
-		.append("ORDER BY dtrai.ten, cs.bo_me_li_di");
+		.append("GROUP BY dtrai.ten,dtrai.ten_truc_thuoc, cs.bo_me_li_di ");
 		return sql.toString();
 	}
 	
@@ -335,8 +331,7 @@ public class ExportChienSiRepository {
 		.append("WHERE cs.khong_co_bo IS NOT NULL ")
 		.append("AND ")
 		.append("YEAR(cs.ngay_nhap_ngu) = :nam_nhap_ngu ")
-		.append("GROUP BY dtrai.ten, cs.khong_co_bo ")
-		.append("ORDER BY dtrai.ten, cs.khong_co_bo");
+		.append("GROUP BY dtrai.ten,dtrai.ten_truc_thuoc, cs.khong_co_bo ");
 		return sql.toString();
 	}
 	
@@ -351,8 +346,7 @@ public class ExportChienSiRepository {
 		.append("WHERE cs.hinh_xam IS NOT NULL ")
 		.append("AND ")
 		.append("YEAR(cs.ngay_nhap_ngu) = :nam_nhap_ngu ")
-		.append("GROUP BY dtrai.ten, cs.hinh_xam ")
-		.append("ORDER BY dtrai.ten, cs.hinh_xam");
+		.append("GROUP BY dtrai.ten,dtrai.ten_truc_thuoc, cs.hinh_xam ");
 		return sql.toString();
 	}
 	
@@ -366,7 +360,7 @@ public class ExportChienSiRepository {
 		.append("WHERE cs.giu_bua IS NOT NULL ")
 		.append("AND ")
 		.append("YEAR(cs.ngay_nhap_ngu) = :nam_nhap_ngu ")
-		.append("GROUP BY cs.giu_bua");
+		.append("GROUP BY dtrai.ten,dtrai.ten_truc_thuoc, cs.giu_bua");
 		return sql.toString();
 	}
 	
@@ -381,8 +375,7 @@ public class ExportChienSiRepository {
 		.append("WHERE cs.nguoi_yeu IS NOT NULL ")
 		.append("AND ")
 		.append("YEAR(cs.ngay_nhap_ngu) = :nam_nhap_ngu ")
-		.append("GROUP BY dtrai.ten, cs.nguoi_yeu ")
-		.append("ORDER BY dtrai.ten, cs.nguoi_yeu");
+		.append("GROUP BY dtrai.ten,dtrai.ten_truc_thuoc, cs.nguoi_yeu ");
 		return sql.toString();
 	}
 	
@@ -397,8 +390,7 @@ public class ExportChienSiRepository {
 		.append("WHERE cs.nguoi_yeu IS NOT NULL ")
 		.append("AND ")
 		.append("YEAR(cs.ngay_nhap_ngu) = :nam_nhap_ngu ")
-		.append("GROUP BY dtrai.ten, cs.hut_thuoc ")
-		.append("ORDER BY dtrai.ten, cs.hut_thuoc");
+		.append("GROUP BY dtrai.ten,dtrai.ten_truc_thuoc, cs.hut_thuoc ");
 		return sql.toString();
 	}
 	
@@ -413,8 +405,7 @@ public class ExportChienSiRepository {
 		.append("WHERE cs.gia_dinh_kho_khan IS NOT NULL ")
 		.append("AND ")
 		.append("YEAR(cs.ngay_nhap_ngu) = :nam_nhap_ngu ")
-		.append("GROUP BY dtrai.ten, cs.gia_dinh_kho_khan ")
-		.append("ORDER BY dtrai.ten, cs.gia_dinh_kho_khan");
+		.append("GROUP BY dtrai.ten,dtrai.ten_truc_thuoc, cs.gia_dinh_kho_khan ");
 		return sql.toString();
 	}
 	
@@ -428,7 +419,7 @@ public class ExportChienSiRepository {
 		.append("WHERE cs.nguoi_quen_trong_quan_doi IS NOT NULL ")
 		.append("AND ")
 		.append("YEAR(cs.ngay_nhap_ngu) = :nam_nhap_ngu ")
-		.append("GROUP BY cs.nguoi_quen_trong_quan_doi");
+		.append("GROUP BY dtrai.ten,dtrai.ten_truc_thuoc, cs.nguoi_quen_trong_quan_doi");
 		return sql.toString();
 	}
 	
@@ -443,8 +434,7 @@ public class ExportChienSiRepository {
 		.append("WHERE cs.so_truong IS NOT NULL ")
 		.append("AND ")
 		.append("YEAR(cs.ngay_nhap_ngu) = :nam_nhap_ngu ")
-		.append("GROUP BY dtrai.ten, cs.so_truong ")
-		.append("ORDER BY dtrai.ten, cs.so_truong");
+		.append("GROUP BY dtrai.ten,dtrai.ten_truc_thuoc, cs.so_truong");
 		return sql.toString();
 	}
 	
