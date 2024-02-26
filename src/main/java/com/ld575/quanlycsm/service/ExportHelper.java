@@ -268,11 +268,12 @@ public class ExportHelper {
 			CountDanTocDto chienSiDto = listQueQuan.get(i);
 			XSSFRow row = getRow(sheet, rowIdx);
 			
-			String[] arrChienSi = listQueQuan.get(i).getDetail().split("\\*\\|\\*");
+			if (chienSiDto.getDetail() == null) continue;
+			String[] arrChienSi = chienSiDto.getDetail().split("\\*\\|\\*");
 
 			XSSFCell cellTinhThanh = row.createCell(1);
 			cellTinhThanh.setCellStyle(getStyleContent(workbook));
-			String cellTinhThanhVal = listQueQuan.get(i).getQqTinhThanh() + ": " + (freq.getOrDefault(chienSiDto.getQqTinhThanh(), 0));
+			String cellTinhThanhVal = chienSiDto.getQqTinhThanh() + ": " + (freq.getOrDefault(chienSiDto.getQqTinhThanh(), 0));
 
 			if (!prevCellTinhThanh.equals(cellTinhThanhVal) && chienSiDto.getQqTinhThanh() != "null") {
 				cellTinhThanh.setCellValue(cellTinhThanhVal);
@@ -358,7 +359,10 @@ public class ExportHelper {
 			XSSFCell cell = row.createCell(1);
 			cell.setCellStyle(getStyleContent(workbook));
 			cell.setCellValue(chienSiDto.getTen() + ": " + chienSiDto.getAmount());
+			
+			if (chienSiDto.getDetail() == null) continue;
 			String[] arrChienSi = chienSiDto.getDetail().split("\\*\\|\\*");
+			
 			XSSFCell cell2 = row.createCell(2);
 			StringBuilder strDetail = new StringBuilder();
 			for (String str : arrChienSi) {
@@ -396,12 +400,15 @@ public class ExportHelper {
 		for (CountChienSiDto chienSiDto : listCountTrinhDo) {
 			XSSFRow row = getRow(sheet, rowIdx);
 			XSSFCell cell = row.createCell(1);
-			if (commonService.isEmpty(chienSiDto.getTen())) {
-				continue;
-			}
+			
+			if (commonService.isEmpty(chienSiDto.getTen()))	continue;
+
 			cell.setCellStyle(getStyleContent(workbook));
 			cell.setCellValue(chienSiDto.getTen() + ": " + chienSiDto.getAmount());
 			if (showDetails.contains(chienSiDto.getTen())) {
+				
+				if (commonService.isEmpty(chienSiDto.getDetail())) continue;
+				
 				String[] arrChienSi = chienSiDto.getDetail().split("\\*\\|\\*");
 				XSSFCell cell2 = row.createCell(2);
 				StringBuilder strDetail = new StringBuilder();
@@ -429,7 +436,9 @@ public class ExportHelper {
 			CountChienSiDto chienSiDto = listCountCoVo.get(i);
 			XSSFRow row = getRow(sheet, rowIdx);
 			
-			String[] arrChienSi = listCountCoVo.get(i).getDetail().split("\\*\\|\\*");
+			if (commonService.isEmpty(chienSiDto.getDetail())) continue;
+			
+			String[] arrChienSi = chienSiDto.getDetail().split("\\*\\|\\*");
 
 			XSSFCell cellDaiDoi = row.createCell(1);
 			cellDaiDoi.setCellStyle(getStyleContent(workbook));
@@ -530,6 +539,7 @@ public class ExportHelper {
 			CountChienSiDto chienSiDto = listContent.get(i);
 			XSSFRow row = getRow(sheet, rowIdx);
 			
+			if (commonService.isEmpty(chienSiDto.getDetail())) continue;
 			String[] arrChienSi = chienSiDto.getDetail().split("\\*\\|\\*");
 
 			XSSFCell cellDaiDoi = row.createCell(1);
@@ -597,12 +607,16 @@ public class ExportHelper {
 	
 	private void createContentKeepCharm(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		List<CountChienSiDto> listCountGiuBua = chienSiRepository.countGiuBua(namNhapNgu);
-		listCountGiuBua.stream().forEach(chienSiDto -> {
+		for (CountChienSiDto chienSiDto : listCountGiuBua) {
 			XSSFRow row = getRow(sheet, rowIdx);
 			XSSFCell cell = row.createCell(1);
 			cell.setCellStyle(getStyleContent(workbook));
 			cell.setCellValue(chienSiDto.getAmount());
+			
+			if (commonService.isEmpty(chienSiDto.getDetail())) continue;
+			
 			String[] arrChienSi = chienSiDto.getDetail().split("\\*\\|\\*");
+			
 			XSSFCell cell2 = row.createCell(2);
 			StringBuilder strDetail = new StringBuilder();
 			for (String str : arrChienSi) {
@@ -610,16 +624,18 @@ public class ExportHelper {
 			}
 			cell2.setCellValue(strDetail.toString());
 			rowIdx++;
-		});
+		}
 	}
 	
 	private void createContentAcquaintanceInTheArmy(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		List<CountChienSiDto> listCountGiuBua = chienSiRepository.countNguoiQuenTrongQuanDoi(namNhapNgu);
-		listCountGiuBua.stream().forEach(chienSiDto -> {
+		for (CountChienSiDto chienSiDto : listCountGiuBua) {
 			XSSFRow row = getRow(sheet, rowIdx);
 			XSSFCell cell = row.createCell(1);
 			cell.setCellStyle(getStyleContent(workbook));
 			cell.setCellValue(chienSiDto.getAmount());
+			
+			if (commonService.isEmpty(chienSiDto.getDetail())) continue;
 			String[] arrChienSi = chienSiDto.getDetail().split("\\*\\|\\*");
 			XSSFCell cell2 = row.createCell(2);
 			StringBuilder strDetail = new StringBuilder();
@@ -628,7 +644,7 @@ public class ExportHelper {
 			}
 			cell2.setCellValue(strDetail.toString());
 			rowIdx++;
-		});
+		}
 	}
 
 	private void createHeaderEthnic(XSSFWorkbook workbook, XSSFSheet sheet) {
@@ -808,7 +824,10 @@ public class ExportHelper {
 			XSSFCell cell = row.createCell(1);
 			cell.setCellStyle(getStyleContent(workbook));
 			cell.setCellValue(chienSiDto.getTen() + ": " + chienSiDto.getAmount());
+			
+			if (chienSiDto.getDetail() == null)	continue;
 			String[] arrChienSi = chienSiDto.getDetail().split("\\*\\|\\*");
+			
 			XSSFCell cell2 = row.createCell(2);
 			StringBuilder strDetail = new StringBuilder();
 			for (String str : arrChienSi) {
