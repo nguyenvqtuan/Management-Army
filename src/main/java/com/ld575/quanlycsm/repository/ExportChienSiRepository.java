@@ -283,8 +283,8 @@ public class ExportChienSiRepository {
 	
 	private String queryCountBoMat() {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT 'Bố Mất', count(cs.bo_mat) as countBoMat, ")
-		.append(getQueryChienSiDetail(", '-', cs.bo_mat"))
+		sql.append("SELECT CONCAT(dtrai.ten, '-', dtrai.ten_truc_thuoc) as don_vi, count(cs.bo_mat) as countBoMat, ")
+		.append(getQueryChienSiDetail(", ', chi tiết: ', cs.bo_mat"))
 		.append("FROM chien_si_entity cs ")
 		.append("INNER JOIN doanh_trai_entity dtrai ")
 		.append("ON dtrai.id = cs.doanh_trai_id ")
@@ -298,8 +298,8 @@ public class ExportChienSiRepository {
 	
 	private String queryCountMeMat() {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT 'Mẹ Mất', count(cs.me_mat) as countMeMat, ")
-		.append(getQueryChienSiDetail(", '-', cs.me_mat"))
+		sql.append("SELECT CONCAT(dtrai.ten, '-', dtrai.ten_truc_thuoc) as don_vi, count(cs.me_mat) as countMeMat, ")
+		.append(getQueryChienSiDetail(", ', chi tiết: ', cs.me_mat"))
 		.append("FROM chien_si_entity cs ")
 		.append("INNER JOIN doanh_trai_entity dtrai ")
 		.append("ON dtrai.id = cs.doanh_trai_id ")
@@ -313,8 +313,8 @@ public class ExportChienSiRepository {
 	
 	private String queryCountBoMeLiDi() {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT 'Bố mẹ li dị', count(cs.bo_me_li_di) as countBoMeLiDi, ")
-		.append(getQueryChienSiDetail(", '-', cs.bo_me_li_di"))
+		sql.append("SELECT CONCAT(dtrai.ten, '-', dtrai.ten_truc_thuoc) as don_vi, count(cs.bo_me_li_di) as countBoMeLiDi, ")
+		.append(getQueryChienSiDetail(", ', chi tiết: ', cs.bo_me_li_di"))
 		.append("FROM chien_si_entity cs ")
 		.append("INNER JOIN doanh_trai_entity dtrai ")
 		.append("ON dtrai.id = cs.doanh_trai_id ")
@@ -327,8 +327,8 @@ public class ExportChienSiRepository {
 	
 	private String queryCountKhongCoBo() {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT 'Không có bố', count(cs.khong_co_bo) as countKhongCoBo, ")
-		.append(getQueryChienSiDetail(", '-', cs.khong_co_bo"))
+		sql.append("SELECT CONCAT(dtrai.ten, '-', dtrai.ten_truc_thuoc) as don_vi, count(cs.khong_co_bo) as countKhongCoBo, ")
+		.append(getQueryChienSiDetail(", ', chi tiết:', cs.khong_co_bo"))
 		.append("FROM chien_si_entity cs ")
 		.append("INNER JOIN doanh_trai_entity dtrai ")
 		.append("ON dtrai.id = cs.doanh_trai_id ")
@@ -341,8 +341,8 @@ public class ExportChienSiRepository {
 	
 	private String queryCountHinhXam() {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT 'Hình xăm', count(cs.hinh_xam) as countHinhXam, ")
-		.append(getQueryChienSiDetail(", '-', cs.hinh_xam"))
+		sql.append("SELECT CONCAT(dtrai.ten, '-', dtrai.ten_truc_thuoc) as don_vi, count(cs.hinh_xam) as countHinhXam, ")
+		.append(getQueryChienSiDetail(", ', chi tiết: ', cs.hinh_xam"))
 		.append("FROM chien_si_entity cs ")
 		.append("INNER JOIN doanh_trai_entity dtrai ")
 		.append("ON dtrai.id = cs.doanh_trai_id ")
@@ -355,8 +355,8 @@ public class ExportChienSiRepository {
 	
 	private String queryCountGiuBua() {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT 'Giữ bùa', count(cs.giu_bua) as countGiuBua, ")
-		.append(getQueryChienSiDetail(", '-', cs.giu_bua"))
+		sql.append("SELECT CONCAT(dtrai.ten, '-', dtrai.ten_truc_thuoc) as don_vi, count(cs.giu_bua) as countGiuBua, ")
+		.append(getQueryChienSiDetail(", ', chi tiết: ', cs.giu_bua"))
 		.append("FROM chien_si_entity cs ")
 		.append("INNER JOIN doanh_trai_entity dtrai ")
 		.append("ON dtrai.id = cs.doanh_trai_id ")
@@ -369,8 +369,8 @@ public class ExportChienSiRepository {
 	
 	private String queryCountNguoiYeu() {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT 'Người yêu', count(cs.nguoi_yeu) as countNguoiYeu, ")
-		.append(getQueryChienSiDetail(", '-', cs.nguoi_yeu"))
+		sql.append("SELECT CONCAT(dtrai.ten, '-', dtrai.ten_truc_thuoc) as don_vi, count(cs.nguoi_yeu) as countNguoiYeu, ")
+		.append(getQueryChienSiDetail(", ', chi tiết: ', cs.nguoi_yeu"))
 		.append("FROM chien_si_entity cs ")
 		.append("INNER JOIN doanh_trai_entity dtrai ")
 		.append("ON dtrai.id = cs.doanh_trai_id ")
@@ -383,8 +383,8 @@ public class ExportChienSiRepository {
 	
 	private String queryCountHutThuoc() {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT 'Hút thuốc', count(cs.hut_thuoc) as countHutThuoc, ")
-		.append(getQueryChienSiDetail(", '-', cs.hut_thuoc"))
+		sql.append("SELECT CONCAT(dtrai.ten, '-', dtrai.ten_truc_thuoc) as don_vi, count(cs.hut_thuoc) as countHutThuoc, ")
+		.append(getQueryChienSiDetail(", ', chi tiết', cs.hut_thuoc"))
 		.append("FROM chien_si_entity cs ")
 		.append("INNER JOIN doanh_trai_entity dtrai ")
 		.append("ON dtrai.id = cs.doanh_trai_id ")
@@ -397,8 +397,8 @@ public class ExportChienSiRepository {
 	
 	private String queryCountGiaDinhKhoKhan() {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT 'Gia đình khó khăn', count(cs.gia_dinh_kho_khan) as countGiaDinhKhoKhan, ")
-		.append(getQueryChienSiDetail(", '-', cs.gia_dinh_kho_khan"))
+		sql.append("SELECT CONCAT(dtrai.ten, '-', dtrai.ten_truc_thuoc) as don_vi, count(cs.gia_dinh_kho_khan) as countGiaDinhKhoKhan, ")
+		.append(getQueryChienSiDetail(", ', chi tiết: ', cs.gia_dinh_kho_khan"))
 		.append("FROM chien_si_entity cs ")
 		.append("INNER JOIN doanh_trai_entity dtrai ")
 		.append("ON dtrai.id = cs.doanh_trai_id ")
@@ -411,8 +411,8 @@ public class ExportChienSiRepository {
 	
 	private String queryCountNguoiQuenTrongQuanDoi() {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT 'Đi bar', count(cs.nguoi_quen_trong_quan_doi) as countDiBar, ")
-		.append(getQueryChienSiDetail(", '-', cs.nguoi_quen_trong_quan_doi"))
+		sql.append("SELECT CONCAT(dtrai.ten, '-', dtrai.ten_truc_thuoc) as don_vi, count(cs.nguoi_quen_trong_quan_doi) as countDiBar, ")
+		.append(getQueryChienSiDetail(", ', chi tiết: ', cs.nguoi_quen_trong_quan_doi"))
 		.append("FROM chien_si_entity cs ")
 		.append("INNER JOIN doanh_trai_entity dtrai ")
 		.append("ON dtrai.id = cs.doanh_trai_id ")

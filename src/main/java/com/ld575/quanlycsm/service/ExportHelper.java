@@ -185,7 +185,7 @@ public class ExportHelper {
 	}
 
 	private void createKeepCharm(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
-		createHeaderNormal(workbook, sheet, "Giữ bùa");
+		createHeaderBelongArmy(workbook, sheet, "Giữ bùa");
 		createContentNormal(workbook, sheet, chienSiRepository.countGiuBua(namNhapNgu));
 	}
 	
@@ -331,84 +331,29 @@ public class ExportHelper {
 		}
 	}
 
-	private void createContentBelongArmy(XSSFWorkbook workbook, XSSFSheet sheet, List<CountChienSiDto> listContent) {
-		
-		Map<String, Integer> freq = getFreqChienSiDto(listContent);
-		String prevCellDaiDoi = "";
-		String prevCellTrungDoi = "";
-		String prevCellTieuDoi = "";
-		int prevIdxDaiDoi = rowIdx;
-		int prevIdxTrungDoi = rowIdx;
-		int prevIdxTieuDoi = rowIdx;
-		
-		for (int i = 0; i < listContent.size(); ++i) {
-			CountChienSiDto chienSiDto = listContent.get(i);
+	private void createContentBelongArmy(XSSFWorkbook workbook, XSSFSheet sheet, List<CountChienSiDto> contents) {
+		for(CountChienSiDto chienSiDto : contents) {
 			XSSFRow row = getRow(sheet, rowIdx);
+			if (commonService.isEmpty(chienSiDto.getTen()))	continue;
+			XSSFCell cell = row.createCell(1);
+			cell.setCellStyle(getStyleContent(workbook));
+			cell.setCellValue(chienSiDto.getTen());
 			
-			if (commonService.isEmpty(chienSiDto.getDetail())) continue;
+			cell = row.createCell(2);
+			cell.setCellStyle(getStyleContent(workbook));
+			cell.setCellValue(chienSiDto.getAmount());
+			
+			if (commonService.isEmpty(chienSiDto.getDetail()))	continue;
 			String[] arrChienSi = chienSiDto.getDetail().split("\\*\\|\\*");
-
-			XSSFCell cellDaiDoi = row.createCell(1);
-			cellDaiDoi.setCellStyle(getStyleContent(workbook));
-			String cellDaiDoiVal = chienSiDto.getDaiDoi() + ": " + (freq.getOrDefault(chienSiDto.getDaiDoi(), 0));
-
-			if (!prevCellDaiDoi.equals(cellDaiDoiVal)) {
-				cellDaiDoi.setCellValue(cellDaiDoiVal);
-				if (prevIdxDaiDoi != rowIdx) {
-					sheet.addMergedRegion(CellRangeAddress.valueOf("B" + (prevIdxDaiDoi + 1) + ":B" + (rowIdx)));
-				}
-				prevIdxDaiDoi = rowIdx;
-			} else {
-				if (i == listContent.size() - 1 && prevIdxDaiDoi != rowIdx) {
-					sheet.addMergedRegion(CellRangeAddress.valueOf("B" + (prevIdxDaiDoi + 1) + ":B" + (rowIdx + 1)));
-				}
-			}
 			
-			XSSFCell cellTrungDoi = row.createCell(2);
-			cellTrungDoi.setCellStyle(getStyleContent(workbook));
-			String cellTrungDoiVal = chienSiDto.getTrungDoi() + ": " + (freq.getOrDefault(chienSiDto.getDaiDoi() + "-" + chienSiDto.getTrungDoi(), 0));
-			
-			if (!prevCellTrungDoi.equals(cellTrungDoiVal)) {
-				cellTrungDoi.setCellValue(cellTrungDoiVal);
-				if (prevIdxTrungDoi != rowIdx) {
-					sheet.addMergedRegion(CellRangeAddress.valueOf("C" + (prevIdxTrungDoi + 1) + ":C" + (rowIdx)));
-				}
-				prevIdxTrungDoi = rowIdx;
-			} else {
-				if (i == listContent.size() - 1 && prevIdxTrungDoi != rowIdx) {
-					sheet.addMergedRegion(CellRangeAddress.valueOf("C" + (prevIdxTrungDoi + 1) + ":C" + (rowIdx + 1)));
-				}
-			}
-			
-			String cellTieuDoiVal = chienSiDto.getTieuDoi() + ": " + (freq.getOrDefault(chienSiDto.getDaiDoi() + "-" + chienSiDto.getTrungDoi() + "-" + chienSiDto.getTieuDoi(), 0));
-			XSSFCell cellTieuDoi = row.createCell(3);
-			cellTieuDoi.setCellStyle(getStyleContent(workbook));
-			
-			if (!prevCellTieuDoi.equals(cellTieuDoiVal)) {
-				cellTieuDoi.setCellValue(cellTieuDoiVal);
-				if (prevIdxTieuDoi != rowIdx && (prevIdxTieuDoi + 1 != rowIdx)) {
-					sheet.addMergedRegion(CellRangeAddress.valueOf("D" + (prevIdxTieuDoi + 1) + ":D" + (rowIdx)));
-				}
-				prevIdxTieuDoi = rowIdx;
-			} else {
-				if (i == listContent.size() - 1 && prevIdxTieuDoi != rowIdx) {
-					sheet.addMergedRegion(CellRangeAddress.valueOf("D" + (prevIdxTieuDoi + 1) + ":D" + (rowIdx + 1)));
-				}
-			}
-			
-			prevCellTrungDoi = cellTrungDoiVal;
-			prevCellDaiDoi = cellDaiDoiVal;
-			prevCellTieuDoi = cellTieuDoiVal;
-			
-			
-			XSSFCell cell3 = row.createCell(4);
+			cell = row.createCell(3);
 			StringBuilder strDetail = new StringBuilder();
 			for (String str : arrChienSi) {
 				strDetail.append(str + "\r\n");
 			}
-			cell3.setCellValue(strDetail.toString());
+			cell.setCellValue(strDetail.toString());
 			rowIdx++;
-		}
+		};
 	}
 	
 	private XSSFFont getFont(XSSFWorkbook workbook, short color, short fontHeight) {
@@ -450,24 +395,6 @@ public class ExportHelper {
 
 	private XSSFRow getRow(XSSFSheet sheet, int rowIdx) {
 		return sheet.getRow(rowIdx) == null ? sheet.createRow(rowIdx) : sheet.getRow(rowIdx);
-	}
-	
-	private Map<String, Integer> getFreqChienSiDto(List<CountChienSiDto> input) {
-		Map<String, Integer> freq = new HashMap<>();
-		input.stream().forEach(e -> {
-			int count = 0;
-			
-			if (e.getDetail() != null && e.getDetail().split("\\*\\|\\*").length > 1) {
-				count = e.getDetail().split("\\*\\|\\*").length - 1;
-			}
-			freq.put(e.getDaiDoi(), freq.getOrDefault(e.getDaiDoi(), 0) + 1 + count);
-			freq.put(e.getDaiDoi() + "-" + e.getTrungDoi(), freq.getOrDefault(e.getDaiDoi() + "-" + e.getTrungDoi(), 0) + 1 + count);
-			freq.put(e.getTrungDoi(), freq.getOrDefault(e.getTrungDoi(), 0) + 1 + count);
-			freq.put(e.getTrungDoi() + "-" + e.getTieuDoi(), freq.getOrDefault(e.getTrungDoi() + "-" + e.getTieuDoi(), 0) + 1 + count);
-			freq.put(e.getDaiDoi() + "-" + e.getTrungDoi() + "-" + e.getTieuDoi(), freq.getOrDefault(e.getDaiDoi() + "-" + e.getTrungDoi() + "-" + e.getTieuDoi(), 0) + 1 + count);
-		});
-		
-		return freq;
 	}
 	
 	private Map<String, Integer> getFreqDanToc(List<CountDanTocDto> input) {
