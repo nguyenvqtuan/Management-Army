@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Star Admin2</title>
+<!-- plugins:css -->
+<link rel="stylesheet" th:href="@{/vendors/feather/feather.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/mdi/css/materialdesignicons.min.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+<link rel="stylesheet" th:href="@{/vendors/typicons/typicons.css}">
+<link rel="stylesheet"
+	th:href="@{/vendors/simple-line-icons/css/simple-line-icons.css}">
+<!-- endinject -->
+<!-- Plugin css for this page -->
+<!-- End plugin css for this page -->
+<!-- inject:css -->
+<link rel="stylesheet" th:href="@{/css/vertical-layout-light/style.css}">
+<!-- endinject -->
+<link rel="shortcut icon" th:href="@{/images/favicon.png}" />
+<title>Doanh Trại</title>
+</head>
+
+<body>
+	<div class="container-scroller">
+		<!-- Nvarbar -->
+		<div th:replace="convert/nvarbar.html :: nvarbar"></div>
+		<!-- Body -->
+		<div class="container-fluid page-body-wrapper">
+			<!-- Sidebar -->
+			<div th:replace="convert/sidebar.html :: sidebar"></div>
+			<!-- Body -->
+			<div class="main-panel">
+				<div class="content-wrapper">
+					<div class="col-12 grid-margin stretch-card">
+						<div class="card">
+							<div class="card-body">
+								<h4 class="card-title" th:text="${title}"></h4>
+								<form class="forms-sample" method="POST"
+									th:object="${doanhTrai}" th:action="@{/doanh-trai/form}">
+									<div class="form-group">
+										<label for="ten">Tên</label> <input type="text"
+											th:field="*{ten}" class="form-control"
+											placeholder="Tên đơn vị">
+										<p th:if="${#fields.hasErrors('ten')}" th:text="*{ten}"
+											class="color-red" />
+
+									</div>
+									<div class="form-group">
+										<label for="tenDayDu">Tên đầy đủ</label> <input type="text"
+											th:field="*{tenDayDu}" name="tenDayDu" value="${tenDayDu}"
+											class="form-control" id="tenDayDu" placeholder="Tên đầy đủ">
+										<p th:if="${#fields.hasErrors('tenDayDu')}"
+											th:text="*{tenDayDu}" class="color-red" />
+
+									</div>
+									<div class="form-group">
+										<label for="moTa">Mô tả</label> <input type="text"
+											th:field="*{moTa}" name="moTa" value="${moTa}"
+											class="form-control" id="moTa" placeholder="Mô tả">
+									</div>
+									<div class="form-group">
+										<label for="capDo">Cấp độ </label> <select
+											class="form-control" id="capDo" name="capDo">
+											<option th:each="i : ${listCapDo}" th:value="${i.id}"
+												th:text="${i.name}"
+												th:selected="${i.id} == ${doanhTrai.capDo}"></option>
+										</select>
+										<p th:if="${#fields.hasErrors('capDo')}" th:text="*{capDo}"
+											class="color-red" />
+
+									</div>
+									<div class="form-group">
+										<label for="trucThuoc">Trực thuộc</label>
+										<div id="selectType-TrucThuoc" class="col-9 invisible">
+											
+										</div>
+										<select class="form-control invisible" id="trucThuoc"
+											th:field="*{trucThuoc}">
+										</select>
+									</div>
+									<div>
+										<input type="hidden" th:field="*{tenDayDuTrucThuoc}" /> <input
+											type="hidden" th:field="*{tenTrucThuoc}" /> <input
+											type="hidden" th:field="*{strIdTrucThuoc}" /> <input
+											type="hidden" th:field="*{id}" />
+									</div>
+									<button type="submit" class="btn btn-primary me-2">Submit</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Footer -->
+	</div>
+	<!-- container-scroller -->
+	<!-- plugins:js -->
+	<script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
+	<!-- endinject -->
+	<!-- Plugin js for this page -->
+	<script th:src="@{/vendors/typeahead.js/typeahead.bundle.min.js}"></script>
+	<script th:src="@{/vendors/select2/select2.min.js}"></script>
+	<script
+		th:src="@{/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js}"></script>
+	<!-- End plugin js for this page -->
+	<!-- inject:js -->
+	<script th:src="@{/js/off-canvas.js}"></script>
+	<script th:src="@{/js/hoverable-collapse.js}"></script>
+	<script th:src="@{/js/settings.js}"></script>
+	<script th:src="@{/js/todolist.js}"></script>
+	<!-- endinject -->
+	<!-- Custom js for this page-->
+	<script th:src="@{/js/file-upload.js}"></script>
+	<script th:src="@{/js/typeahead.js}"></script>
+	<script th:src="@{/js/select2.js}"></script>
+	<!-- End custom js for this page-->
+
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		$( document ).ready(function() {
+			let id = /*[[${id}]]*/'';
+			if (id == null) {
+				return;
+			}
+			
+			$("#selectType-TrucThuoc").attr('class', 'visible col-9');
+			
+			let listTrucThuoc = /*[[${listTrucThuoc}]]*/'';
+			listTrucThuoc.forEach(function(item) {
+				$("#selectType-TrucThuoc").append('<div class="d-float-left">');
+				$("#selectType-TrucThuoc").append('<input type="radio" class="d-float-left form-check-input mr-1" name="selectTrucThuoc" ' + item.checked + ' value="' + item.id +'">');
+				$("#selectType-TrucThuoc").append('<label class="float-left">' + item.name + '</label> ')
+				$("#selectType-TrucThuoc").append('</div>');	
+			});
+			
+			let listTrucThuocTrucTiep = /*[[${listTructhuocTrucTiep}]]*/'';
+			
+			$("#trucThuoc").attr("class", "form-control visible");
+			$('#trucThuoc').empty();
+			listTrucThuocTrucTiep.forEach(function(item) {
+				$('#trucThuoc')
+				.append('<option strIdTrucThuoc="' + item.strIdTrucThuoc + '" tenTrucThuoc="' + item.tenTrucThuoc + '" value="' + item.id +'" ' + item.checkedTrucThuoc + ' ">'
+								+ item.tenDayDuTrucThuoc
+								+ '</option>');
+			});
+		});
+		$("#capDo")
+				.on(
+						"change",
+						function() {
+							let capDo = $(this).val();
+							
+							let link = /*[[@{/doanh-trai/get-truc-thuoc-greater/}]]*/'';
+							$("#selectType-TrucThuoc").attr('class', 'visible col-9');
+							$("#selectType-TrucThuoc").empty();
+							
+							$.ajax({
+								url: link + capDo,
+								success: function(result) {
+									result.forEach(function(item) {
+										
+										$("#selectType-TrucThuoc").append('<div class="d-float-left">');
+										$("#selectType-TrucThuoc").append('<input type="radio" class="d-float-left form-check-input mr-1" name="selectTrucThuoc" value="' + item.id +'">');
+										$("#selectType-TrucThuoc").append('<label class="float-left">' + item.name + '</label> ')
+										$("#selectType-TrucThuoc").append('</div>');									
+									});
+									
+									$('input[type=radio][name=selectTrucThuoc]').change(function() {
+										let capDoRadio = $(this).val();
+										
+										// When level = BQP 
+										if (capDoRadio == 8) {
+											return;
+										}
+										
+										let linkTrucThuoc = /*[[@{/doanh-trai/get-truc-thuoc/}]]*/'';
+										$("#trucThuoc").attr("class", "form-control visible");
+										$.ajax({
+											url : linkTrucThuoc + capDoRadio,
+											success : function(resultRadio) {
+												$('#trucThuoc').empty();
+												let i = 0;
+												resultRadio.forEach(function(itemRadio) {
+													if (i == 0) {
+														$(
+																"#tenDayDuTrucThuoc")
+																.empty();
+														$(
+																"#tenDayDuTrucThuoc")
+																.val(
+																		itemRadio.tenDayDuTrucThuoc);
+
+														$("#strIdTrucThuoc")
+																.empty();
+														$("#strIdTrucThuoc")
+																.val(
+																		itemRadio.strIdTrucThuoc);
+
+														$("#tenTrucThuoc")
+																.empty();
+														$("#tenTrucThuoc")
+																.val(
+																		itemRadio.tenTrucThuoc);
+													}
+													$('#trucThuoc')
+															.append(
+																	'<option strIdTrucThuoc="' + itemRadio.strIdTrucThuoc + '" tenTrucThuoc="' + itemRadio.tenTrucThuoc + '" value="' + itemRadio.id +'">'
+																			+ itemRadio.tenDayDuTrucThuoc
+																			+ '</option>');
+													i++;
+												});
+											}
+										});
+										
+									});
+								}
+							});
+							
+						});
+		
+		$("#trucThuoc").on(
+				"change",
+				function() {
+					let tenDayDuTrucThuoc = $("#trucThuoc option:selected")
+							.text();
+					$("#tenDayDuTrucThuoc").empty().val(tenDayDuTrucThuoc);
+
+					let tenTrucThuoc = $("#trucThuoc option:selected").attr(
+							"tenTrucThuoc");
+					$("#tenTrucThuoc").empty().val(tenTrucThuoc);
+
+					let strIdTrucThuoc = $("#trucThuoc option:selected").attr(
+							"strIdTrucThuoc");
+					$("#strIdTrucThuoc").empty().val(strIdTrucThuoc);
+				});
+		/*]]>*/
+	</script>
+</body>
+</html>

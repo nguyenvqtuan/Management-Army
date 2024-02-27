@@ -1,0 +1,62 @@
+<nav xmlns:th="http://www.thymeleaf.org" th:fragment="sidebar" class="sidebar sidebar-offcanvas" id="sidebar">
+  <ul class="nav">
+    <li class="nav-item">
+      <a class="nav-link" th:href="@{/chien-si/list}">
+        <i class="mdi mdi-grid-large menu-icon"></i>
+        <span class="menu-title">Trang chủ</span>
+      </a>
+    </li>
+    <li class="nav-item nav-category">Trang</li>
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="collapse" href="#dan-toc" aria-expanded="false" aria-controls="auth">
+        <i class="menu-icon mdi mdi-account-circle-outline"></i>
+        <span class="menu-title">Dân tộc</span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="dan-toc">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" th:href="@{/dan-toc/list}"> Danh sách </a></li>
+        </ul>
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" th:href="@{/dan-toc/form}"> Thêm </a></li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="collapse" href="#doanh-trai" aria-expanded="false" aria-controls="auth">
+        <i class="menu-icon mdi mdi-account-circle-outline"></i>
+        <span class="menu-title">Doanh Trại</span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="doanh-trai">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" th:href="@{/doanh-trai/list}"> Danh sách </a></li>
+        </ul>
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" th:href="@{/doanh-trai/form}"> Thêm </a></li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="collapse" href="#chien-si" aria-expanded="false" aria-controls="auth">
+        <i class="menu-icon mdi mdi-account-circle-outline"></i>
+        <span class="menu-title">Chiến sĩ</span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="chien-si">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" th:href="@{/chien-si/list}"> Danh sách </a></li>
+        </ul>
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" th:href="@{/chien-si/form}"> Thêm </a></li>
+        </ul>
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" th:href="@{/chien-si/upload}"> Nhập tệp excel(.xlsx)</a></li>
+        </ul>
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" th:href="@{/chien-si/download}"> Thống kê excel</a></li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+</nav>
