@@ -19,7 +19,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class ChienSiInsertDto {
-	private long id;
+	private Long id;
 	private String trucThuoc;
 	
 	@NotEmpty(message = "Họ tên không được rỗng")

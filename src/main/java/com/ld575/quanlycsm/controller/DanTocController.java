@@ -50,8 +50,9 @@ public class DanTocController {
 	@PostMapping("/form")
 	public String insert(@ModelAttribute("dantoc") DanTocDto danTocDto, RedirectAttributes ra) {
 		MessageDto messageDto = danTocService.save(danTocDto);
-		String message = danTocDto.getId() != null ? "Thêm " : "Cập nhật " + messageDto.getMessage();
-		ra.addFlashAttribute("message", message);
+		
+		String message = danTocDto.getId() == null ? "Thêm " : "Cập nhật ";
+		ra.addFlashAttribute("message", message + messageDto.getMessage());
 		if (messageDto.getType() == Flag.FAILED) {
 			ra.addFlashAttribute("messageType", "error");
 		} else {

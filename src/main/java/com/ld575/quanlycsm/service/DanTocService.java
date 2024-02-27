@@ -27,8 +27,17 @@ public class DanTocService {
 	}
 	
 	public MessageDto save(DanTocDto danTocDto) {
+		
+		Optional<DanTocEntity> danTocByTen = findByTen(danTocDto.getTen());
+		if (danTocDto.getId() != null) {
+			Optional<DanTocEntity> danTocById = findById(danTocDto.getId());
+			if (!danTocByTen.get().getTen().equals(danTocById.get().getTen()) 
+					&& danTocByTen.isPresent()) {
+				return MessageDto.builder().message(Flag.FAILED.name + ". Tên bị trùng").type(Flag.FAILED).build();
+			}
+		}
 		// Check duplicate by name
-		if (findByTen(danTocDto.getTen()).isPresent()) {
+		if (danTocDto.getId() == null && danTocByTen.isPresent()) {
 			return MessageDto.builder().message(Flag.FAILED.name + ". Tên bị trùng").type(Flag.FAILED).build();
 		}
 		DanTocEntity danToc = DanTocEntity.builder()

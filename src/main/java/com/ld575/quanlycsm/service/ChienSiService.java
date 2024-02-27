@@ -22,6 +22,7 @@ import com.ld575.quanlycsm.dto.ChienSiInsertDto;
 import com.ld575.quanlycsm.dto.Flag;
 import com.ld575.quanlycsm.dto.MessageDto;
 import com.ld575.quanlycsm.entity.ChienSiEntity;
+import com.ld575.quanlycsm.entity.DanTocEntity;
 import com.ld575.quanlycsm.repository.ChienSiRepository;
 import com.ld575.quanlycsm.repository.CustomChienSiRepository;
 
@@ -48,8 +49,18 @@ public class ChienSiService {
 	public MessageDto save(ChienSiInsertDto chienSiDto) {
 		ChienSiEntity chienSiEntity = new ChienSiEntity();
 		
+		Optional<ChienSiEntity> chienSiByTen = chienSiRepository.findByHoTenAndNickNameContaining(chienSiDto.getHoTen(), chienSiDto.getNickName());
+		if (chienSiDto.getId() != null) {
+			Optional<ChienSiEntity> chienSiById = findById(chienSiDto.getId());
+			if (!chienSiByTen.get().getHoTen().equals(chienSiById.get().getHoTen())
+					&& !chienSiByTen.get().getNickName().equals(chienSiById.get().getNickName()) 
+					&& chienSiByTen.isPresent()) {
+				return MessageDto.builder().message(Flag.FAILED.name + ". Tên bị trùng").type(Flag.FAILED).build();
+			}
+		}
+		
 		// Check duplicate HoTen and NickName
-		if (chienSiRepository.findByHoTenAndNickNameContaining(chienSiDto.getHoTen(), chienSiDto.getNickName()).isPresent()) {
+		if (chienSiDto.getId() == null && chienSiByTen.isPresent()) {
 			return MessageDto.builder().message(Flag.FAILED.name + ". Tên bị trùng").type(Flag.FAILED).build();
 		}
 		
