@@ -139,7 +139,7 @@ public class ChienSiEntity {
 	@Column
 	private String sucKhoe;
 	
-	@Column(columnDefinition = "char(1) COMMENT \"c: chua dang ky ket hon, r: da dang ky ket hon\"")
+	@Column
 	private char coVo;
 	
 	@Column

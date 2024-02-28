@@ -2,14 +2,13 @@ version: "3.9"
     
 services:
   db:
-    image: mysql
+    image: postgres
     volumes:
       - /home/quoctuan/Projects/Management-CSM/Database:/home/quoctuan/test-db/
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: abc123#A
-      MYSQL_DATABASE: quanly_csm
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: abc123#A
+      POSTGRES_DATABASE: quanly_csm
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: abc123#A
     ports:
-      - "3306:3306"
+      - "5433:5432"
