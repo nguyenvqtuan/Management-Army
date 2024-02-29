@@ -158,6 +158,25 @@ public class ChienSiController {
 		ra.addFlashAttribute("message", "Download thành công!");
 		ra.addFlashAttribute("messageType", "success");
 	}
+	
+	@GetMapping("/download-detail")
+	public String showExportDetail() {
+		return "chiensi/downloadDetail";
+	}
+
+	@PostMapping("/download-detail")
+	public void exportDetail(HttpServletResponse response, @RequestParam("namNhapNgu") String namNhapNgu, RedirectAttributes ra)
+			throws IOException {
+		ByteArrayInputStream byteArrayInputStream = exportHelper.exportDetail(namNhapNgu);
+		response.setContentType("application/octet-stream");
+		LocalDateTime now = LocalDateTime.now();
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");  
+        String formatDateTime = now.format(format);  
+		response.setHeader("Content-Disposition", "attachment; filename=thong-ke-csm-" + namNhapNgu + " _" + formatDateTime + ".xlsx");
+		IOUtils.copy(byteArrayInputStream, response.getOutputStream());
+		ra.addFlashAttribute("message", "Download thành công!");
+		ra.addFlashAttribute("messageType", "success");
+	}
 
 	private List<TrinhDoDto> getListTrinhDo() {
 		List<TrinhDoDto> listTrinhDo = new ArrayList<>();

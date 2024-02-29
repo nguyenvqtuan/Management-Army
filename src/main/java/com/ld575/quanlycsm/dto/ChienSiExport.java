@@ -2,6 +2,8 @@ package com.ld575.quanlycsm.dto;
 
 import java.util.List;
 
+import com.ld575.quanlycsm.entity.ChienSiEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,5 +20,5 @@ public class ChienSiExport {
 
 	private String tenDayDu;
 	private long soLuong;
-	private List<ChienSiDto> listChienSiDto;
+	private List<ChienSiEntity> listChienSi;
 }

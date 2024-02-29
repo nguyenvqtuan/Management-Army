@@ -60,5 +60,4 @@ public class ChienSiDto {
 	private boolean boMeLiDi;
 	private boolean khongCoBo;
 	private String coVo;
-	
 }

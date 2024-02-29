@@ -3,9 +3,13 @@ package com.ld575.quanlycsm.service;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.IntStream;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -20,8 +24,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ld575.quanlycsm.dto.ChienSiExport;
 import com.ld575.quanlycsm.dto.CountChienSiDto;
 import com.ld575.quanlycsm.dto.CountDanTocDto;
+import com.ld575.quanlycsm.entity.ChienSiEntity;
+import com.ld575.quanlycsm.repository.ChienSiRepository;
 import com.ld575.quanlycsm.repository.ExportChienSiRepository;
 
 @Component
@@ -30,7 +37,10 @@ public class ExportHelper {
 	private static int DEFAULT_DISTANCE_STATISTICAL = 2;
 	
 	@Autowired
-	private ExportChienSiRepository chienSiRepository;
+	private ExportChienSiRepository exportChienSiRepository;
+	
+	@Autowired
+	private ChienSiRepository chienSiRepository;
 
 	@Autowired
 	private CommonService commonService;
@@ -52,6 +62,41 @@ public class ExportHelper {
 			return null;
 		}
 	}
+	
+	public ByteArrayInputStream exportDetail(String namNhapNgu) {
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		XSSFSheet sheet = workbook.createSheet("Thống kê");
+
+		createHeaderDetail(workbook, sheet, namNhapNgu);
+		createContentDetail(workbook, sheet, namNhapNgu);
+		
+		try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+			workbook.write(outputStream);
+			return new ByteArrayInputStream(outputStream.toByteArray());
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private void createHeaderDetail(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
+		setTitle(workbook, sheet, namNhapNgu);
+
+		sheet.addMergedRegion(CellRangeAddress.valueOf("B2:K2"));
+		createTableHeader(workbook, sheet);
+	}
+	
+	private void createTableHeader(XSSFWorkbook workbook, XSSFSheet sheet) {
+		List<String> chienSiColumns = commonService.getListColumns(new ChienSiEntity());
+	
+		rowIdx = 5;
+		XSSFRow row = getRow(sheet, rowIdx);
+		IntStream.rangeClosed(1, chienSiColumns.size()).forEach(i -> {
+			XSSFCell cell = row.createCell(i);
+			cell.setCellStyle(getStyleContent(workbook));
+			cell.setCellValue(chienSiColumns.get(i - 1));
+		});
+	}
 
 	private void createHeader(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		setTitle(workbook, sheet, namNhapNgu);
@@ -59,6 +104,35 @@ public class ExportHelper {
 
 		sheet.addMergedRegion(CellRangeAddress.valueOf("B2:K2"));
 		sheet.addMergedRegion(CellRangeAddress.valueOf("I4:K4"));
+	}
+	
+	private void createContentDetail(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
+		List<ChienSiEntity> listChienSi = chienSiRepository.findByNamNhapNgu(namNhapNgu);
+		
+		Map<String, ChienSiExport> content = getChienSiExport(namNhapNgu);
+		
+		
+		for (Map.Entry<String, ChienSiExport> entry : content.entrySet()) {
+			ChienSiExport val = entry.getValue();
+			
+			// Create header
+			rowIdx += 1;
+			sheet.addMergedRegion(CellRangeAddress.valueOf("B" + (rowIdx) + ":E" + (rowIdx)));
+			XSSFRow row = getRow(sheet, rowIdx);
+			XSSFCell cell = row.createCell(1);
+			cell.setCellStyle(getStyleContent(workbook));
+			cell.setCellValue(val.getTenDayDu() + "(" + val.getSoLuong() + ")");
+			int col = 1;
+			
+			rowIdx += 1;
+			// Create content
+			for (ChienSiEntity e : val.getListChienSi()) {
+				cell = row.createCell(col++);
+				cell.setCellStyle(getStyleContent(workbook));
+				List<String> columns = commonService.getListColumns(e);
+				cell.setCellValue(commonService.getFieldValue(e, columns, col));
+			}
+		}
 	}
 
 	private void createContent(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
@@ -97,7 +171,7 @@ public class ExportHelper {
 		XSSFCell cell = row.createCell(1);
 		cell.setCellStyle(cellStyleHeader);
 
-		cell.setCellValue("BẢNG THỐNG KÊ CHIẾN SĨ MỚI NĂM " + namNhapNgu);
+		cell.setCellValue("THỐNG KÊ CHIẾN SĨ NĂM " + namNhapNgu);
 	}
 
 	private void setNumberOfTrops(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
@@ -115,7 +189,7 @@ public class ExportHelper {
 
 		cell.setCellStyle(cellStyleHeader);
 
-		long numberOfTrops = chienSiRepository.countSoldier(namNhapNgu).getAmount();
+		long numberOfTrops = exportChienSiRepository.countSoldier(namNhapNgu).getAmount();
 		cell.setCellValue("Tổng quân số: " + numberOfTrops + " đ/c");
 	}
 
@@ -126,92 +200,92 @@ public class ExportHelper {
 
 	private void createEthnic(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderNormal(workbook, sheet, "Dân tộc");
-		createContentNormal(workbook, sheet, chienSiRepository.countDanToc(namNhapNgu));
+		createContentNormal(workbook, sheet, exportChienSiRepository.countDanToc(namNhapNgu));
 	}
 
 	private void createReligion(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderNormal(workbook, sheet, "Tôn giáo");
-		createContentNormal(workbook, sheet, chienSiRepository.countTonGiao(namNhapNgu));
+		createContentNormal(workbook, sheet, exportChienSiRepository.countTonGiao(namNhapNgu));
 	}
 	
 	private void createLeagure(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderNormal(workbook, sheet, "Đảng viên");
-		createContentNormal(workbook, sheet, chienSiRepository.countDangVien(namNhapNgu));
+		createContentNormal(workbook, sheet, exportChienSiRepository.countDangVien(namNhapNgu));
 	}
 	
 	private void createDegree(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderNormal(workbook, sheet, "Trình độ");
-		createContentNormal(workbook, sheet, chienSiRepository.countTrinhDo(namNhapNgu));
+		createContentNormal(workbook, sheet, exportChienSiRepository.countTrinhDo(namNhapNgu));
 	}
 	
 	private void createWedded(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderNormal(workbook, sheet, "Có vợ, con");
-		createContentNormal(workbook, sheet, chienSiRepository.countCoVo(namNhapNgu));
+		createContentNormal(workbook, sheet, exportChienSiRepository.countCoVo(namNhapNgu));
 	}
 	
 	private void createHealth(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderNormal(workbook, sheet, "Sức khỏe");
-		createContentNormal(workbook, sheet, chienSiRepository.countSucKhoe(namNhapNgu));
+		createContentNormal(workbook, sheet, exportChienSiRepository.countSucKhoe(namNhapNgu));
 	}
 	
 	private void createAge(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderNormal(workbook, sheet, "Năm sinh");
-		createContentNormal(workbook, sheet, chienSiRepository.countDoTuoi(namNhapNgu));
+		createContentNormal(workbook, sheet, exportChienSiRepository.countDoTuoi(namNhapNgu));
 	}
 	
 	private void createDadPassed(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderBelongArmy(workbook, sheet, "Bố mất");
-		createContentBelongArmy(workbook, sheet, chienSiRepository.countBoMat(namNhapNgu));
+		createContentBelongArmy(workbook, sheet, exportChienSiRepository.countBoMat(namNhapNgu));
 	}
 	
 	private void createMomPassed(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderBelongArmy(workbook, sheet, "Mẹ mất");
-		createContentBelongArmy(workbook, sheet, chienSiRepository.countMeMat(namNhapNgu));
+		createContentBelongArmy(workbook, sheet, exportChienSiRepository.countMeMat(namNhapNgu));
 	}
 	
 	private void createDivorcedParents(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderBelongArmy(workbook, sheet, "Bố mẹ li dị");
-		createContentBelongArmy(workbook, sheet, chienSiRepository.countBoMeLiDi(namNhapNgu));
+		createContentBelongArmy(workbook, sheet, exportChienSiRepository.countBoMeLiDi(namNhapNgu));
 	}
 	
 	private void createNoFather(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderBelongArmy(workbook, sheet, "Không có bố");
-		createContentBelongArmy(workbook, sheet, chienSiRepository.countKhongCoBo(namNhapNgu));
+		createContentBelongArmy(workbook, sheet, exportChienSiRepository.countKhongCoBo(namNhapNgu));
 	}
 	
 	private void createTatoo(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderBelongArmy(workbook, sheet, "Hình xăm");
-		createContentBelongArmy(workbook, sheet, chienSiRepository.countHinhXam(namNhapNgu));
+		createContentBelongArmy(workbook, sheet, exportChienSiRepository.countHinhXam(namNhapNgu));
 	}
 
 	private void createKeepCharm(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderBelongArmy(workbook, sheet, "Giữ bùa");
-		createContentNormal(workbook, sheet, chienSiRepository.countGiuBua(namNhapNgu));
+		createContentNormal(workbook, sheet, exportChienSiRepository.countGiuBua(namNhapNgu));
 	}
 	
 	private void createLover(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderBelongArmy(workbook, sheet, "Người yêu");
-		createContentBelongArmy(workbook, sheet, chienSiRepository.countNguoiYeu(namNhapNgu));
+		createContentBelongArmy(workbook, sheet, exportChienSiRepository.countNguoiYeu(namNhapNgu));
 	}
 	
 	private void createSmoker(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderBelongArmy(workbook, sheet, "Hút thuốc");
-		createContentBelongArmy(workbook, sheet, chienSiRepository.countHutThuoc(namNhapNgu));
+		createContentBelongArmy(workbook, sheet, exportChienSiRepository.countHutThuoc(namNhapNgu));
 	}
 	
 	private void createDifficultFamily(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderBelongArmy(workbook, sheet, "Gia đình khó khăn");
-		createContentBelongArmy(workbook, sheet, chienSiRepository.countGiaDinhKhoKhan(namNhapNgu));
+		createContentBelongArmy(workbook, sheet, exportChienSiRepository.countGiaDinhKhoKhan(namNhapNgu));
 	}
 	
 	private void createAcquaintanceInTheArmy(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderNormal(workbook, sheet, "Người quen trong quân đội");
-		createContentNormal(workbook, sheet, chienSiRepository.countNguoiQuenTrongQuanDoi(namNhapNgu));
+		createContentNormal(workbook, sheet, exportChienSiRepository.countNguoiQuenTrongQuanDoi(namNhapNgu));
 	}
 	
 	private void createForte(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		createHeaderNormal(workbook, sheet, "Sở trường");
-		createContentNormal(workbook, sheet, chienSiRepository.countSoTruong(namNhapNgu));
+		createContentNormal(workbook, sheet, exportChienSiRepository.countSoTruong(namNhapNgu));
 	}
 	
 	private void createHeaderHomeTown(XSSFWorkbook workbook, XSSFSheet sheet) {
@@ -251,7 +325,7 @@ public class ExportHelper {
 	}
 
 	private void createContentHomeTown(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
-		List<CountDanTocDto> listQueQuan = chienSiRepository.countQueQuan(namNhapNgu);
+		List<CountDanTocDto> listQueQuan = exportChienSiRepository.countQueQuan(namNhapNgu);
 		
 		Map<String, Integer> freq = getFreqDanToc(listQueQuan);
 		String prevCellTinhThanh = "";
@@ -489,5 +563,39 @@ public class ExportHelper {
 		cell = row.createCell(3);
 		cell.setCellStyle(getStyleMiddle(workbook));
 		cell.setCellValue("Chi tiết");
+	}
+	
+	private Map<String, ChienSiExport> getChienSiExport(String namNhapNgu) {
+		List<ChienSiEntity> chienSiEntitys = chienSiRepository.findByNamNhapNgu(namNhapNgu);
+		
+		// Sorted order desc
+		Map<String, ChienSiExport> res = new TreeMap<>(new Comparator<String>() {
+			@Override
+		    public int compare(String s1, String s2) {
+		        return s1.length() == s2.length() ? s1.compareTo(s2) : s1.length() - s2.length();
+		    }
+		});
+		
+		for (ChienSiEntity cs : chienSiEntitys) {
+			if (commonService.isEmpty(cs.getDoanhTrai().getTen()) || 
+					commonService.isEmpty(cs.getDoanhTrai().getTenTrucThuoc())) continue;
+			String key = cs.getDoanhTrai().getTen() + "-" + cs.getDoanhTrai().getTenTrucThuoc();
+			ChienSiExport val = new ChienSiExport();
+			
+			List<ChienSiEntity> innerCs;
+			if (!res.containsKey(key)) {
+				val.setTenDayDu(cs.getDoanhTrai().getTenDayDu());
+				innerCs = new ArrayList<>();
+			} else {
+				innerCs = res.get(key).getListChienSi();
+			}
+			innerCs.add(cs);
+			
+			val.setListChienSi(innerCs);
+			val.setSoLuong(val.getSoLuong() + 1);
+			res.put(key, val);
+		}
+		
+		return res;
 	}
 }
