@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Xuất file excel thống kê</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" th:href="@{/vendors/feather/feather.css}">
+  <link rel="stylesheet" th:href="@{/vendors/mdi/css/materialdesignicons.min.css}">
+  <link rel="stylesheet" th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+  <link rel="stylesheet" th:href="@{/vendors/typicons/typicons.css}">
+  <link rel="stylesheet" th:href="@{/vendors/simple-line-icons/css/simple-line-icons.css}">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" th:href="@{/css/vertical-layout-light/style.css}">
+  <link th:href="@{/css/toastr.min.css}" rel="stylesheet"/>
+  <!-- endinject -->
+  <link rel="shortcut icon" th:href="@{/images/favicon.png}" />
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- Nvarbar -->
+    <div th:replace="convert/nvarbar.html :: nvarbar"></div>
+    <!-- Body -->
+    <div class="container-fluid page-body-wrapper">
+    	<!-- Sidebar -->
+    	<div th:replace="convert/sidebar.html :: sidebar"></div>
+    	<!-- Body -->
+    	<div class="main-panel">
+    		<div class="content-wrapper">
+	    		<div class="col-12 grid-margin stretch-card">
+				  <div class="card">
+				    <div class="card-body">
+				      <h4 class="card-title" th:text="${title}"></h4>
+				      <form class="forms-sample" method="POST" th:action="@{/chien-si/download-detail}">
+				        <div class="form-group">
+				        	<div class="row">
+				        		<div class="col-3">
+				        			<label>Năm nhập ngũ</label>
+				        		</div>
+								<div class="col-9">
+									<input type="text" name="namNhapNgu" id="namNhapNgu" class="form-control w-25 float-left" placeholder="Năm nhập ngũ"/>	
+								</div>				        	
+				        	</div>
+				        </div>
+				        <button type="submit" class="btn btn-primary me-2">Tải về</button>
+				      </form>
+				    </div>
+				  </div>
+				</div>
+    		</div>
+    	</div>
+    </div>
+    <!-- Footer -->
+  </div>
+  <!-- container-scroller -->
+  <!-- plugins:js -->
+  <script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+  <script th:src="@{/vendors/typeahead.js/typeahead.bundle.min.js}"></script>
+  <script th:src="@{/vendors/select2/select2.min.js}"></script>
+  <script th:src="@{/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js}"></script>
+  <!-- End plugin js for this page -->
+  <!-- inject:js -->
+  <script th:src="@{/js/off-canvas.js}"></script>
+  <script th:src="@{/js/hoverable-collapse.js}"></script>
+  <script th:src="@{/js/settings.js}"></script>
+  <script th:src="@{/js/todolist.js}"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script th:src="@{/js/file-upload.js}"></script>
+  <script th:src="@{/js/typeahead.js}"></script>
+  <script th:src="@{/js/select2.js}"></script>
+
+	<script th:src="@{/js/toastr.min.js}"></script>
+  <!-- End custom js for this page-->
+  <script type="text/javascript" th:inline="javascript">
+  /*<![CDATA[*/
+  $(document).ready(function() {
+		let message = /*[[${message}]]*/'';
+		let messageType = /*[[${messageType}]]*/'';
+		if (messageType == 'error') {
+			toastr.error(message);
+		} else if (messageType == 'success') {
+			toastr.info(message);	
+		}
+	})
+	/*]]>*/
+  </script>
+ </body>
+ </html>
+  

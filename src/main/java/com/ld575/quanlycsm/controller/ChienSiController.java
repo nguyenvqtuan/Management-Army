@@ -28,9 +28,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ld575.quanlycsm.dto.ChienSiDto;
 import com.ld575.quanlycsm.dto.ChienSiInsertDto;
-import com.ld575.quanlycsm.dto.MessageDto;
 import com.ld575.quanlycsm.dto.DoanhTraiDto;
 import com.ld575.quanlycsm.dto.Flag;
+import com.ld575.quanlycsm.dto.MessageDto;
 import com.ld575.quanlycsm.dto.TrinhDoDto;
 import com.ld575.quanlycsm.entity.ChienSiEntity;
 import com.ld575.quanlycsm.entity.DanTocEntity;
@@ -62,23 +62,6 @@ public class ChienSiController {
 		model.addAttribute("listChienSi", listChienSi);
 		model.addAttribute("listTrinhDo", getListTrinhDo());
 		model.addAttribute("listDanToc", getListDanToc());
-		model.addAttribute("listDaiDoi", getListDoanhTraiDaiDoi());
-
-		List<DoanhTraiDto> listTrungDoi;
-		if (chienSiDto.getIdDaiDoi() != null && chienSiDto.getIdDaiDoi() != 0L) {
-			listTrungDoi = getListDoanhTraiTrungDoi(chienSiDto.getIdDaiDoi());
-		} else {
-			listTrungDoi = new ArrayList<>();
-		}
-		model.addAttribute("listTrungDoi", listTrungDoi);
-
-		List<DoanhTraiDto> listTieuDoi;
-		if (chienSiDto.getIdTrungDoi() != null && chienSiDto.getIdTrungDoi() != 0L) {
-			listTieuDoi = getListDoanhTraiTieuDoi(chienSiDto.getIdTrungDoi());
-		} else {
-			listTieuDoi = new ArrayList<>();
-		}
-		model.addAttribute("listTieuDoi", listTieuDoi);
 		model.addAttribute("chiensi", chienSiDto == null ? new ChienSiDto() : chienSiDto);
 		return "chiensi/list";
 	}
@@ -205,36 +188,6 @@ public class ChienSiController {
 			res.add(danTocEntity);
 		}
 		return res;
-	}
-
-	private List<DoanhTraiDto> getListDoanhTraiDaiDoi() {
-		List<DoanhTraiEntity> listDoanhTraiEntity = doanhTraiService.findByCapDo(3);
-		List<DoanhTraiDto> listDoanhTrai = listDoanhTraiEntity.stream().map(e -> {
-			return DoanhTraiDto.builder().id(e.getId()).tenDayDu(e.getTenDayDu()).build();
-		}).collect(Collectors.toList());
-
-		listDoanhTrai.add(0, DoanhTraiDto.builder().id(0L).tenDayDu("Đại đội").build());
-		return listDoanhTrai;
-	}
-
-	private List<DoanhTraiDto> getListDoanhTraiTrungDoi(Long idDaiDoi) {
-		List<DoanhTraiEntity> listDoanhTraiEntity = doanhTraiService.findByCapDoAndTrucThuoc(2, idDaiDoi);
-		List<DoanhTraiDto> listDoanhTrai = listDoanhTraiEntity.stream().map(e -> {
-			return DoanhTraiDto.builder().id(e.getId()).tenDayDu(e.getTenDayDu()).build();
-		}).collect(Collectors.toList());
-
-		listDoanhTrai.add(0, DoanhTraiDto.builder().id(0L).tenDayDu("Trung đội").build());
-		return listDoanhTrai;
-	}
-
-	private List<DoanhTraiDto> getListDoanhTraiTieuDoi(Long idTrungDoi) {
-		List<DoanhTraiEntity> listDoanhTraiEntity = doanhTraiService.findByCapDoAndTrucThuoc(1, idTrungDoi);
-		List<DoanhTraiDto> listDoanhTrai = listDoanhTraiEntity.stream().map(e -> {
-			return DoanhTraiDto.builder().id(e.getId()).tenDayDu(e.getTenDayDu()).build();
-		}).collect(Collectors.toList());
-
-		listDoanhTrai.add(0, DoanhTraiDto.builder().id(0L).tenDayDu("Tiểu đội").build());
-		return listDoanhTrai;
 	}
 
 	private ChienSiInsertDto getChienSiDto(ChienSiEntity chienSiEntity) {

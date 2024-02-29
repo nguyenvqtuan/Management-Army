@@ -21,9 +21,7 @@ public class CustomChienSiRepository {
 	@Autowired
 	private CommonService commonService;
 	
-	@Autowired
-	private DoanhTraiRepository doanhTraiRepository;
-
+	@SuppressWarnings("unchecked")
 	public List<ChienSiEntity> findByCondition(ChienSiDto chienSiDto) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT cs ")
@@ -35,6 +33,7 @@ public class CustomChienSiRepository {
 		
 		setParams(query, chienSiDto);
 		List<ChienSiEntity> res = (List<ChienSiEntity>) query.getResultList();
+		
 		return res;
 	}
 
@@ -52,7 +51,6 @@ public class CustomChienSiRepository {
 		setParamsNgheNghiepBanThan(query, chienSiDto);
 		setParamsSoThich(query, chienSiDto);
 		setParamsCoVo(query, chienSiDto);
-		setParamsTrucThuoc(query, chienSiDto);
 		setParamsCoMayAnhChiEm(query, chienSiDto);
 		setParamsConThuMayTrongNha(query, chienSiDto);
 	}
@@ -171,7 +169,7 @@ public class CustomChienSiRepository {
 			sb.append(getConditionNgheNghiepBanThan(chienSiDto));
 		}
 		
-		if (chienSiDto.isHinhXam()) {
+		if (!commonService.isEmpty(chienSiDto.getHinhXam())) {
 			if (sb.length() == 0) {
 				sb.insert(0, " WHERE ");
 			} else {
@@ -180,7 +178,7 @@ public class CustomChienSiRepository {
 			sb.append(getConditionHinhXam(chienSiDto));
 		}
 		
-		if (chienSiDto.isGiuBua()) {
+		if (!commonService.isEmpty(chienSiDto.getGiuBua())) {
 			if (sb.length() == 0) {
 				sb.insert(0, " WHERE ");
 			} else {
@@ -189,7 +187,7 @@ public class CustomChienSiRepository {
 			sb.append(getConditionGiuBua(chienSiDto));
 		}
 		
-		if (chienSiDto.isNguoiYeu()) {
+		if (!commonService.isEmpty(chienSiDto.getNguoiYeu())) {
 			if (sb.length() == 0) {
 				sb.insert(0, " WHERE ");
 			} else {
@@ -198,7 +196,7 @@ public class CustomChienSiRepository {
 			sb.append(getConditionNguoiYeu(chienSiDto));
 		}
 		
-		if (chienSiDto.isHutThuoc()) {
+		if (!commonService.isEmpty(chienSiDto.getHutThuoc())) {
 			if (sb.length() == 0) {
 				sb.insert(0, " WHERE ");
 			} else {
@@ -259,17 +257,6 @@ public class CustomChienSiRepository {
 				sb.append(" AND ");
 			}
 			sb.append(getConditionKhongCoBo(chienSiDto));
-		}
-		
-		if ((chienSiDto.getIdDaiDoi() != null && chienSiDto.getIdDaiDoi() != 0L) ||
-				(chienSiDto.getIdTrungDoi() != null && chienSiDto.getIdTrungDoi() != 0L) ||
-				(chienSiDto.getIdTieuDoi() != null && chienSiDto.getIdTieuDoi() != 0L)) {
-			if (sb.length() == 0) {
-				sb.insert(0, " WHERE ");
-			} else {
-				sb.append(" AND ");
-			}
-			sb.append(getConditionDoanhTrai(chienSiDto));
 		}
 		
 		if (chienSiDto.getCoMayAnhChiEm() != null && chienSiDto.getCoMayAnhChiEm() != 0) {
@@ -541,7 +528,7 @@ public class CustomChienSiRepository {
 	
 	private String getConditionHinhXam(ChienSiDto chienSiDto) {
 		StringBuilder sb = new StringBuilder();
-		if (chienSiDto.isHinhXam()) {
+		if (!commonService.isEmpty(chienSiDto.getHinhXam())) {
 			sb.insert(0, " ( ");
 			sb.append("cs.hinhXam IS NOT NULL");
 		}
@@ -554,7 +541,7 @@ public class CustomChienSiRepository {
 	
 	private String getConditionGiuBua(ChienSiDto chienSiDto) {
 		StringBuilder sb = new StringBuilder();
-		if (chienSiDto.isGiuBua()) {
+		if (!commonService.isEmpty(chienSiDto.getGiuBua())) {
 			sb.insert(0, " ( ");
 			sb.append("cs.giuBua IS NOT NULL");
 		}
@@ -567,7 +554,7 @@ public class CustomChienSiRepository {
 	
 	private String getConditionNguoiYeu(ChienSiDto chienSiDto) {
 		StringBuilder sb = new StringBuilder();
-		if (chienSiDto.isNguoiYeu()) {
+		if (!commonService.isEmpty(chienSiDto.getNguoiYeu())) {
 			sb.insert(0, " ( ");
 			sb.append("cs.nguoiYeu IS NOT NULL");
 		}
@@ -580,7 +567,7 @@ public class CustomChienSiRepository {
 	
 	private String getConditionHutThuoc(ChienSiDto chienSiDto) {
 		StringBuilder sb = new StringBuilder();
-		if (chienSiDto.isHutThuoc()) {
+		if (!commonService.isEmpty(chienSiDto.getHutThuoc())) {
 			sb.insert(0, " ( ");
 			sb.append("cs.hutThuoc IS NOT NULL");
 		}
@@ -663,39 +650,6 @@ public class CustomChienSiRepository {
 			sb.insert(0, " ( ");
 			sb.append("cs.khongCoBo IS NOT NULL");
 		}
-		if (sb.length() == 0) {
-			return "";
-		}
-		sb.append(")");
-		return sb.toString();
-	}
-	
-	private String getConditionDoanhTrai(ChienSiDto chienSiDto) {
-		StringBuilder sb = new StringBuilder();
-		if (chienSiDto.getIdDaiDoi() != null && chienSiDto.getIdDaiDoi() != 0L) {
-			sb.insert(0, " ( ");
-			sb.append("dtrai.tenTrucThuoc LIKE :daiDoi");
-		}
-		
-		if (chienSiDto.getIdTrungDoi() != null && chienSiDto.getIdTrungDoi() != 0L) {
-			if (sb.length() == 0) {
-				sb.insert(0, " ( ");
-			} else {
-				sb.append(" AND ");
-			}
-			
-			sb.append("dtrai.tenTrucThuoc LIKE :trungDoi");
-		}
-		
-		if (chienSiDto.getIdTieuDoi() != null && chienSiDto.getIdTieuDoi() != 0L) {
-			if (sb.length() == 0) {
-				sb.insert(0, " ( ");
-			} else {
-				sb.append(" AND ");
-			}
-			sb.append("dtrai.ten LIKE :tieuDoi");
-		}
-		
 		if (sb.length() == 0) {
 			return "";
 		}
@@ -849,18 +803,6 @@ public class CustomChienSiRepository {
 	private void setParamsCoVo(Query query, ChienSiDto chienSiDto) {
 		if (!commonService.isEmpty(chienSiDto.getCoVo())) {
 			query.setParameter("coVo", chienSiDto.getCoVo().toCharArray()[0]);
-		}
-	}
-	
-	private void setParamsTrucThuoc(Query query, ChienSiDto chienSiDto) {
-		if (chienSiDto.getIdDaiDoi() != null && chienSiDto.getIdDaiDoi() != 0L) {
-			query.setParameter("daiDoi", "%" + doanhTraiRepository.findById(chienSiDto.getIdDaiDoi()).get().getTen() + "%");
-		}
-		if (chienSiDto.getIdTrungDoi() != null && chienSiDto.getIdTrungDoi() != 0L) {
-			query.setParameter("trungDoi", "%" + doanhTraiRepository.findById(chienSiDto.getIdTrungDoi()).get().getTen() + "%");
-		}
-		if (chienSiDto.getIdTieuDoi() != null && chienSiDto.getIdTieuDoi() != 0L) {
-			query.setParameter("tieuDoi", "%" + doanhTraiRepository.findById(chienSiDto.getIdTieuDoi()).get().getTen() + "%");
 		}
 	}
 	

@@ -49,10 +49,10 @@ public class ChienSiDto {
 	private Integer coMayAnhChiEm;
 	private Integer conThuMayTrongNha;
 		
-	private boolean hinhXam;
-	private boolean giuBua;
-	private boolean nguoiYeu;
-	private boolean hutThuoc;
+	private String hinhXam;
+	private String giuBua;
+	private String nguoiYeu;
+	private String hutThuoc;
 	private String soTruong;
 	
 	private boolean boMat;
@@ -61,11 +61,4 @@ public class ChienSiDto {
 	private boolean khongCoBo;
 	private String coVo;
 	
-	private Long idDaiDoi;
-	private Long idTrungDoi;
-	private Long idTieuDoi;
-	
-	private String strDaiDoi;
-	private String strTrungDoi;
-	private String strTieuDoi;
 }
