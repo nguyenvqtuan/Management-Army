@@ -3,13 +3,14 @@ package com.ld575.quanlycsm.service;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.stream.IntStream;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -81,21 +82,59 @@ public class ExportHelper {
 
 	private void createHeaderDetail(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
 		setTitle(workbook, sheet, namNhapNgu);
+		setNumberOfTrops(workbook, sheet, namNhapNgu);
 
 		sheet.addMergedRegion(CellRangeAddress.valueOf("B2:K2"));
+		sheet.addMergedRegion(CellRangeAddress.valueOf("I4:K4"));
+
 		createTableHeader(workbook, sheet);
 	}
 	
 	private void createTableHeader(XSSFWorkbook workbook, XSSFSheet sheet) {
-		List<String> chienSiColumns = commonService.getListColumns(new ChienSiEntity());
 	
 		rowIdx = 5;
-		XSSFRow row = getRow(sheet, rowIdx);
-		IntStream.rangeClosed(1, chienSiColumns.size()).forEach(i -> {
-			XSSFCell cell = row.createCell(i);
-			cell.setCellStyle(getStyleContent(workbook));
-			cell.setCellValue(chienSiColumns.get(i - 1));
-		});
+		int col = 1;
+		createCellContentDetail(workbook, sheet, col++, "Họ Tên");
+		createCellContentDetail(workbook, sheet, col++, "Ngày Sinh");
+		createCellContentDetail(workbook, sheet, col++, "Cấp bậc");
+		createCellContentDetail(workbook, sheet, col++, "Thời gian nhận cấp bậc");
+		createCellContentDetail(workbook, sheet, col++, "Chức vụ");
+		createCellContentDetail(workbook, sheet, col++, "Ngày nhập ngũ");
+		createCellContentDetail(workbook, sheet, col++, "Ngày vào Đảng");
+		createCellContentDetail(workbook, sheet, col++, "Ngày vào Đảng chính thức");
+		createCellContentDetail(workbook, sheet, col++, "Số thẻ Đảng");
+		createCellContentDetail(workbook, sheet, col++, "Ngày vào Đoàn");
+		createCellContentDetail(workbook, sheet, col++, "Nghề nghiệp gia đình");
+		createCellContentDetail(workbook, sheet, col++, "Có mấy anh chị em");
+		createCellContentDetail(workbook, sheet, col++, "Con thứ mấy trong nhà");
+		createCellContentDetail(workbook, sheet, col++, "Họ tên cha");
+		createCellContentDetail(workbook, sheet, col++, "Năm sinh cha");
+		createCellContentDetail(workbook, sheet, col++, "Nghề nghiệp cha");
+		createCellContentDetail(workbook, sheet, col++, "Họ Tên mẹ");
+		createCellContentDetail(workbook, sheet, col++, "Năm sinh mẹ");
+		createCellContentDetail(workbook, sheet, col++, "Nghề Nghiệp mẹ");
+		createCellContentDetail(workbook, sheet, col++, "Bố mất");
+		createCellContentDetail(workbook, sheet, col++, "Mẹ mất");
+		createCellContentDetail(workbook, sheet, col++, "Bố mẹ li dị");
+		createCellContentDetail(workbook, sheet, col++, "Không có bố ");
+		createCellContentDetail(workbook, sheet, col++, "Gia đình ảnh hưởng covid");
+		createCellContentDetail(workbook, sheet, col++, "Gia đình khó khăn");
+		createCellContentDetail(workbook, sheet, col++, "Người quen trong quân đội");
+		createCellContentDetail(workbook, sheet, col++, "Bố mẹ đang là Liệt sĩ - Quân nhân");
+		createCellContentDetail(workbook, sheet, col++, "Nghề nghiệp bản thân");
+		createCellContentDetail(workbook, sheet, col++, "Trình độ văn hóa");
+		createCellContentDetail(workbook, sheet, col++, "Đã qua trường");
+		createCellContentDetail(workbook, sheet, col++, "Dân tộc");
+		createCellContentDetail(workbook, sheet, col++, "Tôn giáo");
+		createCellContentDetail(workbook, sheet, col++, "Có vợ");
+		createCellContentDetail(workbook, sheet, col++, "Quê quán");
+		createCellContentDetail(workbook, sheet, col++, "Nơi ở hiện ");
+		createCellContentDetail(workbook, sheet, col++, "Hình xăm");
+		createCellContentDetail(workbook, sheet, col++, "Giữ bùa");
+		createCellContentDetail(workbook, sheet, col++, "Người yêu");
+		createCellContentDetail(workbook, sheet, col++, "Hút thuốc");
+		createCellContentDetail(workbook, sheet, col++, "Sở trường");
+		createCellContentDetail(workbook, sheet, col++, "Ghi chú");
 	}
 
 	private void createHeader(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
@@ -107,8 +146,6 @@ public class ExportHelper {
 	}
 	
 	private void createContentDetail(XSSFWorkbook workbook, XSSFSheet sheet, String namNhapNgu) {
-		List<ChienSiEntity> listChienSi = chienSiRepository.findByNamNhapNgu(namNhapNgu);
-		
 		Map<String, ChienSiExport> content = getChienSiExport(namNhapNgu);
 		
 		
@@ -117,20 +154,74 @@ public class ExportHelper {
 			
 			// Create header
 			rowIdx += 1;
-			sheet.addMergedRegion(CellRangeAddress.valueOf("B" + (rowIdx) + ":E" + (rowIdx)));
 			XSSFRow row = getRow(sheet, rowIdx);
 			XSSFCell cell = row.createCell(1);
 			cell.setCellStyle(getStyleContent(workbook));
-			cell.setCellValue(val.getTenDayDu() + "(" + val.getSoLuong() + ")");
-			int col = 1;
+			cell.setCellValue(val.getTenDayDu());
+			sheet.addMergedRegion(CellRangeAddress.valueOf("B" + (rowIdx + 1) + ":E" + (rowIdx + 1)));
+			
+			cell = row.createCell(5);
+			cell.setCellStyle(getStyleContent(workbook));
+			cell.setCellValue("Số lượng");
+			
+			cell = row.createCell(6);
+			cell.setCellStyle(getStyleContent(workbook));
+			cell.setCellValue(val.getSoLuong());
 			
 			rowIdx += 1;
 			// Create content
 			for (ChienSiEntity e : val.getListChienSi()) {
-				cell = row.createCell(col++);
-				cell.setCellStyle(getStyleContent(workbook));
-				List<String> columns = commonService.getListColumns(e);
-				cell.setCellValue(commonService.getFieldValue(e, columns, col));
+				int col = 1;
+				
+				createCellContentDetail(workbook, sheet, col++, e.getHoTen());
+				createCellContentDetail(workbook, sheet, col++, commonService.convertDate(e.getNgaySinh()));
+				createCellContentDetail(workbook, sheet, col++, e.getCapBac());
+				createCellContentDetail(workbook, sheet, col++, commonService.convertDate(e.getThoiGianNhanCapBac()));
+				createCellContentDetail(workbook, sheet, col++, e.getChucVu());
+				createCellContentDetail(workbook, sheet, col++, commonService.convertDate(e.getNgayNhapNgu()));
+				createCellContentDetail(workbook, sheet, col++, commonService.convertDate(e.getNgayVaoDang()));
+				createCellContentDetail(workbook, sheet, col++, commonService.convertDate(e.getNgayVaoDangChinhThuc()));
+				createCellContentDetail(workbook, sheet, col++, e.getSoTheDang());
+				createCellContentDetail(workbook, sheet, col++, commonService.convertDate(e.getNgayVaoDoan()));
+				createCellContentDetail(workbook, sheet, col++, e.getNgheNghiepGiaDinh());
+
+				createCellContentDetail(workbook, sheet, col++, String.valueOf(e.getCoMayAnhChiEm()));
+				createCellContentDetail(workbook, sheet, col++, String.valueOf(e.getConThuMayTrongNha()));
+				createCellContentDetail(workbook, sheet, col++, e.getHoTenCha());
+				createCellContentDetail(workbook, sheet, col++, String.valueOf(e.getNamSinhCha()));
+				createCellContentDetail(workbook, sheet, col++, e.getNgheNghiepCha());
+				createCellContentDetail(workbook, sheet, col++, e.getHoTenMe());
+				createCellContentDetail(workbook, sheet, col++, String.valueOf(e.getNamSinhMe()));
+				createCellContentDetail(workbook, sheet, col++, e.getNgheNghiepMe());
+				createCellContentDetail(workbook, sheet, col++, e.getBoMat());
+				createCellContentDetail(workbook, sheet, col++, e.getMeMat());
+				createCellContentDetail(workbook, sheet, col++, e.getBoMeLiDi());
+			
+
+				createCellContentDetail(workbook, sheet, col++, e.getGiaDinhAnhHuongCovid());
+				createCellContentDetail(workbook, sheet, col++, e.getGiaDinhKhoKhan());
+				createCellContentDetail(workbook, sheet, col++, e.getNguoiQuenTrongQuanDoi());
+				createCellContentDetail(workbook, sheet, col++, e.getBoMeLaLietSiHoacQuanNhan());
+				createCellContentDetail(workbook, sheet, col++, e.getNgheNghiepBanThan());
+				createCellContentDetail(workbook, sheet, col++, e.getTrinhDo());
+				createCellContentDetail(workbook, sheet, col++, e.getDaQuaTruong());
+				createCellContentDetail(workbook, sheet, col++, e.getDanToc().getTen());
+				createCellContentDetail(workbook, sheet, col++, e.getTonGiao());
+				createCellContentDetail(workbook, sheet, col++, e.getSucKhoe());
+				String coVo = e.getCoVo() == 'r' ? e.getCoVo() + " Ghi chú: " + e.getGhiChuCoVo() : "";
+				createCellContentDetail(workbook, sheet, col++, coVo);
+				
+
+				createCellContentDetail(workbook, sheet, col++, e.getQqPhuongXa() + ", " + e.getQqQuanHuyen() + ", " + e.getQqTinhThanh());
+				createCellContentDetail(workbook, sheet, col++, e.getNohnPhuongXa() + ", " + e.getNohnQuanHuyen() + ", " + e.getNohnTinhThanh());
+				createCellContentDetail(workbook, sheet, col++, e.getHinhXam());
+				createCellContentDetail(workbook, sheet, col++, e.getGiuBua());
+				createCellContentDetail(workbook, sheet, col++, e.getNguoiYeu());
+				createCellContentDetail(workbook, sheet, col++, e.getHutThuoc());
+				createCellContentDetail(workbook, sheet, col++, e.getSoTruong());
+				createCellContentDetail(workbook, sheet, col++, e.getGhiChu());
+				
+				rowIdx += 1;
 			}
 		}
 	}
@@ -566,7 +657,7 @@ public class ExportHelper {
 	}
 	
 	private Map<String, ChienSiExport> getChienSiExport(String namNhapNgu) {
-		List<ChienSiEntity> chienSiEntitys = chienSiRepository.findByNamNhapNgu(namNhapNgu);
+		List<ChienSiEntity> chienSiEntitys = chienSiRepository.findByNamNhapNgu(Integer.valueOf(namNhapNgu));
 		
 		// Sorted order desc
 		Map<String, ChienSiExport> res = new TreeMap<>(new Comparator<String>() {
@@ -583,19 +674,28 @@ public class ExportHelper {
 			ChienSiExport val = new ChienSiExport();
 			
 			List<ChienSiEntity> innerCs;
+			long soluong = 1;
 			if (!res.containsKey(key)) {
-				val.setTenDayDu(cs.getDoanhTrai().getTenDayDu());
 				innerCs = new ArrayList<>();
 			} else {
+				soluong = res.get(key).getSoLuong() + 1;
 				innerCs = res.get(key).getListChienSi();
 			}
 			innerCs.add(cs);
 			
+			val.setTenDayDu(cs.getDoanhTrai().getTenDayDu() + " - " + cs.getDoanhTrai().getTenDayDuTrucThuoc());
 			val.setListChienSi(innerCs);
-			val.setSoLuong(val.getSoLuong() + 1);
+			val.setSoLuong(soluong);
 			res.put(key, val);
 		}
 		
 		return res;
+	}
+	
+	private void createCellContentDetail(XSSFWorkbook workbook, XSSFSheet sheet, int col, String val) {
+		XSSFRow row = getRow(sheet, rowIdx);
+		XSSFCell cell = row.createCell(col++);
+		cell.setCellStyle(getStyleContent(workbook));
+		cell.setCellValue(val);
 	}
 }

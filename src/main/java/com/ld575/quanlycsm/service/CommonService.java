@@ -1,13 +1,9 @@
 package com.ld575.quanlycsm.service;
 
-import java.lang.reflect.Field;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
-import javax.persistence.Column;
 
 import org.springframework.stereotype.Service;
 
@@ -67,33 +63,10 @@ public class CommonService {
 	public Integer emptyValue(Integer i) {
 		return i == null ? 0 : i;
 	}
-
-	public List<String> getListColumns(Object obj) {
-		List<String> res = new ArrayList<>();
-		Class<?> cl = obj.getClass();
-		for (Field field : cl.getDeclaredFields()) {
-			Column column = field.getAnnotation(Column.class);
-			if (column != null) {
-				res.add(column.name());
-			}
-		}
-		return res;
-	}
-
-	public String getFieldValue(Object obj, List<String> listColumn, int col) {
-
-		Field field;
-		Object value = null;
-		try {
-			field = obj.getClass().getDeclaredField(listColumn.get(col));
-			field.setAccessible(true);
-
-			value = field.get(obj);
-		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		}
-		return value.toString();
+	
+	public String convertDate(Date date) {
+		if (date == null) return ""; 
+		DateFormat df = new SimpleDateFormat("YYYY-mm-dd");
+		return df.format(date); 
 	}
 }

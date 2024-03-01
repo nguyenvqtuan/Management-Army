@@ -454,7 +454,8 @@ public class ExportChienSiRepository {
 			CountChienSiDto countChienSiDto = new CountChienSiDto();
 			countChienSiDto.setTen(ten);
 			countChienSiDto.setAmount(count);
-			countChienSiDto.setDetail(e[2].toString());
+			if (e[2] != null) countChienSiDto.setDetail(e[2].toString());
+			
 			res.add(countChienSiDto);
 		}
 		return res;

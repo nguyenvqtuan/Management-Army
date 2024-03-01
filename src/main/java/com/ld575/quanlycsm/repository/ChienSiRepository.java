@@ -15,6 +15,6 @@ public interface ChienSiRepository extends JpaRepository<ChienSiEntity, Long> {
 	
 	Optional<ChienSiEntity> findByHoTenAndNickNameContaining(String name, String nickName);
 
-	@Query("SELECT cs FROM ChienSiEntity cs WHERE YEAR(namNhapNgu) = ?1")
-	List<ChienSiEntity> findByNamNhapNgu(String namNhapNgu);
+	@Query("SELECT cs FROM ChienSiEntity cs WHERE YEAR(cs.ngayNhapNgu) = ?1")
+	List<ChienSiEntity> findByNamNhapNgu(Integer namNhapNgu);
 }
